@@ -1,10 +1,8 @@
-import { Session, User } from "@supabase/supabase-js";
-import { useRouter, useSegments, SplashScreen } from "expo-router";
-import { createContext, useContext, useEffect, useState } from "react";
+import { Session, User } from '@supabase/supabase-js';
+import { SplashScreen, useRouter, useSegments } from 'expo-router';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import { supabase } from "@/config/supabase";
-
-SplashScreen.preventAutoHideAsync();
+import { supabase } from '@/config/supabase';
 
 type SupabaseContextProps = {
   user: User | null;
@@ -31,6 +29,7 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
 export const useSupabase = () => useContext(SupabaseContext);
 
 export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
+  SplashScreen.preventAutoHideAsync();
   const router = useRouter();
   const segments = useSegments();
   const [user, setUser] = useState<User | null>(null);
@@ -78,14 +77,13 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   }, []);
 
   useEffect(() => {
-    if (!initialized) return;
-
-    const inProtectedGroup = segments[0] === "(protected)";
+    //if (!initialized) return;
+    const inProtectedGroup = segments[0] === '(protected)';
 
     if (session && !inProtectedGroup) {
-      router.push("/(app)/(protected)/");
+      router.push('/(app)/(protected)/');
     } else if (!session) {
-      router.push("/(app)/welcome");
+      router.push('/(app)/welcome');
     }
 
     /* HACK: Something must be rendered when determining the initial auth state... 
