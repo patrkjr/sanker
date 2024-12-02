@@ -6,6 +6,12 @@ import Spacings from '@/constants/Spacings';
 import { Link } from 'expo-router';
 import { LinkComponent } from 'expo-router/build/link/Link';
 import Icon from './Icon';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { timingConfig } from '@/constants/Animations';
 
 interface ItemProps {
   label: string;
@@ -14,6 +20,7 @@ interface ItemProps {
   hasTrailingIcon?: boolean;
   leadingIconName?: string;
   trailingIconName?: string;
+  animate?: boolean;
   disabled?: boolean;
   isLastItem?: boolean;
   hasTrailingIcon?: boolean;
@@ -25,24 +32,50 @@ export default function Item({
   isLastItem = false,
   href,
   disabled = false,
+  animate = true,
   skeleton = false,
   children,
 }: ItemProps) {
   const theme = useColorScheme() || 'light';
   const colors = Colors[theme];
 
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
+  const translateX = useSharedValue(0);
+
+  const animatedItemStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: withTiming(scale.value, timingConfig.md) },
+        { translateX: withTiming(translateX.value, timingConfig.md) },
+      ],
+      opacity: disabled ? 0.5 : withTiming(opacity.value, timingConfig.md),
+    };
+  });
+
   const content = (
-    <Pressable disabled={disabled || skeleton} onPress={onPress}>
-      <View
+    <Pressable
+      onPressIn={() => (
+        (opacity.value = 0.6),
+        animate && ((translateX.value = 12), (scale.value = 1.03))
+      )}
+      onPressOut={() => (
+        (opacity.value = 1),
+        animate && ((translateX.value = 0), (scale.value = 1))
+      )}
+      disabled={disabled || skeleton}
+      onPress={onPress}
+    >
+      <Animated.View
         style={[
           {
-            opacity: disabled ? 0.5 : 1,
             borderColor: colors.border,
             borderBottomWidth: 1,
             height: 60,
           },
           isLastItem && { borderBottomWidth: 0 },
           styles.container,
+          animatedItemStyle,
         ]}
       >
         {!skeleton ? (
@@ -55,7 +88,7 @@ export default function Item({
             ]}
           />
         )}
-      </View>
+      </Animated.View>
     </Pressable>
   );
 

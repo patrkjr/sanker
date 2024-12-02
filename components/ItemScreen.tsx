@@ -13,7 +13,7 @@ import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 
-const IMAGE_HEIGHT = 240;
+const IMAGE_HEIGHT = 480;
 
 export default function ItemScreen() {
   const { id } = useLocalSearchParams();
