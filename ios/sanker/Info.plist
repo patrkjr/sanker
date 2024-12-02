@@ -27,8 +27,14 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>myapp</string>
+          <string>sanker</string>
           <string>com.ptrkjr.sanker</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+sanker</string>
         </array>
       </dict>
     </array>
@@ -48,6 +54,29 @@
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+    </array>
+    <key>UIAppFonts</key>
+    <array>
+      <string>FiraMono-Bold.ttf</string>
+      <string>FiraMono-Medium.ttf</string>
+      <string>FiraMono-Regular.ttf</string>
+      <string>Nunito-Black.ttf</string>
+      <string>Nunito-BlackItalic.ttf</string>
+      <string>Nunito-Bold.ttf</string>
+      <string>Nunito-BoldItalic.ttf</string>
+      <string>Nunito-ExtraBold.ttf</string>
+      <string>Nunito-ExtraBoldItalic.ttf</string>
+      <string>Nunito-ExtraLight.ttf</string>
+      <string>Nunito-ExtraLightItalic.ttf</string>
+      <string>Nunito-Italic.ttf</string>
+      <string>Nunito-Light.ttf</string>
+      <string>Nunito-LightItalic.ttf</string>
+      <string>Nunito-Medium.ttf</string>
+      <string>Nunito-MediumItalic.ttf</string>
+      <string>Nunito-Regular.ttf</string>
+      <string>Nunito-SemiBold.ttf</string>
+      <string>Nunito-SemiBoldItalic.ttf</string>
+      <string>SpaceMono-Regular.ttf</string>
     </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>

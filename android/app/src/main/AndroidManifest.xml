@@ -24,8 +24,9 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="myapp"/>
+        <data android:scheme="sanker"/>
         <data android:scheme="com.ptrkjr.sanker"/>
+        <data android:scheme="exp+sanker"/>
       </intent-filter>
     </activity>
   </application>
