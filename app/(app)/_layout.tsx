@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@/constants/Themes';
-import HeaderStyle from '@/constants/HeaderStyle';
+import { HeaderLargeStyle } from '@/constants/HeaderStyle';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -65,11 +65,19 @@ function RootLayoutNav() {
         />
         <Stack.Screen
           name="signup"
-          options={{ gestureEnabled: true, title: 'Sign up', ...HeaderStyle }}
+          options={{
+            gestureEnabled: true,
+            title: 'Sign up',
+            ...HeaderLargeStyle,
+          }}
         />
         <Stack.Screen
           name="login"
-          options={{ gestureEnabled: true, title: 'Log in', ...HeaderStyle }}
+          options={{
+            gestureEnabled: true,
+            title: 'Log in',
+            ...HeaderLargeStyle,
+          }}
         />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>

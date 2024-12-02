@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import HeaderLargeStyle from '@/constants/HeaderStyle';
+import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
 
 export default function HomeLayout() {
   return (
@@ -8,7 +8,10 @@ export default function HomeLayout() {
         name="index"
         options={{ title: 'Featured', ...HeaderLargeStyle }}
       />
-      <Stack.Screen name="item/[id]" options={{ title: 'Item for sale' }} />
+      <Stack.Screen
+        name="item/[id]"
+        options={{ title: 'Item for sale', ...HeaderStyle }}
+      />
     </Stack>
   );
 }

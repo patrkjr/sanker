@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
-import HeaderLargeStyle from '@/constants/HeaderStyle';
+import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
 
 export default function ProfileLayout() {
   const { title } = useLocalSearchParams();
@@ -12,9 +12,16 @@ export default function ProfileLayout() {
       />
       <Stack.Screen
         name="account-settings"
-        options={{ title: 'Edit profile', ...HeaderLargeStyle }}
+        options={{
+          title: 'Edit profile',
+          ...HeaderLargeStyle,
+          headerBackTitleStyle: { fontWeight: '800' },
+        }}
       />
-      <Stack.Screen name="item/[id]" options={{ titel: 'Item for sale' }} />
+      <Stack.Screen
+        name="item/[id]"
+        options={{ titel: 'Item for sale', ...HeaderStyle }}
+      />
       <Stack.Screen
         name="edit-name"
         options={{
