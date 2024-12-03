@@ -63,7 +63,7 @@ export default function ProductItem({
             </View>
           </View>
           <View style={{ padding: Spacings.sm }}>
-            <Icon name="chevron-right" />
+            <Icon name="ChevronRight" />
           </View>
         </Animated.View>
       </Pressable>

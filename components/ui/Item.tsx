@@ -116,7 +116,7 @@ const Value = ({
   );
 };
 
-const TrailingIcon = ({ trailingIcon = <Icon name="chevron-right" /> }) => {
+const TrailingIcon = ({ trailingIcon = <Icon name="ChevronRight" /> }) => {
   return trailingIcon;
 };
 

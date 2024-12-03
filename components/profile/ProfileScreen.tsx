@@ -87,7 +87,7 @@ export default function ProfileScreen() {
           </Item>
           <Item disabled isLastItem>
             <Item.Label>About Sanker</Item.Label>
-            <Item.Value trailingIcon={<Icon name="external-link" />} />
+            <Item.Value trailingIcon={<Icon name="ExternalLink" />} />
           </Item>
         </Card>
       </View>

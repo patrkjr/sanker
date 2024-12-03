@@ -72,7 +72,7 @@ const Images = ({ images }) => {
   return (
     <View style={[styles.imageContainer, { backgroundColor: colors.card }]}>
       <View style={styles.iconContainer}>
-        <Icon name="image" size={40} />
+        <Icon name="Image" size={40} />
       </View>
       {images.map((url, index) => {
         return (
