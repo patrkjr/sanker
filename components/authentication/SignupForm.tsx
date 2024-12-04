@@ -104,20 +104,20 @@ export default function SignupForm() {
           rules={{ required: true }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="Name"
+              label="Full name"
               placeholder="eg. Jane Smith"
               onBlur={() => {
                 setActiveField(null);
                 onBlur();
               }}
-              onFocus={() => setActiveField('name')}
-              active={activeField === 'name'}
+              onFocus={() => setActiveField('full_name')}
+              active={activeField === 'full_name'}
               autoCapitalize="words"
               autoComplete="name"
               onChangeText={onChange}
               value={value}
               editable={!isSubmitting}
-              errorMessage={errors.name && errors.name.message}
+              errorMessage={errors?.full_name && errors?.full_name.message}
             />
           )}
         />

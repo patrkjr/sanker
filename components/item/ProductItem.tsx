@@ -21,28 +21,41 @@ export default function ProductItem({
   title,
   price,
   imageUrl,
+  disabled = false,
+  animate = true,
+  onPress,
   ...otherProps
 }) {
   const colors = useThemedColors();
   const [pressedState, setPressedState] = useState(false);
 
-  useEffect(() => {
-    opacity.value = pressedState ? 0.4 : 1;
-  }, [pressedState]);
-
+  const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
+  const translateX = useSharedValue(0);
 
   const animatedItemStyle = useAnimatedStyle(() => {
     return {
-      opacity: withTiming(opacity.value, timingConfig.md),
+      transform: [
+        { scale: withTiming(scale.value, timingConfig.md) },
+        { translateX: withTiming(translateX.value, timingConfig.md) },
+      ],
+      opacity: disabled ? 0.5 : withTiming(opacity.value, timingConfig.md),
     };
   });
 
   return (
     <Link href={`/profile/item/${id}`} asChild>
       <Pressable
-        onPressIn={() => setPressedState(true)}
-        onPressOut={() => setPressedState(false)}
+        onPressIn={() => (
+          (opacity.value = 0.6),
+          animate && ((translateX.value = 12), (scale.value = 1.03))
+        )}
+        onPressOut={() => (
+          (opacity.value = 1),
+          animate && ((translateX.value = 0), (scale.value = 1))
+        )}
+        disabled={disabled}
+        onPress={onPress}
       >
         <Animated.View
           style={[styles.outerContainer, animatedItemStyle]}
