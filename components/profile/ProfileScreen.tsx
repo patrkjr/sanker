@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacings.md,
   },
   editContainer: {
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

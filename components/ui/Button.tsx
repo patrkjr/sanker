@@ -109,8 +109,14 @@ const Button = forwardRef(
       <Animated.View style={animatedButtonStyle}>
         <Pressable
           ref={ref}
-          onPressIn={(() => handlePressIn, onPressIn)}
-          onPressOut={(() => handlePressOut, onPressOut)}
+          onPressIn={() => {
+            handlePressIn();
+            onPressIn && onPressIn();
+          }}
+          onPressOut={() => {
+            handlePressOut();
+            onPressOut && onPressOut();
+          }}
           style={[
             wrapperStyle,
             ghost && ghostStyle,

@@ -65,51 +65,66 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
   // COMPONENT HERE
 
   return (
-    <View style={[{ backgroundColor: colors.card }, styles.outerContainer]}>
+    <View style={[styles.shadowWrapper, { shadowColor: colors.text }]}>
       <View
-        style={{
-          backgroundColor: colors.themed.card,
-          height: COVER_AREA_HEIGHT,
-          width: '100%',
-          position: 'absolute',
-        }}
-      />
-      <View style={styles.contentContainer}>
-        <ProfilePicture avatarUrl={profile?.avatar_url} size={IMAGE_SIZE} />
-        {/* Should probably improve the layout of this at some point */}
-        {profile?.phone_verified && (
-          <View
-            style={{
-              backgroundColor: 'transparent',
-              height: 'auto',
-              transform: [{ translateY: -25 }],
-            }}
-          >
-            <SelectableTag
-              showSelectable={false}
-              text="Phone verified"
-              selected
-              mono
-            />
-          </View>
-        )}
-      </View>
-      <View style={styles.nameContainer}>
-        {profile ? (
-          <H3>{profile.full_name}</H3>
-        ) : (
-          <View
-            style={{ backgroundColor: 'transparent', height: 32, width: 180 }}
-          >
-            <SkeletonBox />
-          </View>
-        )}
+        style={[
+          { backgroundColor: colors.card, borderColor: colors.border },
+          styles.outerContainer,
+        ]}
+      >
+        <View
+          style={{
+            backgroundColor: colors.themed.card,
+            height: COVER_AREA_HEIGHT,
+            width: '100%',
+            position: 'absolute',
+          }}
+        />
+        <View style={styles.contentContainer}>
+          <ProfilePicture avatarUrl={profile?.avatar_url} size={IMAGE_SIZE} />
+          {/* Should probably improve the layout of this at some point */}
+          {profile?.phone_verified && (
+            <View
+              style={{
+                backgroundColor: 'transparent',
+                height: 'auto',
+                transform: [{ translateY: -25 }],
+              }}
+            >
+              <SelectableTag
+                showSelectable={false}
+                text="Phone verified"
+                selected
+                mono
+              />
+            </View>
+          )}
+        </View>
+        <View style={styles.nameContainer}>
+          {profile ? (
+            <H3>{profile.full_name}</H3>
+          ) : (
+            <View
+              style={{ backgroundColor: 'transparent', height: 32, width: 180 }}
+            >
+              <SkeletonBox />
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  shadowWrapper: {
+    backgroundColor: 'transparent',
+    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: 0.08,
+    shadowRadius: 24,
+    elevation: 6,
+    borderRadius: Spacings.borderRadius.md,
+  },
   outerContainer: {
     height: 182,
     overflow: 'hidden',
