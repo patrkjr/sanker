@@ -56,7 +56,6 @@ export default function ProfilePicture({ profile, size = 72 }) {
 
   async function updateProfilePicture() {
     try {
-      setIsLoading(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: 'images',
         allowsMultipleSelection: false,
@@ -66,10 +65,11 @@ export default function ProfilePicture({ profile, size = 72 }) {
       });
 
       if (result.canceled || !result.assets || result.assets.length === 0) {
-        console.log('User cancelled image picker.');
+        //User cancelled the image picker.
         return;
       }
 
+      setIsLoading(true);
       const image = result.assets[0];
 
       if (!image.uri) {

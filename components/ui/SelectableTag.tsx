@@ -1,19 +1,19 @@
-import Spacings from "@/constants/Spacings";
-import { View } from "../Themed";
-import { Mono, Small } from "../typography";
-import Card from "./Card";
-import { Pressable, PressableProps, StyleSheet } from "react-native";
-import FontScale from "@/constants/FontScale";
-import { useThemedColors } from "@/hooks/useThemedColors";
-import { useEffect, useRef } from "react";
+import Spacings from '@/constants/Spacings';
+import { View } from '../Themed';
+import { Mono, Small } from '../typography';
+import Card from './Card';
+import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import FontScale from '@/constants/FontScale';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import { useEffect, useRef } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
-} from "react-native-reanimated";
-import { timingConfig, springConfig } from "@/constants/Animations";
-import * as Haptics from "expo-haptics";
+} from 'react-native-reanimated';
+import { timingConfig, springConfig } from '@/constants/Animations';
+import * as Haptics from 'expo-haptics';
 
 interface TagProps extends PressableProps {
   text: string;
@@ -86,7 +86,6 @@ export default function SelectableTag({
   mono = false,
   tabIndex,
 }: TagProps) {
-
   const colors = useThemedColors();
 
   const scale = useSharedValue(1);
@@ -124,7 +123,9 @@ export default function SelectableTag({
       >
         {showSelectable && <SelectableThumb selected={selected} />}
         {mono ? (
-          <Mono secondary style={[selected && { color: colors.themed.text }]}>{text}</Mono>
+          <Mono secondary style={[selected && { color: colors.themed.text }]}>
+            {text}
+          </Mono>
         ) : (
           <Small bold style={[selected && { color: colors.themed.text }]}>
             {text}
@@ -137,19 +138,20 @@ export default function SelectableTag({
 
 const styles = StyleSheet.create({
   card: {
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    width: "auto",
-    alignItems: "center",
-    justifyContent: "center",
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    width: 'auto',
+    paddingHorizontal: Spacings.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: Spacings.xs,
   },
   text: {
     fontSize: FontScale.md,
   },
   thumbBase: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: Spacings.borderRadius.round,
     borderWidth: 1,
     width: THUMB_SIZE,

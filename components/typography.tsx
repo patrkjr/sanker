@@ -5,7 +5,7 @@ import { Text, TextProps as RnTextProps, useColorScheme } from 'react-native';
 
 interface TextProps extends RnTextProps {
   secondary?: boolean;
-  indent?: 'sm' | 'md';
+  indent?: string | false;
   bold?: boolean;
   error?: boolean;
 }
@@ -45,8 +45,8 @@ Mono.displayName = 'Mono';
 
 const Label = function ({
   children,
-  indent = 'md',
   secondary = false,
+  indent = 'md',
   ...textProps
 }: TextProps) {
   const theme = useColorScheme() || 'light';
@@ -57,9 +57,9 @@ const Label = function ({
     <Text
       style={[
         basicFontStyle,
+        indent && { paddingHorizontal: Spacings[indent] },
         {
           fontWeight: '800',
-          paddingHorizontal: Spacings[indent],
           fontSize: FontScale['sm'],
           color: secondary ? colors.textSecondary : colors.text,
         },
@@ -238,7 +238,7 @@ const H3 = function ({ children, ...textProps }: TextProps) {
 };
 H3.displayName = 'H3';
 
-const H4 = function ({ children, ...textProps }: TextProps) {
+const H4 = function ({ children, secondary = false, ...textProps }: TextProps) {
   const theme = useColorScheme() || 'light';
 
   const colors = Colors[theme];
@@ -247,7 +247,11 @@ const H4 = function ({ children, ...textProps }: TextProps) {
     <Text
       style={[
         basicFontStyle,
-        { fontSize: FontScale['lg'], fontWeight: '800', color: colors.text },
+        {
+          fontSize: FontScale['lg'],
+          fontWeight: '800',
+          color: secondary ? colors.textSecondary : colors.text,
+        },
         textProps?.style,
       ]}
       {...textProps}

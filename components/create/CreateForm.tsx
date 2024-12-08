@@ -160,7 +160,7 @@ export default function CreateForm() {
         rules={{ required: true }}
         render={({ field: { onChange, value } }) => (
           <View style={{ gap: Spacings.sm }}>
-            <Label>Condition</Label>
+            <Label style={{ paddingHorizontal: Spacings.sm }}>Condition</Label>
             <View style={styles.conditionOptions}>
               <SelectableTag
                 selected={value === 'new'}
@@ -258,7 +258,7 @@ export default function CreateForm() {
 const styles = StyleSheet.create({
   conditionOptions: {
     flexDirection: 'row',
-    gap: Spacings.sm,
+    gap: Spacings.xs,
     flexWrap: 'wrap',
   },
 });

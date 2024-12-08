@@ -1,10 +1,10 @@
-import { TextInput, TextInputProps, ViewStyle, TextStyle } from "react-native";
-import { View } from "../Themed";
-import Spacings from "@/constants/Spacings";
-import Colors from "@/constants/Colors";
-import FontScale from "@/constants/FontScale";
-import { useColorScheme } from "react-native";
-import { Label, P, Small } from "../typography";
+import { TextInput, TextInputProps, ViewStyle, TextStyle } from 'react-native';
+import { View } from '../Themed';
+import Spacings from '@/constants/Spacings';
+import Colors from '@/constants/Colors';
+import FontScale from '@/constants/FontScale';
+import { useColorScheme } from 'react-native';
+import { Label, P, Small } from '../typography';
 
 interface InputProps extends TextInputProps {
   /** Optional style for the container wrapping the TextInput */
@@ -25,15 +25,15 @@ export default function Input({
   ...textInputProps
 }: InputProps) {
   //const theme = useThemeColor();
-  const theme = useColorScheme() || "light";
+  const theme = useColorScheme() || 'light';
   const colors = Colors[theme];
   const fontSize = FontScale;
 
   const inputStyles: TextStyle = {
     color: colors.text,
-    fontSize: fontSize["lg"],
-    fontFamily: "Nunito",
-    fontWeight: "600",
+    fontSize: fontSize['lg'],
+    fontFamily: 'Nunito',
+    fontWeight: '600',
     paddingHorizontal: Spacings.md,
     paddingVertical: Spacings.sm,
     backgroundColor: colors.card,
@@ -49,7 +49,14 @@ export default function Input({
   return (
     <View style={[wrapperStyles, containerStyle]}>
       {label && (
-        <Label style={[active && { color: colors.textActive }]}>{label}</Label>
+        <Label
+          style={[
+            active && { color: colors.textActive },
+            { paddingHorizontal: Spacings.sm },
+          ]}
+        >
+          {label}
+        </Label>
       )}
       <TextInput
         selectionColor={colors.textSecondary}
@@ -57,8 +64,16 @@ export default function Input({
         placeholderTextColor={colors.textPlaceholder}
         {...textInputProps}
       />
-      {helperMessage && <Small style={{ paddingHorizontal: Spacings.sm }} secondary>{helperMessage}</Small>}
-      {errorMessage && <Small style={{ paddingHorizontal: Spacings.sm }} error>{errorMessage}</Small>}
+      {helperMessage && (
+        <Small style={{ paddingHorizontal: Spacings.sm }} secondary>
+          {helperMessage}
+        </Small>
+      )}
+      {errorMessage && (
+        <Small style={{ paddingHorizontal: Spacings.sm }} error>
+          {errorMessage}
+        </Small>
+      )}
     </View>
   );
 }
