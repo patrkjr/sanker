@@ -65,7 +65,7 @@ const red = {
 export default {
   light: {
     text: grey['800'],
-    textSecondary: grey[600],
+    textSecondary: grey[500],
     textPlaceholder: grey[400],
     textError: red[600],
     textActive: green[700],

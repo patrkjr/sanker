@@ -2,7 +2,7 @@ import { Alert, StyleSheet } from 'react-native';
 import { useSupabase } from '@/context/supabase-provider';
 import Button from '../ui/Button';
 import Spacings from '@/constants/Spacings';
-import { Label, P } from '../typography';
+import { Label, Mono, P } from '../typography';
 import Card from '../ui/Card';
 import { View, Text } from '../Themed';
 import Item from '../ui/Item';
@@ -11,14 +11,14 @@ import AppInfo from '../AppInfo';
 import Icon from '../ui/Icon';
 import useUserStore from '@/stores/userStore';
 import { useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { Link, useFocusEffect } from 'expo-router';
 import React from 'react';
 import { useUserItems } from '@/hooks/useUserItems';
 import ProfileCard from './ProfileCard';
 
 export default function ProfileScreen() {
-  const { signOut } = useSupabase();
-  const user = useUserStore((state) => state.user);
+  const { signOut, user } = useSupabase();
+  const profile = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
   const { isLoading, fetchUserItems } = useUserItems();
 
@@ -28,13 +28,15 @@ export default function ProfileScreen() {
     }, [])
   );
 
-  const UserProfileInfo = () => {
-    return (
-      <View style={styles.profileContainer}>
-        <Text>{user?.email}</Text>
-      </View>
-    );
-  };
+  //Get created time and make a Date object.
+  const dateStr = user?.created_at;
+  const date = new Date(dateStr);
+
+  //Form at the date as "m YYYY"
+  const formattedCreatedAt = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
 
   return (
     <ScrollView
@@ -47,13 +49,29 @@ export default function ProfileScreen() {
         paddingHorizontal: Spacings.sm,
       }}
     >
-      {user ? <ProfileCard profileId={user.id} /> : <Text>No user</Text>}
+      {profile && (
+        <>
+          <ProfileCard profileId={profile.id} />
+          <View style={styles.editContainer}>
+            <Mono secondary>
+              Member since <Mono>{formattedCreatedAt}</Mono>
+            </Mono>
+            <Link
+              style={{ width: 'auto' }}
+              href={'/profile/account-settings'}
+              asChild
+            >
+              <Button size="sm" title="Edit profile" />
+            </Link>
+          </View>
+        </>
+      )}
       <View style={styles.sectionStyle}>
         <Label>Listings</Label>
         <Card style={styles.cardWithListStyle}>
           <Item href={'/profile/listings'} skeleton={isLoading}>
             <Item.Label>My listings</Item.Label>
-            <Item.Value>{user?.items?.length}</Item.Value>
+            <Item.Value>{profile?.items?.length}</Item.Value>
           </Item>
           <Item href={'/profile/listings'} isLastItem disabled>
             <Item.Label>Favorites</Item.Label>
@@ -63,12 +81,8 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.sectionStyle}>
-        <Label>Profile</Label>
+        <Label>Preferences</Label>
         <Card style={styles.cardWithListStyle}>
-          <Item href={'profile/account-settings'}>
-            <Item.Label>Edit Profile</Item.Label>
-            <Item.Value></Item.Value>
-          </Item>
           <Item disabled>
             <Item.Label>Notifications</Item.Label>
             <Item.Value></Item.Value>
@@ -77,16 +91,16 @@ export default function ProfileScreen() {
             <Item.Label>Location</Item.Label>
             <Item.Value></Item.Value>
           </Item>
+          <Item disabled isLastItem>
+            <Item.Label>Theme</Item.Label>
+            <Item.Value>System</Item.Value>
+          </Item>
         </Card>
       </View>
 
       <View style={styles.sectionStyle}>
         <Label>More</Label>
         <Card style={styles.cardWithListStyle}>
-          <Item disabled>
-            <Item.Label>Edit theme</Item.Label>
-            <Item.Value>System</Item.Value>
-          </Item>
           <Item disabled>
             <Item.Label>Support</Item.Label>
             <Item.Value />
@@ -121,8 +135,10 @@ const styles = StyleSheet.create({
     paddingVertical: Spacings.xs,
     paddingHorizontal: Spacings.md,
   },
-  profileContainer: {
-    marginHorizontal: Spacings.sm,
-    padding: Spacings.md,
+  editContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: Spacings.md,
   },
 });

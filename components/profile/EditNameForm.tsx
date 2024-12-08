@@ -1,17 +1,19 @@
-import { Alert, ScrollView, StyleSheet } from "react-native";
-import Input from "../ui/Input";
-import Spacings from "@/constants/Spacings";
-import Button from "../ui/Button";
-import useUserStore from "@/stores/userStore";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "@/config/supabase";
-import { useRouter } from "expo-router";
-import { P } from "../typography";
+import { Alert, ScrollView, StyleSheet } from 'react-native';
+import Input from '../ui/Input';
+import Spacings from '@/constants/Spacings';
+import Button from '../ui/Button';
+import useUserStore from '@/stores/userStore';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { supabase } from '@/config/supabase';
+import { useRouter } from 'expo-router';
+import { P } from '../typography';
+import { useSupabase } from '@/context/supabase-provider';
 
-export default function EditNameForm({ fullName = "...!" }) {
-  const user = useUserStore((state) => state.user);
+export default function EditNameForm({ fullName = '...!' }) {
+  const { user } = useSupabase();
+  const profile = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const router = useRouter();
 
@@ -20,7 +22,7 @@ export default function EditNameForm({ fullName = "...!" }) {
   const formSchema = z.object({
     full_name: z
       .string()
-      .regex(/^[\p{L}]+(?:[-' ][\p{L}]+)*$/u, "Set a name for yourself."),
+      .regex(/^[\p{L}]+(?:[-' ][\p{L}]+)*$/u, 'Set a name for yourself.'),
   });
 
   const {
@@ -30,7 +32,7 @@ export default function EditNameForm({ fullName = "...!" }) {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: user?.full_name,
+      full_name: profile?.full_name,
     },
   });
 
@@ -38,11 +40,11 @@ export default function EditNameForm({ fullName = "...!" }) {
     try {
       const { full_name } = data;
       const { error: userError } = await supabase
-        .from("users")
+        .from('users')
         .update({ full_name })
-        .eq("id", user.id);
+        .eq('id', user.id);
 
-      setUser({ ...user, full_name });
+      setUser({ ...profile, full_name });
 
       router.back();
     } catch (error) {

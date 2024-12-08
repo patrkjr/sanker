@@ -45,7 +45,7 @@ Mono.displayName = 'Mono';
 
 const Label = function ({
   children,
-  secondary = false,
+  secondary = true,
   indent = 'md',
   ...textProps
 }: TextProps) {

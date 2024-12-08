@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import { Pressable, useColorScheme, ViewStyle } from 'react-native';
-import { Large } from '../typography';
+import { Large, P, Small } from '../typography';
 import Colors from '@/constants/Colors';
 import Spacings from '@/constants/Spacings';
 import Animated, {
@@ -9,10 +9,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { timingConfig } from '@/constants/Animations';
+import FontScale from '@/constants/FontScale';
 
 interface ButtonProps {
   title: string;
   disabled?: boolean;
+  size: 'sm' | 'md';
   ghost?: boolean;
   themed?: boolean;
   onPress?: () => void;
@@ -26,7 +28,11 @@ const Button = forwardRef(
       themed = false,
       ghost = false,
       disabled = false,
+      style,
+      size = 'md',
       onPress,
+      onPressOut,
+      onPressIn,
       ...otherProps
     }: ButtonProps,
     ref
@@ -48,7 +54,7 @@ const Button = forwardRef(
       width: '100%',
       backgroundColor: themed ? colors.themed.card : colors.card,
       paddingVertical: Spacings.sm,
-      paddingHorizontal: Spacings.md,
+      paddingHorizontal: Spacings.lg,
       borderRadius: Spacings.borderRadius.round,
       borderWidth: 1,
       borderColor: themed ? colors.themed.border : colors.border,
@@ -56,6 +62,7 @@ const Button = forwardRef(
 
     const textStyle = {
       color: themed ? colors.themed.text : colors.text,
+      fontSize: size === 'sm' ? FontScale.md : FontScale.lg,
       fontWeight: '800',
       textAlign: 'center',
     };
@@ -102,12 +109,17 @@ const Button = forwardRef(
       <Animated.View style={animatedButtonStyle}>
         <Pressable
           ref={ref}
-          {...otherProps}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          style={[wrapperStyle, ghost && ghostStyle, disabled && disabledStyle]}
+          onPressIn={(() => handlePressIn, onPressIn)}
+          onPressOut={(() => handlePressOut, onPressOut)}
+          style={[
+            wrapperStyle,
+            ghost && ghostStyle,
+            disabled && disabledStyle,
+            style,
+          ]}
           disabled={disabled}
           onPress={onPress}
+          {...otherProps}
         >
           <Large
             bold

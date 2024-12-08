@@ -1,14 +1,16 @@
-import { Alert, ScrollView, StyleSheet } from "react-native";
-import Spacings from "@/constants/Spacings";
-import { View } from "../Themed";
-import { H2, Label, P } from "../typography";
-import Card from "../ui/Card";
-import Item from "../ui/Item";
-import useUserStore from "@/stores/userStore";
+import { Alert, ScrollView, StyleSheet } from 'react-native';
+import Spacings from '@/constants/Spacings';
+import { View } from '../Themed';
+import { H2, Label, P } from '../typography';
+import Card from '../ui/Card';
+import Item from '../ui/Item';
+import useUserStore from '@/stores/userStore';
+import EditAvatar from './EditAvatar';
+import { useSupabase } from '@/context/supabase-provider';
 
 export default function AccountSettings() {
-  //const { user } = useSupabase();
-  const user = useUserStore((state) => state.user);
+  const { user } = useSupabase();
+  const userProfile = useUserStore((state) => state.user);
 
   return (
     <ScrollView
@@ -17,11 +19,21 @@ export default function AccountSettings() {
       contentContainerStyle={styles.container}
     >
       <View style={styles.cardWithLabel}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: Spacings.lg,
+            gap: Spacings.sm,
+          }}
+        >
+          <EditAvatar editable profile={userProfile} />
+        </View>
         <Label>Profile</Label>
         <Card>
           <Item href="profile/edit-name">
             <Item.Label>Full name</Item.Label>
-            <Item.Value>{user?.full_name}</Item.Value>
+            <Item.Value>{userProfile?.full_name}</Item.Value>
           </Item>
 
           <Item disabled>

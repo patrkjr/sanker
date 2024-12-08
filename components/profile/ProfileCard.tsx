@@ -9,6 +9,7 @@ import Spacings from '@/constants/Spacings';
 import SelectableTag from '../ui/SelectableTag';
 import SkeletonBox from '../ui/SkeletonBox';
 import ProfilePicture from './ProfilePicture';
+import { useSupabase } from '@/context/supabase-provider';
 
 interface ProfileCardTypes {
   profileId: string;
@@ -21,17 +22,18 @@ const MARGIN_TOP = COVER_AREA_HEIGHT - IMAGE_SIZE / 2;
 export default function ProfileCard({ profileId }: ProfileCardTypes) {
   const colors = useThemedColors();
   const [profile, setProfile] = useState(null);
-  const user = useUserStore((state) => state.user);
+  const { user } = useSupabase();
+  const userProfile = useUserStore((state) => state.user);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (user?.id === profileId) {
-      setProfile(user);
+      setProfile(userProfile);
       setIsLoading(false);
       return;
     }
     getProfileDataAsync();
-  }, [user]);
+  }, [userProfile]);
 
   //Get the profile info from supabase
   async function getProfileDataAsync() {
@@ -73,7 +75,7 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
         }}
       />
       <View style={styles.contentContainer}>
-        <ProfilePicture profile={profile} size={IMAGE_SIZE} />
+        <ProfilePicture avatarUrl={profile?.avatar_url} size={IMAGE_SIZE} />
         {/* Should probably improve the layout of this at some point */}
         {profile?.phone_verified && (
           <View

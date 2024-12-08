@@ -14,20 +14,32 @@ import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
 import useUserStore from '@/stores/userStore';
 import { supabase } from '@/config/supabase';
+import { boolean, number } from 'zod';
 
 // This component can be updated to only take needed props
 // Right now it takes a whole profile, but only uses names and image url
-export default function ProfilePicture({ profile, size = 72 }) {
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
-  const [isLoading, setIsLoading] = useState(false);
+
+interface ProfilePictureProps {
+  //Missing profile type definition
+  profile: {};
+  size: number;
+  isLoading: boolean;
+}
+
+export default function ProfilePicture({
+  isLoading = false,
+  avatarUrl,
+  size = 72,
+}: ProfilePictureProps) {
+  // const user = useUserStore((state) => state.user);
+  // const setUser = useUserStore((state) => state.setUser);
   const [pictureUrl, setPictureUrl] = useState(null);
 
   useEffect(() => {
-    if (profile?.avatar_url) {
-      downloadImage(profile.avatar_url);
+    if (avatarUrl) {
+      downloadImage(avatarUrl);
     }
-  }, [profile?.avatar_url]);
+  }, [avatarUrl]);
 
   async function downloadImage(path: string) {
     try {
@@ -54,85 +66,22 @@ export default function ProfilePicture({ profile, size = 72 }) {
     }
   }
 
-  async function updateProfilePicture() {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: 'images',
-        allowsMultipleSelection: false,
-        allowsEditing: true,
-        quality: 0.3,
-        exif: false,
-      });
-
-      if (result.canceled || !result.assets || result.assets.length === 0) {
-        //User cancelled the image picker.
-        return;
-      }
-
-      setIsLoading(true);
-      const image = result.assets[0];
-
-      if (!image.uri) {
-        throw new Error('No image uri!'); // Realistically, this should never happen, but just in case...
-      }
-
-      // Get URI of the image
-      const arraybuffer = await fetch(image.uri).then((res) =>
-        res.arrayBuffer()
-      );
-
-      // Get the file extention of the image
-      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg';
-      // make a new filename for the image based on current time
-      const path = `${Date.now()}.${fileExt}`;
-
-      // Upload the image and return the url
-      const { data, error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(path, arraybuffer, {
-          contentType: image.mimeType ?? 'image/jpeg',
-        });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const { error: avatarError } = await supabase
-        .from('users')
-        .update({ avatar_url: path })
-        .eq('id', user.id);
-
-      if (avatarError) {
-        throw avatarError;
-      }
-
-      setUser({ ...user, avatar_url: path });
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error?.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
   //Get the initials from the first and last name (first and last name not yet implemented in supabase)
-  function getInitials() {
-    if (!profile || !profile.first_name || !profile.last_name) {
-      return '🥾';
-    }
+  // function getInitials() {
+  //   if (!profile || !profile.first_name || !profile.last_name) {
+  //     return '🥾';
+  //   }
 
-    const firstInitial = profile.first_name.charAt(0).toUpperCase();
-    const lastInitial = profile.last_name.charAt(0).toUpperCase();
+  //   const firstInitial = profile.first_name.charAt(0).toUpperCase();
+  //   const lastInitial = profile.last_name.charAt(0).toUpperCase();
 
-    return firstInitial + lastInitial;
-  }
+  //   return firstInitial + lastInitial;
+  // }
 
   const colors = useThemedColors();
 
   return (
-    <Pressable
-      onPress={() => user?.id === profile?.id && updateProfilePicture()}
-      disabled={isLoading}
-    >
+    <>
       <View
         style={[
           {
@@ -160,11 +109,11 @@ export default function ProfilePicture({ profile, size = 72 }) {
           />
         ) : (
           <P bold style={{ textAlign: 'center' }}>
-            {getInitials()}
+            🥾
           </P>
         )}
       </View>
-    </Pressable>
+    </>
   );
 }
 
