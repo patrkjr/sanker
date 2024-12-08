@@ -12,6 +12,7 @@ import {
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import ProfileCard from './profile/ProfileCard';
 
 const IMAGE_HEIGHT = 480;
 
@@ -68,6 +69,7 @@ export default function ItemScreen() {
           {item.price} kr.
         </Small>
         {item.description && <P>{item.description}</P>}
+        <ProfileCard profileId={item.owner_id} />
       </View>
     </ScrollView>
   );

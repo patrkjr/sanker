@@ -1,6 +1,5 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from '../Themed';
-import { H3, Label, P, Small } from '../typography';
+import { Label, P, Small } from '../typography';
 import Input from '../ui/Input';
 import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
@@ -8,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import * as z from 'zod';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
 import SelectableTag from '../ui/SelectableTag';
 import Switch from '../ui/Switch';
 import Item from '../ui/Item';
@@ -16,6 +15,7 @@ import Card from '../ui/Card';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
 import { useRouter } from 'expo-router';
+import ImagePicker from './ImagePicker';
 
 const formSchema = z.object({
   price: z
@@ -31,11 +31,10 @@ const formSchema = z.object({
   description: z.string(),
   use_user_address: z.boolean(),
   show_exact_address: z.boolean(),
-  image_urls: z.array(z.string()),
+  image_urls: z.array(z.string()).min(1, 'You need a least 1 image.'),
 });
 
 export default function CreateForm() {
-  const insets = useSafeAreaInsets();
   const user = useUserStore((state) => state.user);
   const router = useRouter();
 
@@ -47,10 +46,7 @@ export default function CreateForm() {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image_urls: [
-        'https://picsum.photos/300/200.jpg',
-        'https://picsum.photos/300/200.jpg',
-      ],
+      image_urls: [],
       price: '',
       title: '',
       condition: '',
@@ -63,7 +59,6 @@ export default function CreateForm() {
   const [activeField, setActiveField] = useState<string | null>(null);
 
   const onSubmit = async (data) => {
-    // console.log(data);
     try {
       const { error } = await supabase
         .from('items')
@@ -96,25 +91,22 @@ export default function CreateForm() {
         paddingVertical: Spacings.md,
       }}
     >
-      {/* Price field */}
+      {/* Image upload */}
       <Controller
         control={control}
-        name="price"
+        name="image_urls"
         rules={{ required: true }}
-        render={({ field: { onBlur, onChange, value } }) => (
-          <Input
-            label="Price"
-            value={value}
-            inputMode="numeric"
-            onChangeText={onChange}
-            onBlur={() => {
-              setActiveField(null);
-              onBlur();
-            }}
-            onFocus={() => setActiveField('price')}
-            active={activeField === 'price'}
-            errorMessage={errors.price?.message}
-          />
+        render={({ field: { value } }) => (
+          <View style={{ gap: Spacings.sm }}>
+            <ImagePicker />
+            {console.log('Images: ')}
+            {console.log(value)}
+            {errors?.image_urls && (
+              <Small style={{ paddingHorizontal: Spacings.sm }} error>
+                {errors.image_urls.message}
+              </Small>
+            )}
+          </View>
         )}
       />
 
@@ -137,13 +129,35 @@ export default function CreateForm() {
             errorMessage={errors.title?.message}
           />
         )}
-      ></Controller>
+      />
+
+      {/* Price field */}
+      <Controller
+        control={control}
+        name="price"
+        rules={{ required: true }}
+        render={({ field: { onBlur, onChange, value } }) => (
+          <Input
+            label="Price"
+            value={value}
+            inputMode="numeric"
+            onChangeText={onChange}
+            onBlur={() => {
+              setActiveField(null);
+              onBlur();
+            }}
+            onFocus={() => setActiveField('price')}
+            active={activeField === 'price'}
+            errorMessage={errors.price?.message}
+          />
+        )}
+      />
 
       {/* Condition field */}
       <Controller
         control={control}
         name="condition"
-        rules={{ required: false }}
+        rules={{ required: true }}
         render={({ field: { onChange, value } }) => (
           <View style={{ gap: Spacings.sm }}>
             <Label>Condition</Label>
@@ -171,7 +185,7 @@ export default function CreateForm() {
             )}
           </View>
         )}
-      ></Controller>
+      />
 
       {/* Description field */}
       <Controller

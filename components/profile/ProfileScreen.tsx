@@ -10,11 +10,11 @@ import { ScrollView } from 'react-native';
 import AppInfo from '../AppInfo';
 import Icon from '../ui/Icon';
 import useUserStore from '@/stores/userStore';
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import React from 'react';
-import { supabase } from '@/config/supabase';
 import { useUserItems } from '@/hooks/useUserItems';
+import ProfileCard from './ProfileCard';
 
 export default function ProfileScreen() {
   const { signOut } = useSupabase();
@@ -22,9 +22,11 @@ export default function ProfileScreen() {
   const clearUser = useUserStore((state) => state.clearUser);
   const { isLoading, fetchUserItems } = useUserItems();
 
-  useFocusEffect(() => {
-    fetchUserItems();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserItems();
+    }, [])
+  );
 
   const UserProfileInfo = () => {
     return (
@@ -39,9 +41,13 @@ export default function ProfileScreen() {
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
       style={{ flex: 1 }}
-      contentContainerStyle={{ gap: Spacings.md, paddingVertical: Spacings.md }}
+      contentContainerStyle={{
+        gap: Spacings.md,
+        paddingVertical: Spacings.md,
+        paddingHorizontal: Spacings.sm,
+      }}
     >
-      {user ? <UserProfileInfo /> : <Text>No user</Text>}
+      {user ? <ProfileCard profileId={user.id} /> : <Text>No user</Text>}
       <View style={styles.sectionStyle}>
         <Label>Listings</Label>
         <Card style={styles.cardWithListStyle}>
@@ -109,7 +115,6 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   sectionStyle: {
-    paddingHorizontal: Spacings.sm,
     gap: Spacings.xs,
   },
   cardWithListStyle: {

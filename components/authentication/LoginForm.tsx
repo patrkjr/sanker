@@ -54,12 +54,8 @@ export default function LoginForm() {
 
       setUser({ ...data, ...user });
     } catch (error) {
-      Alert.alert(error?.message, '', [
-        {
-          text: 'Ok',
-          style: 'cancel',
-        },
-      ]);
+      console.log(error);
+      Alert.alert(error?.message);
     }
   };
 

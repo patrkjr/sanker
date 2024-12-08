@@ -14,9 +14,11 @@ export default function Listings() {
   const { isLoading, fetchUserItems } = useUserItems();
   const items = useUserStore((state) => state.user?.items);
 
-  useFocusEffect(() => {
-    fetchUserItems();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserItems();
+    }, [])
+  );
 
   if (isLoading) return <ActivityIndicator />;
 

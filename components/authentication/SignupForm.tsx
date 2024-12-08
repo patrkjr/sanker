@@ -51,8 +51,8 @@ export default function SignupForm() {
 
   const [activeField, setActiveField] = useState<string | null>(null);
 
-  const onSubmit = async (data) => {
-    const { email, password, full_name } = data;
+  const onSubmit = async (formData) => {
+    const { email, password } = formData;
     try {
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
@@ -65,21 +65,23 @@ export default function SignupForm() {
 
       const user = authData.user;
 
+      // Take out the fields you need here.
+      const { full_name } = formData;
+
       if (user) {
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .insert([
-            {
-              id: user.id, // Use the id from the `auth` table
-              full_name,
-            },
-          ]);
+        const { error: userError } = await supabase.from('users').insert([
+          {
+            full_name,
+            id: user.id, // Use the id from the `auth` table
+          },
+        ]);
 
         if (userError) {
           throw new Error(userError.message);
         }
 
-        setUser({ ...user, full_name, items: [] });
+        // Set both normal table data
+        setUser({ full_name, email, id: user.id, items: [] });
       }
     } catch (error) {
       Alert.alert(error?.message);

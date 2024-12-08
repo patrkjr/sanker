@@ -57,6 +57,14 @@
             "./assets/fonts/SpaceMono-Regular.ttf"
           ]
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Sanker accesses your photos to let you post items on the store.",
+          "cameraPermisson": "Allow Sanker to access your camera, to take photos of your item.",
+          "microphonePermission": false
+        }
       ]
     ],
     "experiments": {

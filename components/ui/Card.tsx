@@ -1,9 +1,8 @@
-import { useColorScheme, ViewStyle } from "react-native";
-import { View } from "../Themed";
-import Colors from "@/constants/Colors";
-import Spacings from "@/constants/Spacings";
-import { PropsWithChildren } from "react";
-import Animated from "react-native-reanimated";
+import { useColorScheme, ViewStyle } from 'react-native';
+import Colors from '@/constants/Colors';
+import Spacings from '@/constants/Spacings';
+import { PropsWithChildren, useEffect } from 'react';
+import Animated from 'react-native-reanimated';
 
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
@@ -18,7 +17,7 @@ export default function Card({
   style,
   ...otherProps
 }: CardProps) {
-  const theme = useColorScheme() || "light";
+  const theme = useColorScheme() || 'light';
   const colors = Colors[theme];
 
   const cardStyle: ViewStyle = {
@@ -28,7 +27,7 @@ export default function Card({
     borderColor: themed ? colors.themed.border : colors.border,
     paddingVertical: Spacings.xs,
     paddingHorizontal: Spacings.md,
-    width: "100%",
+    width: '100%',
   };
 
   return (
