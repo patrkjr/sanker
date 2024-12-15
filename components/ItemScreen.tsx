@@ -33,6 +33,7 @@ export default function ItemScreen() {
   const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [showMultipleImages, setShowMultipleImages] = useState(false);
   const [item, setItem] = useState(null);
   const navigation = useNavigation();
 
@@ -59,6 +60,9 @@ export default function ItemScreen() {
         .single();
 
       if (data) {
+        if (data.image_urls.length > 1) {
+          setShowMultipleImages(true);
+        }
         setItem(data);
         navigation.setOptions({ title: data.title });
       }
@@ -98,7 +102,7 @@ export default function ItemScreen() {
             loop={false}
             data={item.image_urls}
             style={{ width: '100%' }}
-            enabled={item.image_urls.length !== 1}
+            enabled={showMultipleImages}
             onProgressChange={(offsetProgress, absoluteProgress) =>
               (progress.value = absoluteProgress)
             }
@@ -126,6 +130,7 @@ export default function ItemScreen() {
               backgroundColor: grey[800],
               position: 'absolute',
               bottom: Spacings.sm,
+              display: !showMultipleImages && 'none',
             }}
           />
         </View>
