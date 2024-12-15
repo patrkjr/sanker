@@ -62,6 +62,8 @@ const red = {
   1100: '#5a0707', // Almost black with the faintest red tint
 };
 
+export { grey, green, blue, red };
+
 export default {
   light: {
     text: grey['800'],
@@ -87,6 +89,10 @@ export default {
       card: green[100],
       border: green[200],
     },
+    permanent: {
+      white: grey[50],
+      black: grey[1100],
+    },
   },
   dark: {
     text: grey[300],
@@ -111,6 +117,10 @@ export default {
       textSecondary: green[900],
       card: green[1000],
       border: green[900],
+    },
+    permanent: {
+      white: grey[50],
+      black: grey[1100],
     },
   },
 } as ThemeObject;

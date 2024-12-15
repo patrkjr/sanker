@@ -1,13 +1,14 @@
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { View } from './Themed';
 import { H2, H3, H4, Label, Large, P, Small } from './typography';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
   Image,
   ScrollView,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
@@ -15,6 +16,10 @@ import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 import ProfileCard from './profile/ProfileCard';
 import SelectableTag from './ui/SelectableTag';
 import Button from './ui/Button';
+import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { useSharedValue } from 'react-native-reanimated';
+import { Basic as DotIndicators } from './Pagination';
+import { grey } from '@/constants/Colors';
 
 const IMAGE_HEIGHT = 300;
 
@@ -25,10 +30,16 @@ const conditionStrings = {
 };
 
 export default function ItemScreen() {
+  const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [item, setItem] = useState(null);
   const navigation = useNavigation();
+
+  const progress = useSharedValue<number>(0);
+
+  const ref = useRef<ICarouselInstance>(null);
+  //const ref = React.useRef<ICarouselInstance>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,7 +69,18 @@ export default function ItemScreen() {
     }
   }
 
-  if (isLoading) return <ActivityIndicator />;
+  const onPressPagination = (index: number) => {
+    ref.current?.scrollTo({
+      /**
+       * Calculate the difference between the current index and the target index
+       * to ensure that the carousel scrolls to the nearest index
+       */
+      count: index - progress.value,
+      animated: true,
+    });
+  };
+
+  if (isLoading) return <ActivityIndicator color="red" />;
 
   return (
     <ScrollView
@@ -66,8 +88,46 @@ export default function ItemScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.pageContent}>
-        <View style={styles.imageContainer}>
-          <Image style={{ height: IMAGE_HEIGHT }} src={item.image_urls[0]} />
+        <View
+          style={styles.imageContainer}
+          dataSet={{ kind: 'utils', name: 'pagination' }}
+        >
+          <Carousel
+            ref={ref}
+            width={width - Spacings.md * 2}
+            loop={false}
+            data={item.image_urls}
+            style={{ width: '100%' }}
+            enabled={item.image_urls.length !== 1}
+            onProgressChange={(offsetProgress, absoluteProgress) =>
+              (progress.value = absoluteProgress)
+            }
+            renderItem={({ item, index }) => (
+              <Image style={{ height: IMAGE_HEIGHT }} src={item} />
+            )}
+          />
+          <DotIndicators
+            progress={progress}
+            data={item.image_urls}
+            onPress={onPressPagination}
+            dotStyle={{
+              backgroundColor: grey[700],
+              borderRadius: Spacings.borderRadius.round,
+            }}
+            activeDotStyle={{
+              backgroundColor: grey[50],
+              borderRadius: Spacings.borderRadius.round,
+            }}
+            containerStyle={{
+              gap: Spacings.xs,
+              paddingHorizontal: Spacings.sm,
+              paddingVertical: Spacings.xs,
+              borderRadius: Spacings.borderRadius.round,
+              backgroundColor: grey[800],
+              position: 'absolute',
+              bottom: Spacings.sm,
+            }}
+          />
         </View>
         <View style={styles.subHeader}>
           <H4 bold secondary>

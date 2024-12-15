@@ -92,7 +92,7 @@ export default function ProfileScreen() {
             <Item.Label>Notifications</Item.Label>
             <Item.Value></Item.Value>
           </Item>
-          <Item disabled isLastItem>
+          <Item disabled>
             <Item.Label>Location</Item.Label>
             <Item.Value></Item.Value>
           </Item>
