@@ -15,12 +15,14 @@ export default function ProfileLayout() {
         options={{
           title: 'Edit profile',
           ...HeaderLargeStyle,
-          headerBackTitleStyle: { fontWeight: '800' },
         }}
       />
       <Stack.Screen
         name="item/[id]"
-        options={{ titel: 'Item for sale', ...HeaderStyle }}
+        options={{
+          title: 'Item for sale',
+          ...HeaderStyle,
+        }}
       />
       <Stack.Screen
         name="edit-name"

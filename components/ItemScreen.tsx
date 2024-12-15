@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
-import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 import ProfileCard from './profile/ProfileCard';
 import SelectableTag from './ui/SelectableTag';
 import Button from './ui/Button';
@@ -88,6 +87,7 @@ export default function ItemScreen() {
 
   return (
     <ScrollView
+      style={{ marginTop: 48 }}
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
     >
