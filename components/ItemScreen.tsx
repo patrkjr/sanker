@@ -19,6 +19,7 @@ import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
 import { Basic as DotIndicators } from './Pagination';
 import { grey } from '@/constants/Colors';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 const IMAGE_HEIGHT = 300;
 
@@ -35,6 +36,7 @@ export default function ItemScreen() {
   const [showMultipleImages, setShowMultipleImages] = useState(false);
   const [item, setItem] = useState(null);
   const navigation = useNavigation();
+  const colors = useThemedColors();
 
   const progress = useSharedValue<number>(0);
 
@@ -92,14 +94,10 @@ export default function ItemScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.pageContent}>
-        <View
-          style={styles.imageContainer}
-          dataSet={{ kind: 'utils', name: 'pagination' }}
-        >
+        <View style={[styles.imageContainer, { backgroundColor: colors.card }]}>
           <Carousel
             ref={ref}
             width={width - Spacings.md * 2}
-            loop={false}
             data={item.image_urls}
             style={{ width: '100%' }}
             enabled={showMultipleImages}
