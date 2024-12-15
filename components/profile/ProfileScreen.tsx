@@ -28,6 +28,11 @@ export default function ProfileScreen() {
     }, [])
   );
 
+  // Check for user
+  if (!user) {
+    return null;
+  }
+
   //Get created time and make a Date object.
   const dateStr = user?.created_at;
   const date = new Date(dateStr);

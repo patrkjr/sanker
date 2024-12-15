@@ -9,22 +9,12 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { timingConfig } from '@/constants/Animations';
-import * as ImagePicker from 'expo-image-picker';
-import * as Haptics from 'expo-haptics';
 
-export default function AddImage() {
-  const pickImageAsync = async () => {
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ['images'],
-    //   allowsMultipleSelection: true,
-    //   orderedSelection: true,
-    //   quality: 0.5,
-    //   exif: false,
-    // });
-    // if (!result.canceled) {
-    //   console.log(result);
-    // }
-  };
+import * as Haptics from 'expo-haptics';
+import { useState } from 'react';
+
+export default function AddImage({ onPress }) {
+  //onPress(() => pickImageAsync());
 
   const opacity = useSharedValue(1);
   const scale = useSharedValue(1);
@@ -38,7 +28,7 @@ export default function AddImage() {
 
   return (
     <Pressable
-      onPress={pickImageAsync}
+      onPress={onPress}
       onPressIn={() => ((opacity.value = 0.5), (scale.value = 0.88))}
       onPressOut={() => (
         (opacity.value = 1),

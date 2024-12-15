@@ -15,7 +15,10 @@ import Card from '../ui/Card';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
 import { useRouter } from 'expo-router';
-import ImagePicker from './ImagePicker';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import ImageUploadGallery from './ImageUploadGallery';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const formSchema = z.object({
   price: z
@@ -27,16 +30,25 @@ const formSchema = z.object({
   title: z
     .string()
     .min(2, 'Give your item a title that is at lease 3 characters long.'),
-  condition: z.enum(['new', 'used', 'worn']),
+  condition: z.enum(['new', 'used', 'worn'], {
+    errorMap: (issue, ctx) => ({ message: 'Please describe the condition.' }),
+  }),
   description: z.string(),
   use_user_address: z.boolean(),
   show_exact_address: z.boolean(),
-  image_urls: z.array(z.string()).min(1, 'You need a least 1 image.'),
+  image_urls: z
+    .array(
+      z.object({
+        uri: z.string().url(),
+      })
+    )
+    .min(1, 'You need at least 1 image'),
 });
 
 export default function CreateForm() {
   const user = useUserStore((state) => state.user);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -60,9 +72,17 @@ export default function CreateForm() {
 
   const onSubmit = async (data) => {
     try {
+      // Generate a uuid
+      setIsLoading(true);
+      const id = uuidv4();
+
+      // Upload the images
+      const imageUrls = await uploadImages(id, data.image_urls);
+
+      //Insert the new item into database
       const { error } = await supabase
         .from('items')
-        .insert({ ...data, owner_id: user?.id });
+        .insert({ id, ...data, image_urls: imageUrls, owner_id: user?.id });
       if (error) {
         Alert.alert(error?.message);
         return;
@@ -71,12 +91,14 @@ export default function CreateForm() {
         pathname: '/new/success',
         params: {
           ...data,
-          image_urls: JSON.stringify(data.image_urls),
+          image_urls: JSON.stringify(imageUrls),
         },
       });
       reset();
     } catch (error) {
       Alert.alert(error?.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,11 +118,12 @@ export default function CreateForm() {
         control={control}
         name="image_urls"
         rules={{ required: true }}
-        render={({ field: { value } }) => (
+        render={({ field: { value, onChange } }) => (
           <View style={{ gap: Spacings.sm }}>
-            <ImagePicker />
-            {console.log('Images: ')}
-            {console.log(value)}
+            <ImageUploadGallery
+              images={value}
+              onChangeImages={(images) => onChange(images)}
+            />
             {errors?.image_urls && (
               <Small style={{ paddingHorizontal: Spacings.sm }} error>
                 {errors.image_urls.message}
@@ -247,7 +270,7 @@ export default function CreateForm() {
       {/* Submit button */}
       <Button
         title="Post item"
-        disabled={isSubmitting}
+        disabled={isLoading || isSubmitting}
         themed
         onPress={handleSubmit(onSubmit)}
       />
@@ -262,3 +285,45 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 });
+
+const compressImage = async (uri: string) => {
+  try {
+    const manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 1000 } }], // Resize width, maintain aspect ratio
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compress to 70%
+    );
+    return manipulatedImage;
+  } catch (error) {
+    console.error('compressImage function: ' + error.message);
+    alert(error?.message);
+  }
+};
+
+const uploadImages = async (itemId: string, images: [{ uri: string }]) => {
+  const uploadedUrls = [];
+  for (const image of images) {
+    const compressedImage = await compressImage(image.uri);
+    const fileName = `items/${itemId}/${Date.now()}.jpeg`;
+    const { data, error } = await supabase.storage
+      .from('images')
+      .upload(fileName, compressedImage, {
+        contentType: image.mimeType ?? 'image/jpeg',
+      });
+
+    if (data) {
+      try {
+        const {
+          data: { publicUrl },
+        } = await supabase.storage.from('images').getPublicUrl(data.path);
+
+        uploadedUrls.push(publicUrl);
+      } catch (error) {
+        console.error('Error getting absolute URL: ' + error?.message);
+      }
+    } else {
+      console.error('Image upload failed: ', error);
+    }
+  }
+  return uploadedUrls;
+};
