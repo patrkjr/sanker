@@ -81,9 +81,9 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     const inProtectedGroup = segments[0] === '(protected)';
 
     if (session && !inProtectedGroup) {
-      router.push('/(app)/(protected)/');
+      router.replace('/(app)/(protected)/');
     } else if (!session) {
-      router.push('/(app)/welcome');
+      router.replace('/(app)/welcome');
     }
 
     /* HACK: Something must be rendered when determining the initial auth state... 
