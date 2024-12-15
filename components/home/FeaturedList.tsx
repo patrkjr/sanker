@@ -8,13 +8,15 @@ import { Link } from 'expo-router';
 
 const IMG_HEIGHT = 180;
 
-export default function FeaturedList({ items }) {
+export default function FeaturedList({ items, onRefresh, refreshing }) {
   const colors = useThemedColors();
 
   return (
     <FlatList
       contentInsetAdjustmentBehavior="automatic"
       numColumns={2}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       showsVerticalScrollIndicator={false}
       columnWrapperStyle={{
         justifyContent: 'space-between',

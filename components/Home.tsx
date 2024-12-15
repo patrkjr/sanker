@@ -36,9 +36,15 @@ export default function Home() {
     }
   }
 
-  if (isLoading) return <ActivityIndicator />;
+  //if (isLoading) return <ActivityIndicator />;
 
-  return <FeaturedList items={items} />;
+  return (
+    <FeaturedList
+      onRefresh={getFeaturedItemsAsync}
+      refreshing={isLoading}
+      items={items}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
