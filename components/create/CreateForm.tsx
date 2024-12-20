@@ -6,8 +6,14 @@ import Button from '../ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import * as z from 'zod';
-import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import SelectableTag from '../ui/SelectableTag';
 import Switch from '../ui/Switch';
 import Item from '../ui/Item';
@@ -19,6 +25,10 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import ImageUploadGallery from './ImageUploadGallery';
 import * as ImageManipulator from 'expo-image-manipulator';
+import Animated, {
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 const formSchema = z.object({
   price: z
@@ -102,179 +112,221 @@ export default function CreateForm() {
     }
   };
 
+  //Refs
+  const scrollViewRef = useRef<ScrollView>(null);
+  const titleRef = useRef(null);
+  const priceRef = useRef(null);
+  const descriptionRef = useRef(null);
+
+  const keyboard = useAnimatedKeyboard();
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value }],
+  }));
+
+  const handleFocus = (ref, fieldName: string) => {
+    if (ref?.current && scrollViewRef?.current) {
+      ref.current.measureLayout(
+        scrollViewRef.current,
+        (x, y) => {
+          scrollViewRef.current?.scrollTo({ x: 0, y: y - 128, animated: true });
+        },
+        (error) => {
+          console.error('measureLayout error:', error);
+        }
+      );
+    }
+    setActiveField(fieldName);
+  };
+
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-      contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{
-        gap: Spacings.lg,
-        paddingHorizontal: Spacings.md,
-        paddingVertical: Spacings.md,
-      }}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'android' ? 98 : 0}
     >
-      {/* Image upload */}
-      <Controller
-        control={control}
-        name="image_urls"
-        rules={{ required: true }}
-        render={({ field: { value, onChange } }) => (
-          <View style={{ gap: Spacings.sm }}>
-            <ImageUploadGallery
-              images={value}
-              onChangeImages={(images) => onChange(images)}
-            />
-            {errors?.image_urls && (
-              <Small style={{ paddingHorizontal: Spacings.sm }} error>
-                {errors.image_urls.message}
-              </Small>
-            )}
-          </View>
-        )}
-      />
-
-      {/* Title field */}
-      <Controller
-        control={control}
-        name="title"
-        rules={{ required: true }}
-        render={({ field: { onBlur, onChange, value } }) => (
-          <Input
-            label="Title"
-            value={value}
-            onChangeText={onChange}
-            onBlur={() => {
-              setActiveField(null);
-              onBlur();
-            }}
-            onFocus={() => setActiveField('title')}
-            active={activeField === 'title'}
-            errorMessage={errors.title?.message}
-          />
-        )}
-      />
-
-      {/* Price field */}
-      <Controller
-        control={control}
-        name="price"
-        rules={{ required: true }}
-        render={({ field: { onBlur, onChange, value } }) => (
-          <Input
-            label="Price"
-            value={value}
-            inputMode="numeric"
-            onChangeText={onChange}
-            onBlur={() => {
-              setActiveField(null);
-              onBlur();
-            }}
-            onFocus={() => setActiveField('price')}
-            active={activeField === 'price'}
-            errorMessage={errors.price?.message}
-          />
-        )}
-      />
-
-      {/* Condition field */}
-      <Controller
-        control={control}
-        name="condition"
-        rules={{ required: true }}
-        render={({ field: { onChange, value } }) => (
-          <View style={{ gap: Spacings.sm }}>
-            <Label style={{ paddingHorizontal: Spacings.sm }}>Condition</Label>
-            <View style={styles.conditionOptions}>
-              <SelectableTag
-                selected={value === 'new'}
-                onPress={() => onChange('new')}
-                text="Like new"
+      <Animated.ScrollView
+        ref={scrollViewRef}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[
+          {
+            paddingHorizontal: Spacings.md,
+            paddingVertical: Spacings.md,
+            gap: Spacings.lg,
+          },
+          animatedStyles,
+        ]}
+      >
+        {/* Image upload */}
+        <Controller
+          control={control}
+          name="image_urls"
+          rules={{ required: true }}
+          render={({ field: { value, onChange } }) => (
+            <View style={{ gap: Spacings.sm }}>
+              <ImageUploadGallery
+                images={value}
+                onChangeImages={(images) => onChange(images)}
               />
-              <SelectableTag
-                selected={value === 'used'}
-                onPress={() => onChange('used')}
-                text="Nice but used"
-              />
-              <SelectableTag
-                selected={value === 'worn'}
-                onPress={() => onChange('worn')}
-                text="Worn"
-              />
+              {errors?.image_urls && (
+                <Small style={{ paddingHorizontal: Spacings.sm }} error>
+                  {errors.image_urls.message}
+                </Small>
+              )}
             </View>
-            {errors?.condition && (
-              <Small style={{ paddingHorizontal: Spacings.sm }} error>
-                {errors.condition.message}
-              </Small>
-            )}
-          </View>
-        )}
-      />
+          )}
+        />
 
-      {/* Description field */}
-      <Controller
-        control={control}
-        name="description"
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
+        {/* Title field */}
+        <Controller
+          control={control}
+          name="title"
+          rules={{ required: true }}
+          render={({ field: { onBlur, onChange, value } }) => (
             <Input
-              label="Description"
+              ref={titleRef}
+              label="Title"
               value={value}
-              style={{ minHeight: 120, maxHeight: 140 }}
-              multiline
               onChangeText={onChange}
               onBlur={() => {
                 setActiveField(null);
                 onBlur();
               }}
-              onFocus={() => setActiveField('description')}
-              active={activeField === 'description'}
-              helperMessage="Description is optional"
-              errorMessage={errors.description?.message}
+              onFocus={() => handleFocus(titleRef, 'title')}
+              active={activeField === 'title'}
+              errorMessage={errors.title?.message}
             />
-          </>
-        )}
-      ></Controller>
+          )}
+        />
 
-      {/* Address fields */}
-      <Card>
+        {/* Price field */}
         <Controller
           control={control}
-          name="use_user_address"
+          name="price"
+          rules={{ required: true }}
+          render={({ field: { onBlur, onChange, value } }) => (
+            <Input
+              ref={priceRef}
+              label="Price"
+              value={value}
+              inputMode="numeric"
+              onChangeText={onChange}
+              onBlur={() => {
+                setActiveField(null);
+                onBlur();
+              }}
+              onFocus={() => handleFocus(priceRef, 'price')}
+              active={activeField === 'price'}
+              errorMessage={errors.price?.message}
+            />
+          )}
+        />
+
+        {/* Condition field */}
+        <Controller
+          control={control}
+          name="condition"
           rules={{ required: true }}
           render={({ field: { onChange, value } }) => (
-            <Item animate={false} onPress={() => onChange(!value)}>
-              <Item.Label>Use my address as location</Item.Label>
-              <Item.Value hasTrailingIcon={false}>
-                <Switch selected={value} onPress={() => onChange(!value)} />
-              </Item.Value>
-            </Item>
+            <View style={{ gap: Spacings.sm }}>
+              <Label style={{ paddingHorizontal: Spacings.sm }}>
+                Condition
+              </Label>
+              <View style={styles.conditionOptions}>
+                <SelectableTag
+                  selected={value === 'new'}
+                  onPress={() => onChange('new')}
+                  text="Like new"
+                />
+                <SelectableTag
+                  selected={value === 'used'}
+                  onPress={() => onChange('used')}
+                  text="Nice but used"
+                />
+                <SelectableTag
+                  selected={value === 'worn'}
+                  onPress={() => onChange('worn')}
+                  text="Worn"
+                />
+              </View>
+              {errors?.condition && (
+                <Small style={{ paddingHorizontal: Spacings.sm }} error>
+                  {errors.condition.message}
+                </Small>
+              )}
+            </View>
+          )}
+        />
+
+        {/* Description field */}
+        <Controller
+          control={control}
+          name="description"
+          rules={{ required: true }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <>
+              <Input
+                ref={descriptionRef}
+                label="Description"
+                value={value}
+                style={{ minHeight: 120, maxHeight: 140 }}
+                multiline
+                onChangeText={onChange}
+                onBlur={() => {
+                  setActiveField(null);
+                  onBlur();
+                }}
+                onFocus={() => handleFocus(descriptionRef, 'description')}
+                active={activeField === 'description'}
+                helperMessage="Description is optional"
+                errorMessage={errors.description?.message}
+              />
+            </>
           )}
         ></Controller>
 
-        <Controller
-          control={control}
-          name="show_exact_address"
-          rules={{ required: true }}
-          render={({ field: { onChange, value } }) => (
-            <Item animate={false} onPress={() => onChange(!value)} isLastItem>
-              <Item.Label>Show address</Item.Label>
-              <Item.Value hasTrailingIcon={false}>
-                <Switch selected={value} onPress={() => onChange(!value)} />
-              </Item.Value>
-            </Item>
-          )}
-        ></Controller>
-      </Card>
+        {/* Address fields */}
+        <Card>
+          <Controller
+            control={control}
+            name="use_user_address"
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <Item animate={false} onPress={() => onChange(!value)}>
+                <Item.Label>Use my address as location</Item.Label>
+                <Item.Value hasTrailingIcon={false}>
+                  <Switch selected={value} onPress={() => onChange(!value)} />
+                </Item.Value>
+              </Item>
+            )}
+          ></Controller>
 
-      {/* Submit button */}
-      <Button
-        title="Post item"
-        disabled={isLoading || isSubmitting}
-        themed
-        onPress={handleSubmit(onSubmit)}
-      />
-    </ScrollView>
+          <Controller
+            control={control}
+            name="show_exact_address"
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <Item animate={false} onPress={() => onChange(!value)} isLastItem>
+                <Item.Label>Show address</Item.Label>
+                <Item.Value hasTrailingIcon={false}>
+                  <Switch selected={value} onPress={() => onChange(!value)} />
+                </Item.Value>
+              </Item>
+            )}
+          ></Controller>
+        </Card>
+
+        {/* Submit button */}
+        <Button
+          title="Post item"
+          disabled={isLoading || isSubmitting}
+          themed
+          onPress={handleSubmit(onSubmit)}
+        />
+      </Animated.ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

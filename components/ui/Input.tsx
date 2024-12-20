@@ -1,10 +1,17 @@
-import { TextInput, TextInputProps, ViewStyle, TextStyle } from 'react-native';
+import {
+  TextInput,
+  TextInputProps,
+  ViewStyle,
+  TextStyle,
+  StyleSheetProperties,
+} from 'react-native';
 import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
 import Colors from '@/constants/Colors';
 import FontScale from '@/constants/FontScale';
 import { useColorScheme } from 'react-native';
 import { Label, P, Small } from '../typography';
+import { forwardRef } from 'react';
 
 interface InputProps extends TextInputProps {
   /** Optional style for the container wrapping the TextInput */
@@ -15,15 +22,18 @@ interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
 }
 
-export default function Input({
-  label,
-  active = false,
-  helperMessage,
-  errorMessage,
-  containerStyle,
-  style,
-  ...textInputProps
-}: InputProps) {
+const Input = forwardRef(function Input(
+  {
+    label,
+    active = false,
+    helperMessage,
+    errorMessage,
+    containerStyle,
+    style,
+    ...textInputProps
+  }: InputProps,
+  ref
+) {
   //const theme = useThemeColor();
   const theme = useColorScheme() || 'light';
   const colors = Colors[theme];
@@ -59,6 +69,7 @@ export default function Input({
         </Label>
       )}
       <TextInput
+        ref={ref}
         selectionColor={colors.textSecondary}
         style={[inputStyles, style]}
         placeholderTextColor={colors.textPlaceholder}
@@ -76,4 +87,6 @@ export default function Input({
       )}
     </View>
   );
-}
+});
+
+export default Input;

@@ -37,6 +37,7 @@
     "react-dom": "18.3.1",
     "react-hook-form": "^7.53.2",
     "react-native": "0.76.3",
+    "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
     "react-native-reanimated": "~3.16.1",
     "react-native-reanimated-carousel": "^3.5.1",
@@ -46,8 +47,7 @@
     "react-native-web": "~0.19.13",
     "uuid": "^11.0.3",
     "zod": "^3.23.8",
-    "zustand": "^5.0.1",
-    "react-native-gesture-handler": "~2.20.2"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
