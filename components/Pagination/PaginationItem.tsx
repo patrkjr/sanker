@@ -38,7 +38,7 @@ export const PaginationItem: React.FC<
     onPress,
   } = props;
 
-  const defaultDotSize = 10;
+  const defaultDotSize = 8;
 
   const sizes = {
     width: size || dotStyle?.width || defaultDotSize,

@@ -113,7 +113,7 @@ export default function ItemScreen() {
             data={item.image_urls}
             onPress={onPressPagination}
             dotStyle={{
-              backgroundColor: grey[700],
+              backgroundColor: grey[500],
               borderRadius: Spacings.borderRadius.round,
             }}
             activeDotStyle={{
@@ -122,10 +122,10 @@ export default function ItemScreen() {
             }}
             containerStyle={{
               gap: Spacings.xs,
-              paddingHorizontal: Spacings.sm,
+              paddingHorizontal: Spacings.xs,
               paddingVertical: Spacings.xs,
               borderRadius: Spacings.borderRadius.round,
-              backgroundColor: grey[800],
+              backgroundColor: colors.darkScrim,
               position: 'absolute',
               bottom: Spacings.sm,
               display: !showMultipleImages && 'none',

@@ -1,5 +1,4 @@
-const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
+const darkScrim = 'rgba(0,0,0,0.52)';
 
 const green = {
   50: '#fdfefc',
@@ -93,6 +92,7 @@ export default {
       white: grey[50],
       black: grey[1100],
     },
+    darkScrim,
   },
   dark: {
     text: grey[300],
@@ -122,5 +122,6 @@ export default {
       white: grey[50],
       black: grey[1100],
     },
+    darkScrim,
   },
 } as ThemeObject;
