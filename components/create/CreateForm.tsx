@@ -1,3 +1,4 @@
+import React from 'react';
 import { View } from '../Themed';
 import { Label, P, Small } from '../typography';
 import Input from '../ui/Input';
@@ -6,7 +7,7 @@ import Button from '../ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import * as z from 'zod';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -26,6 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ImageUploadGallery from './ImageUploadGallery';
 import * as ImageManipulator from 'expo-image-manipulator';
 import Animated, {
+  LinearTransition,
   useAnimatedKeyboard,
   useAnimatedStyle,
 } from 'react-native-reanimated';
@@ -147,6 +149,7 @@ export default function CreateForm() {
     >
       <Animated.ScrollView
         ref={scrollViewRef}
+        layout={LinearTransition}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         contentInsetAdjustmentBehavior="automatic"
@@ -166,10 +169,7 @@ export default function CreateForm() {
           rules={{ required: true }}
           render={({ field: { value, onChange } }) => (
             <View style={{ gap: Spacings.sm }}>
-              <ImageUploadGallery
-                images={value}
-                onChangeImages={(images) => onChange(images)}
-              />
+              <ImageUploadGallery images={value} onChangeImages={onChange} />
               {errors?.image_urls && (
                 <Small style={{ paddingHorizontal: Spacings.sm }} error>
                   {errors.image_urls.message}

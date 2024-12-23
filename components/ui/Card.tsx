@@ -1,13 +1,16 @@
+import React from 'react';
 import { useColorScheme, ViewStyle } from 'react-native';
 import Colors from '@/constants/Colors';
 import Spacings from '@/constants/Spacings';
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 import Animated from 'react-native-reanimated';
+import { ViewProps } from '../Themed';
 
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
   themed?: boolean;
-  style?: ViewStyle;
+  style: ViewStyle | ViewStyle[];
+  otherProps?: ViewProps;
 }
 
 export default function Card({
