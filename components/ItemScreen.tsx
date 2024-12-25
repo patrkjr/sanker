@@ -1,15 +1,13 @@
-import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { View } from './Themed';
-import { H2, H3, H4, Label, Large, P, Small } from './typography';
-import { useEffect, useRef, useState } from 'react';
+import { H2, H3, H4, Label, P } from './typography';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import ProfileCard from './profile/ProfileCard';
 import SelectableTag from './ui/SelectableTag';
 import Button from './ui/Button';
-import { useSharedValue } from 'react-native-reanimated';
-import { useThemedColors } from '@/hooks/useThemedColors';
 import ImageCarousel from './ui/ImageCarousel';
 
 const IMAGE_HEIGHT = 300;
@@ -23,12 +21,8 @@ const conditionStrings = {
 export default function ItemScreen() {
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [showMultipleImages, setShowMultipleImages] = useState(false);
   const [item, setItem] = useState(null);
   const navigation = useNavigation();
-  const colors = useThemedColors();
-
-  const progress = useSharedValue<number>(0);
 
   //const ref = React.useRef<ICarouselInstance>(null);
 
@@ -62,17 +56,6 @@ export default function ItemScreen() {
       setIsLoading(false);
     }
   }
-
-  const onPressPagination = (index: number) => {
-    ref.current?.scrollTo({
-      /**
-       * Calculate the difference between the current index and the target index
-       * to ensure that the carousel scrolls to the nearest index
-       */
-      count: index - progress.value,
-      animated: true,
-    });
-  };
 
   if (isLoading) return <ActivityIndicator color="red" />;
 
