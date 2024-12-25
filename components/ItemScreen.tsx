@@ -20,6 +20,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import { Basic as DotIndicators } from './Pagination';
 import { grey } from '@/constants/Colors';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import ImageCarousel from './ui/ImageCarousel';
 
 const IMAGE_HEIGHT = 300;
 
@@ -61,9 +62,9 @@ export default function ItemScreen() {
         .single();
 
       if (data) {
-        if (data.image_urls.length > 1) {
-          setShowMultipleImages(true);
-        }
+        // if (data.image_urls.length > 1) {
+        //   setShowMultipleImages(true);
+        // }
         setItem(data);
         navigation.setOptions({ title: data.title });
       }
@@ -95,41 +96,9 @@ export default function ItemScreen() {
     >
       <View style={styles.pageContent}>
         <View style={[styles.imageContainer, { backgroundColor: colors.card }]}>
-          <Carousel
-            ref={ref}
+          <ImageCarousel
             width={width - Spacings.md * 2}
-            data={item.image_urls}
-            style={{ width: '100%' }}
-            enabled={showMultipleImages}
-            onProgressChange={(offsetProgress, absoluteProgress) =>
-              (progress.value = absoluteProgress)
-            }
-            renderItem={({ item, index }) => (
-              <Image style={{ height: IMAGE_HEIGHT }} src={item} />
-            )}
-          />
-          <DotIndicators
-            progress={progress}
-            data={item.image_urls}
-            onPress={onPressPagination}
-            dotStyle={{
-              backgroundColor: grey[500],
-              borderRadius: Spacings.borderRadius.round,
-            }}
-            activeDotStyle={{
-              backgroundColor: grey[50],
-              borderRadius: Spacings.borderRadius.round,
-            }}
-            containerStyle={{
-              gap: Spacings.xs,
-              paddingHorizontal: Spacings.xs,
-              paddingVertical: Spacings.xs,
-              borderRadius: Spacings.borderRadius.round,
-              backgroundColor: colors.darkScrim,
-              position: 'absolute',
-              bottom: Spacings.sm,
-              display: !showMultipleImages && 'none',
-            }}
+            imageUrls={item?.image_urls}
           />
         </View>
         <View style={styles.subHeader}>
