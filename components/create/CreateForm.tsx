@@ -168,7 +168,12 @@ export default function CreateForm() {
           name="image_urls"
           rules={{ required: true }}
           render={({ field: { value, onChange } }) => (
-            <View style={{ gap: Spacings.sm }}>
+            <View
+              style={{
+                gap: Spacings.sm,
+                overflow: 'visible',
+              }}
+            >
               <ImageUploadGallery images={value} onChangeImages={onChange} />
               {errors?.image_urls && (
                 <Small style={{ paddingHorizontal: Spacings.sm }} error>

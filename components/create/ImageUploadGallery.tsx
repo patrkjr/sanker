@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Spacings from '@/constants/Spacings';
 import AddImage from './ImagePicker';
 import * as ImagePicker from 'expo-image-picker';
-import Animated, { LinearTransition } from 'react-native-reanimated';
+import Animated, {
+  LinearTransition,
+  useSharedValue,
+} from 'react-native-reanimated';
 import ImageItem from './ImageItem';
 import AddMoreCard from './AddMoreCard';
 import * as Haptics from 'expo-haptics';
@@ -15,6 +18,9 @@ interface ImageUploadGalleryProps {
 interface ImageAsset {
   uri: string;
 }
+
+const IMAGE_SIZE = 100;
+const GAP = Spacings.md;
 
 export default function ImageUploadGallery({
   images,
@@ -59,29 +65,89 @@ export default function ImageUploadGallery({
     return <AddImage onPress={pickImageAsync} />;
   }
 
+  const THRESHOLD_FACTOR = 0.6;
+  const SLOT_SIZE = IMAGE_SIZE + GAP;
+
+  const [offsetIndexes, setOffsetIndexes] = useState<number[]>([]);
+  const [offsetX, setOffsetX] = useState(0);
+
+  const handleDrag = (
+    index: number,
+    translationX: number,
+    finalize: boolean
+  ) => {
+    const dragThreshold = SLOT_SIZE * THRESHOLD_FACTOR;
+    const direction = Math.sign(translationX);
+    const offsetDistance = Math.abs(translationX);
+
+    const newIndex =
+      index + direction * Math.floor((offsetDistance / dragThreshold) * 0.8);
+
+    setOffsetX(direction * SLOT_SIZE * -1);
+    const numberOfIndexes =
+      direction * Math.floor((offsetDistance / dragThreshold) * 0.8) +
+      direction;
+    if (numberOfIndexes === 0) {
+      setOffsetX(0);
+      setOffsetIndexes([]);
+    } else if (direction === -1) {
+      let indexesToAdd = [];
+      for (let i = -1; i > numberOfIndexes; i--) {
+        indexesToAdd.push(index + i);
+      }
+      setOffsetIndexes(indexesToAdd);
+    } else {
+      let indexesToAdd = [];
+      for (let i = 1; i < numberOfIndexes; i++) {
+        indexesToAdd.push(index + i);
+      }
+      setOffsetIndexes(indexesToAdd);
+    }
+
+    if (
+      finalize &&
+      newIndex !== index &&
+      newIndex >= 0 &&
+      newIndex < images.length
+    ) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setOffsetIndexes([]);
+      setOffsetX(0);
+      const newImages = [...images];
+      const [movedItem] = newImages.splice(index, 1);
+      newImages.splice(newIndex, 0, movedItem);
+      onChangeImages(newImages);
+    }
+  };
+
   return (
     <Animated.FlatList
       nestedScrollEnabled
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={images}
+      // LinearTransition is making a ugly animation when dragging to reorder. Fix in the future.
       itemLayoutAnimation={LinearTransition}
+      data={images}
       style={{ overflow: 'visible' }}
       contentContainerStyle={{
-        gap: Spacings.md,
+        gap: GAP,
         alignItems: 'center',
       }}
       keyExtractor={(item) => item.uri}
       renderItem={({ item, index }) => (
         <ImageItem
           item={item}
+          onDrag={handleDrag}
           shouldAnimate={images.length > 1}
+          offset={offsetIndexes.includes(index) ? offsetX : 0}
           index={index}
           onRemoveImage={removeImage}
         />
       )}
       ListFooterComponent={
-        images.length ? <AddMoreCard onAddMore={pickImageAsync} /> : null
+        images.length ? (
+          <AddMoreCard onAddMore={pickImageAsync} size={IMAGE_SIZE} />
+        ) : null
       }
     />
   );

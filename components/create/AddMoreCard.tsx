@@ -9,15 +9,15 @@ import Animated, {
 import Icon from '../ui/Icon';
 
 interface Props {
-  width: number;
+  size?: number;
   onAddMore: () => void;
 }
 
-export default function AddMoreCard({ onAddMore, width = 100 }: Props) {
+export default function AddMoreCard({ onAddMore, size = 100 }: Props) {
   return (
     <Animated.View layout={LinearTransition} style={{ flex: 1 }}>
       <Pressable onPress={onAddMore}>
-        <Card style={[styles.addImage, { width }]}>
+        <Card style={[styles.addImage, { width: size }]}>
           <Icon name="ImagePlus" />
         </Card>
       </Pressable>
