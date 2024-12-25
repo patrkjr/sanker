@@ -88,6 +88,11 @@ export default {
       card: green[100],
       border: green[200],
     },
+    descructive: {
+      text: red[600],
+      border: red[200],
+      background: red[100],
+    },
     permanent: {
       white: grey[50],
       black: grey[1100],
@@ -117,6 +122,11 @@ export default {
       textSecondary: green[900],
       card: green[1000],
       border: green[900],
+    },
+    descructive: {
+      text: red[500],
+      border: red[1000],
+      background: red[1100],
     },
     permanent: {
       white: grey[50],

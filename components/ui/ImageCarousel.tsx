@@ -12,7 +12,6 @@ import { View } from '../Themed';
 const IMAGE_HEIGHT = 300;
 
 export default function ImageCarousel({ imageUrls }) {
-  console.log(imageUrls);
   const colors = useThemedColors();
   const ref = useRef<ICarouselInstance>(null);
   const { width } = useWindowDimensions();

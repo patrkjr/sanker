@@ -15,6 +15,7 @@ interface ButtonProps {
   title: string;
   disabled?: boolean;
   size: 'sm' | 'md';
+  variant: 'default' | 'themed' | 'descructive';
   ghost?: boolean;
   themed?: boolean;
   onPress?: () => void;
@@ -27,6 +28,7 @@ const Button = forwardRef(
       title,
       themed = false,
       ghost = false,
+      variant = 'default',
       disabled = false,
       style,
       size = 'md',
@@ -105,6 +107,15 @@ const Button = forwardRef(
       scale.value = withTiming(1, timingConfig.md);
     }
 
+    const descructiveStyle = {
+      backgroundColor: colors.descructive.background,
+      borderColor: colors.descructive.border,
+    };
+
+    const descructiveTextStyle = {
+      color: colors.descructive.text,
+    };
+
     return (
       <Animated.View style={animatedButtonStyle}>
         <Pressable
@@ -120,6 +131,7 @@ const Button = forwardRef(
           style={[
             wrapperStyle,
             ghost && ghostStyle,
+            variant === 'descructive' && descructiveStyle,
             disabled && disabledStyle,
             style,
           ]}
@@ -129,7 +141,12 @@ const Button = forwardRef(
         >
           <Large
             bold
-            style={[textStyle, ghost && ghostText, disabled && disabledText]}
+            style={[
+              textStyle,
+              ghost && ghostText,
+              variant === 'descructive' && descructiveTextStyle,
+              disabled && disabledText,
+            ]}
           >
             {title}
           </Large>

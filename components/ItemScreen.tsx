@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { View } from './Themed';
-import { H2, H3, H4, Label, P } from './typography';
+import { H2, H4, Label, P } from './typography';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '@/config/supabase';
@@ -9,8 +9,7 @@ import ProfileCard from './profile/ProfileCard';
 import SelectableTag from './ui/SelectableTag';
 import Button from './ui/Button';
 import ImageCarousel from './ui/ImageCarousel';
-
-const IMAGE_HEIGHT = 300;
+import { useSupabase } from '@/context/supabase-provider';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -19,12 +18,11 @@ const conditionStrings = {
 };
 
 export default function ItemScreen() {
+  const { user } = useSupabase();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [item, setItem] = useState(null);
   const navigation = useNavigation();
-
-  //const ref = React.useRef<ICarouselInstance>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,9 +42,6 @@ export default function ItemScreen() {
         .single();
 
       if (data) {
-        // if (data.image_urls.length > 1) {
-        //   setShowMultipleImages(true);
-        // }
         setItem(data);
         navigation.setOptions({ title: data.title });
       }
@@ -56,8 +51,61 @@ export default function ItemScreen() {
       setIsLoading(false);
     }
   }
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (isLoading) return <ActivityIndicator color="red" />;
+
+  function askForDeletion() {
+    Alert.alert('Delete this item?', 'You cannot recreate it, ever.', [
+      {
+        text: 'Go back',
+        style: 'cancel',
+        isPreferred: true,
+      },
+      {
+        text: 'Delete',
+        onPress: handleDeleteItem,
+        style: 'destructive',
+      },
+    ]);
+  }
+
+  async function handleDeleteItem() {
+    // Currently deletes item from database. In the future, deleted items should be store elsewhere for analytics
+    setIsDeleting(true);
+    try {
+      const { data: list, error: listError } = await supabase.storage
+        .from('images')
+        .list(`items/${item.id}`);
+      const filesToRemove = list.map((x) => `items/${item.id}/${x.name}`);
+
+      if (listError) {
+        throw listError;
+      }
+
+      const { error: imagesError } = await supabase.storage
+        .from('images')
+        .remove(filesToRemove);
+
+      if (imagesError) {
+        throw imagesError;
+      }
+
+      const { error: itemError } = await supabase
+        .from('items')
+        .delete()
+        .eq('id', item?.id);
+      if (itemError) {
+        throw itemError;
+      }
+    } catch (e) {
+      console.log(e);
+      alert(e.message);
+    } finally {
+      navigation.goBack();
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <ScrollView
@@ -86,20 +134,19 @@ export default function ItemScreen() {
             {item.description && <P>{item.description}</P>}
           </View>
         )}
+        {item.owner_id === user.id && (
+          <Button
+            variant="descructive"
+            title="Delete item"
+            onPress={askForDeletion}
+          />
+        )}
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
-    height: IMAGE_HEIGHT,
-  },
-  imageContainer: {
-    height: IMAGE_HEIGHT,
-    borderRadius: Spacings.borderRadius.lg,
-    overflow: 'hidden',
-  },
   pageContent: {
     padding: Spacings.md,
     gap: Spacings.md,
