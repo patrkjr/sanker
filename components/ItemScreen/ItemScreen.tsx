@@ -1,15 +1,17 @@
+import React from 'react';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { View } from './Themed';
-import { H2, H4, Label, P } from './typography';
+import { View } from '../Themed';
+import { H2, H4, Label, P } from '../typography';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
-import ProfileCard from './profile/ProfileCard';
-import SelectableTag from './ui/SelectableTag';
-import Button from './ui/Button';
-import ImageCarousel from './ui/ImageCarousel';
+import ProfileCard from '../profile/ProfileCard';
+import SelectableTag from '../ui/SelectableTag';
+import Button from '../ui/Button';
+import ImageCarousel from '../ui/ImageCarousel';
 import { useSupabase } from '@/context/supabase-provider';
+import ItemScreenLoader from './ItemScreenLoader';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -51,9 +53,8 @@ export default function ItemScreen() {
       setIsLoading(false);
     }
   }
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  if (isLoading) return <ActivityIndicator color="red" />;
+  if (isLoading) return <ItemScreenLoader />;
 
   function askForDeletion() {
     Alert.alert('Delete this item?', 'You cannot recreate it, ever.', [
@@ -72,7 +73,7 @@ export default function ItemScreen() {
 
   async function handleDeleteItem() {
     // Currently deletes item from database. In the future, deleted items should be store elsewhere for analytics
-    setIsDeleting(true);
+    setIsLoading(true);
     try {
       const { data: list, error: listError } = await supabase.storage
         .from('images')
@@ -103,7 +104,7 @@ export default function ItemScreen() {
       alert(e.message);
     } finally {
       navigation.goBack();
-      setIsDeleting(false);
+      setIsLoading(false);
     }
   }
 

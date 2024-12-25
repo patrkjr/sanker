@@ -8,11 +8,21 @@ import { useThemedColors } from '@/hooks/useThemedColors';
 import { Image } from 'expo-image';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import { View } from '../Themed';
+import LoadingShimmer from './LoadingShimmer';
 
 const IMAGE_HEIGHT = 300;
 
-export default function ImageCarousel({ imageUrls }) {
+export default function ImageCarousel({ imageUrls, isLoading = false }) {
   const colors = useThemedColors();
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.card }]}>
+        <LoadingShimmer />
+      </View>
+    );
+  }
+
   const ref = useRef<ICarouselInstance>(null);
   const { width } = useWindowDimensions();
 
@@ -32,12 +42,11 @@ export default function ImageCarousel({ imageUrls }) {
   const isEnabled = imageUrls.length >= 2;
 
   return (
-    <View>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
       <Carousel
         ref={ref}
         width={width - Spacings.md * 2}
         data={imageUrls}
-        style={[styles.container, { backgroundColor: colors.card }]}
         enabled={isEnabled}
         onProgressChange={(offsetProgress, absoluteProgress) =>
           (progress.value = absoluteProgress)
