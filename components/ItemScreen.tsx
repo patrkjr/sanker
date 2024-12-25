@@ -2,23 +2,13 @@ import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { View } from './Themed';
 import { H2, H3, H4, Label, Large, P, Small } from './typography';
 import { useEffect, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import ProfileCard from './profile/ProfileCard';
 import SelectableTag from './ui/SelectableTag';
 import Button from './ui/Button';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
-import { Basic as DotIndicators } from './Pagination';
-import { grey } from '@/constants/Colors';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import ImageCarousel from './ui/ImageCarousel';
 
@@ -31,7 +21,6 @@ const conditionStrings = {
 };
 
 export default function ItemScreen() {
-  const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [showMultipleImages, setShowMultipleImages] = useState(false);
@@ -41,7 +30,6 @@ export default function ItemScreen() {
 
   const progress = useSharedValue<number>(0);
 
-  const ref = useRef<ICarouselInstance>(null);
   //const ref = React.useRef<ICarouselInstance>(null);
 
   useEffect(() => {
@@ -95,12 +83,7 @@ export default function ItemScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.pageContent}>
-        <View style={[styles.imageContainer, { backgroundColor: colors.card }]}>
-          <ImageCarousel
-            width={width - Spacings.md * 2}
-            imageUrls={item?.image_urls}
-          />
-        </View>
+        <ImageCarousel imageUrls={item?.image_urls} />
         <View style={styles.subHeader}>
           <H4 bold secondary>
             {item.price} kr.

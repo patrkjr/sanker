@@ -1,12 +1,12 @@
+import React from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from '../Themed';
 import { H2, H3, Large, P } from '../typography';
-import { Image, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
 import SelectableTag from '../ui/SelectableTag';
-import Icon from '../ui/Icon';
-import { useThemedColors } from '@/hooks/useThemedColors';
+import ImageCarousel from '../ui/ImageCarousel';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -33,17 +33,17 @@ export default function Success() {
   const succesMessage: string =
     successMessages[Math.floor(Math.random() * successMessages.length)];
 
+  // console.log('images: ' + imageArray);
+
   return (
     <ScrollView
       style={{ flex: 1 }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}
     >
-      <H3>{succesMessage}</H3>
-      {
-        //Only show the first image, but we recieve all the images here
-        imageArray && <Images images={[imageArray[1]]} />
-      }
+      <H3 style={{ textAlign: 'center' }}>{succesMessage}</H3>
+      {/* //Only show the first image, but we recieve all the images here */}
+      <ImageCarousel imageUrls={imageArray} />
       <View style={styles.priceContainer}>
         <Large bold secondary>
           {price} kr.
@@ -66,27 +66,6 @@ export default function Success() {
     </ScrollView>
   );
 }
-
-const Images = ({ images }) => {
-  const colors = useThemedColors();
-  return (
-    <View style={[styles.imageContainer, { backgroundColor: colors.card }]}>
-      <View style={styles.iconContainer}>
-        <Icon name="Image" size={40} />
-      </View>
-      {images.map((url, index) => {
-        return (
-          <View key={index} style={styles.image}>
-            <Image
-              src={url}
-              style={{ opacity: 1, width: '100%', height: 224 }}
-            />
-          </View>
-        );
-      })}
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {

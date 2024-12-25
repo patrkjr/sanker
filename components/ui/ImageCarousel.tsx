@@ -6,12 +6,16 @@ import Spacings from '@/constants/Spacings';
 import { grey } from '@/constants/Colors';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { Image } from 'expo-image';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import { View } from '../Themed';
 
 const IMAGE_HEIGHT = 300;
 
-export default function ImageCarousel({ imageUrls, width }) {
+export default function ImageCarousel({ imageUrls }) {
+  console.log(imageUrls);
   const colors = useThemedColors();
   const ref = useRef<ICarouselInstance>(null);
+  const { width } = useWindowDimensions();
 
   const progress = useSharedValue<number>(0);
 
@@ -29,12 +33,12 @@ export default function ImageCarousel({ imageUrls, width }) {
   const isEnabled = imageUrls.length >= 2;
 
   return (
-    <>
+    <View>
       <Carousel
         ref={ref}
-        width={width || 250}
+        width={width - Spacings.md * 2}
         data={imageUrls}
-        style={{ width: '100%' }}
+        style={[styles.container, { backgroundColor: colors.card }]}
         enabled={isEnabled}
         onProgressChange={(offsetProgress, absoluteProgress) =>
           (progress.value = absoluteProgress)
@@ -66,6 +70,15 @@ export default function ImageCarousel({ imageUrls, width }) {
           display: !isEnabled && 'none',
         }}
       />
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    borderRadius: Spacings.borderRadius.lg,
+    height: IMAGE_HEIGHT,
+    overflow: 'hidden',
+  },
+});
