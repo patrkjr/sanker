@@ -1,8 +1,8 @@
 import Spacings from '@/constants/Spacings';
-import { View } from '../Themed';
+import React from 'react';
 import { Mono, Small } from '../typography';
 import Card from './Card';
-import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, ViewStyle } from 'react-native';
 import FontScale from '@/constants/FontScale';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { useEffect, useRef } from 'react';
@@ -18,6 +18,7 @@ import * as Haptics from 'expo-haptics';
 interface TagProps extends PressableProps {
   text: string;
   mono?: boolean;
+  onPress?: (() => void) | undefined;
   showSelectable?: boolean;
   selected?: boolean;
 }
@@ -26,7 +27,13 @@ const THUMB_SIZE = 12;
 const DOT_SIZE = 4;
 
 // This is only the inner thumb of the component
-const SelectableThumb = ({ selected, style }) => {
+const SelectableThumb = ({
+  selected,
+  style,
+}: {
+  style?: ViewStyle;
+  selected: boolean;
+}) => {
   //Use this to check for initial render
   const initialRender = useRef(true);
 
@@ -105,34 +112,28 @@ export default function SelectableTag({
   };
 
   return (
-    <Pressable
+    <Card
       onPress={onPress}
-      tabIndex={tabIndex}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
+      style={[
+        styles.card,
+        selected && {
+          backgroundColor: colors.themed.card,
+          borderColor: colors.themed.border,
+        },
+        onPress && animatedThumb,
+      ]}
     >
-      <Card
-        style={[
-          styles.card,
-          selected && {
-            backgroundColor: colors.themed.card,
-            borderColor: colors.themed.border,
-          },
-          onPress && animatedThumb,
-        ]}
-      >
-        {showSelectable && <SelectableThumb selected={selected} />}
-        {mono ? (
-          <Mono secondary style={[selected && { color: colors.themed.text }]}>
-            {text}
-          </Mono>
-        ) : (
-          <Small bold style={[selected && { color: colors.themed.text }]}>
-            {text}
-          </Small>
-        )}
-      </Card>
-    </Pressable>
+      {showSelectable && <SelectableThumb selected={selected} />}
+      {mono ? (
+        <Mono secondary style={[selected && { color: colors.themed.text }]}>
+          {text}
+        </Mono>
+      ) : (
+        <Small bold style={[selected && { color: colors.themed.text }]}>
+          {text}
+        </Small>
+      )}
+    </Card>
   );
 }
 

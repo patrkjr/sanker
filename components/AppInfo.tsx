@@ -13,7 +13,7 @@ export default function AppInfo() {
     >
       <View style={{ gap: Spacings.xs, alignItems: 'center' }}>
         <H4 secondary>Sanker</H4>
-        <Mono secondary>v0.1</Mono>
+        <Mono secondary>v0.0.1</Mono>
       </View>
       <P bold secondary>
         Kechu studio

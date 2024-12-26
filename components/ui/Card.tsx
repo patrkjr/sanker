@@ -15,7 +15,7 @@ import * as Haptics from 'expo-haptics';
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
   themed?: boolean;
-  style: ViewStyle | ViewStyle[];
+  style: ViewStyle | ViewStyle[] | [];
   onPress?: (() => void) | undefined;
   useHaptics?: boolean;
   otherProps?: ViewProps;
