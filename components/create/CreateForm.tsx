@@ -66,7 +66,7 @@ export default function CreateForm() {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -140,6 +140,21 @@ export default function CreateForm() {
     }
     setActiveField(fieldName);
   };
+
+  function handleResetForm() {
+    Alert.alert('Reset form?', 'Your changes will not be saved.', [
+      {
+        text: 'Keep editing',
+        style: 'cancel',
+        isPreferred: true,
+      },
+      {
+        text: 'Reset form',
+        style: 'destructive',
+        onPress: () => (reset(), scrollViewRef?.current?.scrollTo({ y: 0 })),
+      },
+    ]);
+  }
 
   return (
     <KeyboardAvoidingView
@@ -330,6 +345,9 @@ export default function CreateForm() {
           themed
           onPress={handleSubmit(onSubmit)}
         />
+        {isDirty && (
+          <Button ghost title="Reset form" onPress={handleResetForm} />
+        )}
       </Animated.ScrollView>
     </KeyboardAvoidingView>
   );
