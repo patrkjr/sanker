@@ -1,5 +1,9 @@
 import React from 'react';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import {
+  ErrorBoundary,
+  useLocalSearchParams,
+  useNavigation,
+} from 'expo-router';
 import { View } from '../Themed';
 import { H2, H4, Label, P } from '../typography';
 import { useEffect, useState } from 'react';
@@ -12,6 +16,7 @@ import Button from '../ui/Button';
 import ImageCarousel from '../ui/ImageCarousel';
 import { useSupabase } from '@/context/supabase-provider';
 import ItemScreenLoader from './ItemScreenLoader';
+import ItemNotFound from './ItemNotFound';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -27,11 +32,14 @@ export default function ItemScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: '',
-      headerTransparent: true,
-      headerBlurEffect: 'systemMaterial',
-    });
+    // ------------------
+    // Why did I do this below? Could set it in the layout settings..
+    // ------------------
+    // navigation.setOptions({
+    //   headerTitle: '',
+    //   headerTransparent: true,
+    //   headerBlurEffect: 'systemMaterial',
+    // });
     getItemAsync();
   }, []);
 
@@ -55,6 +63,10 @@ export default function ItemScreen() {
   }
 
   if (isLoading) return <ItemScreenLoader />;
+
+  if (!item) {
+    return <ItemNotFound />;
+  }
 
   function askForDeletion() {
     Alert.alert('Delete this item?', 'You cannot recreate it, ever.', [
@@ -110,7 +122,6 @@ export default function ItemScreen() {
 
   return (
     <ScrollView
-      style={{ marginTop: 48 }}
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
     >

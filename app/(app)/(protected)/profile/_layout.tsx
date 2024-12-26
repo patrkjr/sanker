@@ -20,10 +20,12 @@ export default function ProfileLayout() {
       <Stack.Screen
         name="item/[id]"
         options={{
+          headerTitle: '',
           title: 'Item for sale',
           ...HeaderStyle,
         }}
       />
+
       <Stack.Screen
         name="edit-name"
         options={{

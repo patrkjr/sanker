@@ -10,7 +10,11 @@ export default function HomeLayout() {
       />
       <Stack.Screen
         name="item/[id]"
-        options={{ title: 'Item for sale', ...HeaderStyle }}
+        options={{
+          headerTitle: '',
+          title: 'Item for sale',
+          ...HeaderStyle,
+        }}
       />
     </Stack>
   );

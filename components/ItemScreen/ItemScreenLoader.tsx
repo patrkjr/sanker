@@ -17,7 +17,6 @@ export default function ItemScreenLoader() {
 
 const styles = StyleSheet.create({
   pageContainer: {
-    marginTop: 48 * 2,
     padding: Spacings.md,
     gap: Spacings.md,
   },
