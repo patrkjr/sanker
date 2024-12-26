@@ -30,7 +30,7 @@ export default function ImageItem({
 }: {
   item: { uri: string };
   index: number;
-  size: number;
+  size?: number;
   offset: number;
   shouldAnimate: boolean;
   onDrag: (translationX: number, index: number, finalize: boolean) => void;
@@ -68,11 +68,11 @@ export default function ImageItem({
     })
     .onEnd((e) => {
       scale.value = 1;
+      zIndex.value = 0;
       rotation.value = '0deg';
       onDrag(index, e.translationX, true);
     })
     .onFinalize((e) => {
-      zIndex.value = 0;
       translationX.value = withTiming(0, timingConfig.md);
     })
     //This should probably be changed to run on UI in the future.
