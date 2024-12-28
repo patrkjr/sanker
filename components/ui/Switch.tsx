@@ -1,15 +1,15 @@
-import { Pressable, StyleSheet } from "react-native";
-import { View } from "../Themed";
-import Spacings from "@/constants/Spacings";
-import { useThemedColors } from "@/hooks/useThemedColors";
+import { Pressable, StyleSheet } from 'react-native';
+import { View } from '../Themed';
+import Spacings from '@/constants/Spacings';
+import { useThemedColors } from '@/hooks/useThemedColors';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { timingConfig } from "@/constants/Animations";
-import { useEffect, useRef } from "react";
-import * as Haptics from "expo-haptics";
+} from 'react-native-reanimated';
+import { timingConfig } from '@/constants/Animations';
+import { useEffect, useRef } from 'react';
+import * as Haptics from 'expo-haptics';
 
 const WIDTH = 40;
 const HEIGHT = 24;
@@ -18,6 +18,7 @@ const THUMB_SIZE = 20;
 export default function Switch({
   selected = false,
   disabled = false,
+  useHaptics = true,
   onPress,
   ...otherProps
 }) {
@@ -28,7 +29,7 @@ export default function Switch({
 
   const thumbPosition = useSharedValue(selected ? WIDTH - THUMB_SIZE - 4 : 0);
   const backgroundColor = useSharedValue(
-    selected ? colors.primary : colors.cardDisabled,
+    selected ? colors.primary : colors.cardDisabled
   );
 
   useEffect(() => {
@@ -39,13 +40,15 @@ export default function Switch({
     // This will not run on inital render because of early return above
     thumbPosition.value = withTiming(
       selected ? WIDTH - THUMB_SIZE - 4 : 0,
-      timingConfig.md,
+      timingConfig.md
     );
     backgroundColor.value = withTiming(
       selected ? colors.primary : colors.cardDisabled,
-      timingConfig.md,
+      timingConfig.md
     );
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (useHaptics) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
   }, [selected, colors]);
 
   const handlePress = () => {
@@ -88,7 +91,7 @@ export default function Switch({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingHorizontal: 2,
     borderRadius: Spacings.borderRadius.round,
     width: WIDTH,

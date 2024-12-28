@@ -11,20 +11,6 @@ export default function ProfileLayout() {
         options={{ title: 'Profile', ...HeaderLargeStyle }}
       />
       <Stack.Screen
-        name="account-settings"
-        options={{
-          title: 'Edit profile',
-          ...HeaderLargeStyle,
-        }}
-      />
-      <Stack.Screen
-        name="theme-preferences"
-        options={{
-          title: 'Theme',
-          ...HeaderStyle,
-        }}
-      />
-      <Stack.Screen
         name="item/[id]"
         options={{
           headerTitle: '',
@@ -41,12 +27,37 @@ export default function ProfileLayout() {
           ...HeaderLargeStyle,
         }}
       />
+
       <Stack.Screen
         name="listings"
         options={{
           title: 'My listings',
           headerShown: true,
           ...HeaderLargeStyle,
+        }}
+      />
+
+      <Stack.Screen
+        name="account-settings"
+        options={{
+          title: 'Edit profile',
+          ...HeaderLargeStyle,
+        }}
+      />
+
+      <Stack.Screen
+        name="notification-preferences"
+        options={{
+          title: 'Notifications',
+          ...HeaderStyle,
+        }}
+      />
+
+      <Stack.Screen
+        name="theme-preferences"
+        options={{
+          title: 'Theme',
+          ...HeaderStyle,
         }}
       />
     </Stack>
