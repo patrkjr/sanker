@@ -17,6 +17,7 @@ import ImageCarousel from '../ui/ImageCarousel';
 import { useSupabase } from '@/context/supabase-provider';
 import ItemScreenLoader from './ItemScreenLoader';
 import ItemNotFound from './ItemNotFound';
+import useItemStore from '@/stores/itemStore';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -28,35 +29,46 @@ export default function ItemScreen() {
   const { user } = useSupabase();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [item, setItem] = useState(null);
   const navigation = useNavigation();
+  // TODO: Get item from itemStore, then set it in state to prevent showing the same item across multiple ItemScreens
+  //const { item, setItem } = useItemStore();
+  const [item, setItem] = useState();
 
   useEffect(() => {
-    // ------------------
-    // Why did I do this below? Could set it in the layout settings..
-    // ------------------
-    // navigation.setOptions({
-    //   headerTitle: '',
-    //   headerTransparent: true,
-    //   headerBlurEffect: 'systemMaterial',
-    // });
     getItemAsync();
+    return () => {
+      // Cleanup function to reset item state and loading status
+      //setItem(null);
+      setIsLoading(false);
+    };
   }, []);
 
   async function getItemAsync() {
     try {
-      const { data, error, status } = await supabase
-        .from('items')
-        .select('*')
-        .eq('id', id)
-        .single();
+      const {
+        data,
+        error: itemError,
+        status,
+      } = await supabase.from('items').select('*').eq('id', id).single();
+
+      if (status === 406) {
+        setItem(null);
+        return;
+      }
+
+      if (itemError) {
+        throw itemError;
+      }
 
       if (data) {
         setItem(data);
         navigation.setOptions({ title: data.title });
+      } else {
+        setItem(null);
       }
     } catch (error) {
-      Alert.alert(error?.message);
+      // setItem(null);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

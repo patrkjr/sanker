@@ -77,7 +77,7 @@ export default function ProfileScreen() {
             <Item.Label>My listings</Item.Label>
             <Item.Value>{profile?.items?.length}</Item.Value>
           </Item>
-          <Item href={'/profile/listings'} isLastItem disabled>
+          <Item href={'/listings'} isLastItem disabled>
             <Item.Label>Favorites</Item.Label>
             <Item.Value>4</Item.Value>
           </Item>

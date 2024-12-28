@@ -28,7 +28,7 @@ export default function ProtectedLayout() {
         }}
       />
       <Tabs.Screen
-        name="new"
+        name="create"
         options={{
           title: 'Create',
           tabBarIcon: ({ focused }) => (

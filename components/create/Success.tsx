@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { View } from '../Themed';
 import { H2, H3, Large, P } from '../typography';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -7,6 +7,8 @@ import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
 import SelectableTag from '../ui/SelectableTag';
 import ImageCarousel from '../ui/ImageCarousel';
+import useItemStore from '@/stores/itemStore';
+import ItemScreenLoader from '../ItemScreen/ItemScreenLoader';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -25,15 +27,26 @@ const successMessages: Array = [
 ];
 
 export default function Success() {
-  const { price, title, condition, image_urls } = useLocalSearchParams();
-  const imageArray = JSON.parse(image_urls);
+  const { item, setItem } = useItemStore();
 
   const router = useRouter();
+  const navigation = useNavigation();
 
   const succesMessage: string =
     successMessages[Math.floor(Math.random() * successMessages.length)];
 
-  // console.log('images: ' + imageArray);
+  async function handleDismiss() {
+    router.dismissTo({
+      pathname: '/create',
+      params: { shouldResetForm: 'true' },
+    });
+  }
+
+  if (!item) {
+    return <ItemScreenLoader />;
+  }
+
+  const { title, price, condition, image_urls } = item;
 
   return (
     <ScrollView
@@ -43,7 +56,7 @@ export default function Success() {
     >
       <H3 style={{ textAlign: 'center' }}>{succesMessage}</H3>
       {/* //Only show the first image, but we recieve all the images here */}
-      <ImageCarousel imageUrls={imageArray} />
+      <ImageCarousel imageUrls={image_urls} />
       <View style={styles.priceContainer}>
         <Large bold secondary>
           {price} kr.
@@ -56,13 +69,7 @@ export default function Success() {
       </View>
       <H2>{title}</H2>
       <Button disabled title="Share" />
-      <Button
-        title="Close"
-        ghost
-        onPress={() => {
-          router.dismiss(1);
-        }}
-      />
+      <Button title="Close" ghost onPress={handleDismiss} />
     </ScrollView>
   );
 }

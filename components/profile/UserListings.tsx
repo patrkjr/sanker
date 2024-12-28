@@ -9,7 +9,7 @@ import ProductItem from '../item/ProductItem';
 import { useUserItems } from '@/hooks/useUserItems';
 import { useFocusEffect } from 'expo-router';
 
-export default function Listings() {
+export default function UserListings() {
   const user = useUserStore((state) => state.user);
   const { isLoading, fetchUserItems } = useUserItems();
   const items = useUserStore((state) => state.user?.items);

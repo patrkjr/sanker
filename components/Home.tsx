@@ -1,17 +1,13 @@
-import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
-import { Large, P, Small } from './typography';
-import Card from './ui/Card';
+import { Alert, StyleSheet } from 'react-native';
 import Spacings from '@/constants/Spacings';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/config/supabase';
-import { View } from './Themed';
-import useUserStore from '@/stores/userStore';
 import FeaturedList from './home/FeaturedList';
+import * as Haptics from 'expo-haptics';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
     getFeaturedItemsAsync();
@@ -20,6 +16,7 @@ export default function Home() {
   async function getFeaturedItemsAsync() {
     try {
       setIsLoading(true);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       const { data, error, status } = await supabase.from('items').select('*');
 
       if (error) {

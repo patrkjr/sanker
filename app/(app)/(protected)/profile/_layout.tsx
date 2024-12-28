@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
 
 export default function ProfileLayout() {
-  const { title } = useLocalSearchParams();
+  // const { title } = useLocalSearchParams();
 
   return (
     <Stack>
@@ -36,7 +36,11 @@ export default function ProfileLayout() {
       />
       <Stack.Screen
         name="listings"
-        options={{ title: 'My listings', ...HeaderLargeStyle }}
+        options={{
+          title: 'My listings',
+          headerShown: true,
+          ...HeaderLargeStyle,
+        }}
       />
     </Stack>
   );

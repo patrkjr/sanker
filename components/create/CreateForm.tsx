@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from '../Themed';
-import { Label, P, Small } from '../typography';
+import { H3, Label, Large, P, Small } from '../typography';
 import Input from '../ui/Input';
 import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import * as z from 'zod';
 import { useRef, useState } from 'react';
 import {
@@ -19,18 +19,17 @@ import SelectableTag from '../ui/SelectableTag';
 import Switch from '../ui/Switch';
 import Item from '../ui/Item';
 import Card from '../ui/Card';
-import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
 import ImageUploadGallery from './ImageUploadGallery';
-import * as ImageManipulator from 'expo-image-manipulator';
 import Animated, {
   LinearTransition,
   useAnimatedKeyboard,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import ControlledInputField from '../ui/ControlledInputField';
+import useItemFormStore from '@/stores/itemFormStore';
 
 const formSchema = z.object({
   price: z
@@ -60,7 +59,9 @@ const formSchema = z.object({
 export default function CreateForm() {
   const user = useUserStore((state) => state.user);
   const router = useRouter();
+  const params = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const { setForm } = useItemFormStore();
 
   const {
     control,
@@ -83,35 +84,11 @@ export default function CreateForm() {
   const [activeField, setActiveField] = useState<string | null>(null);
 
   const onSubmit = async (data) => {
-    try {
-      // Generate a uuid
-      setIsLoading(true);
-      const id = uuidv4();
-
-      // Upload the images
-      const imageUrls = await uploadImages(id, data.image_urls);
-
-      //Insert the new item into database
-      const { error } = await supabase
-        .from('items')
-        .insert({ id, ...data, image_urls: imageUrls, owner_id: user?.id });
-      if (error) {
-        Alert.alert(error?.message);
-        return;
-      }
-      router.push({
-        pathname: '/new/success',
-        params: {
-          ...data,
-          image_urls: JSON.stringify(imageUrls),
-        },
-      });
-      reset();
-    } catch (error) {
-      Alert.alert(error?.message);
-    } finally {
-      setIsLoading(false);
-    }
+    //router.push('/create/uploading-item');
+    setForm(data);
+    router.push('/create/uploading-item');
+    reset();
+    scrollViewRef?.current?.scrollTo({ y: 0 });
   };
 
   //Refs
@@ -155,6 +132,14 @@ export default function CreateForm() {
       },
     ]);
   }
+
+  // if (true) {
+  //   return (
+  //     <View style={styles.fullPageFill}>
+  //       <Large>HEllo</Large>
+  //     </View>
+  //   );
+  // }
 
   return (
     <KeyboardAvoidingView
@@ -200,48 +185,28 @@ export default function CreateForm() {
         />
 
         {/* Title field */}
-        <Controller
-          control={control}
+        <ControlledInputField
           name="title"
-          rules={{ required: true }}
-          render={({ field: { onBlur, onChange, value } }) => (
-            <Input
-              ref={titleRef}
-              label="Title"
-              value={value}
-              onChangeText={onChange}
-              onBlur={() => {
-                setActiveField(null);
-                onBlur();
-              }}
-              onFocus={() => handleFocus(titleRef, 'title')}
-              active={activeField === 'title'}
-              errorMessage={errors.title?.message}
-            />
-          )}
+          title="Title"
+          control={control}
+          ref={titleRef}
+          isActive={activeField === 'title'}
+          setActiveField={setActiveField}
+          handleFocus={handleFocus}
+          errorMessage={errors?.title?.message}
         />
 
         {/* Price field */}
-        <Controller
-          control={control}
+        <ControlledInputField
           name="price"
-          rules={{ required: true }}
-          render={({ field: { onBlur, onChange, value } }) => (
-            <Input
-              ref={priceRef}
-              label="Price"
-              value={value}
-              inputMode="numeric"
-              onChangeText={onChange}
-              onBlur={() => {
-                setActiveField(null);
-                onBlur();
-              }}
-              onFocus={() => handleFocus(priceRef, 'price')}
-              active={activeField === 'price'}
-              errorMessage={errors.price?.message}
-            />
-          )}
+          title="Price"
+          control={control}
+          ref={priceRef}
+          isActive={activeField === 'price'}
+          setActiveField={setActiveField}
+          handleFocus={handleFocus}
+          errorMessage={errors?.price?.message}
+          inputMode="numeric"
         />
 
         {/* Condition field */}
@@ -359,46 +324,8 @@ const styles = StyleSheet.create({
     gap: Spacings.xs,
     flexWrap: 'wrap',
   },
+  fullPageFill: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'red',
+  },
 });
-
-const compressImage = async (uri: string) => {
-  try {
-    const manipulatedImage = await ImageManipulator.manipulateAsync(
-      uri,
-      [{ resize: { width: 1000 } }], // Resize width, maintain aspect ratio
-      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compress to 70%
-    );
-    return manipulatedImage;
-  } catch (error) {
-    console.error('compressImage function: ' + error.message);
-    alert(error?.message);
-  }
-};
-
-const uploadImages = async (itemId: string, images: [{ uri: string }]) => {
-  const uploadedUrls = [];
-  for (const image of images) {
-    const compressedImage = await compressImage(image.uri);
-    const fileName = `items/${itemId}/${Date.now()}.jpeg`;
-    const { data, error } = await supabase.storage
-      .from('images')
-      .upload(fileName, compressedImage, {
-        contentType: image.mimeType ?? 'image/jpeg',
-      });
-
-    if (data) {
-      try {
-        const {
-          data: { publicUrl },
-        } = await supabase.storage.from('images').getPublicUrl(data.path);
-
-        uploadedUrls.push(publicUrl);
-      } catch (error) {
-        console.error('Error getting absolute URL: ' + error?.message);
-      }
-    } else {
-      console.error('Image upload failed: ', error);
-    }
-  }
-  return uploadedUrls;
-};

@@ -5,11 +5,17 @@ import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { Link } from 'expo-router';
+import useItemStore from '@/stores/itemStore';
 
 const IMG_HEIGHT = 180;
 
 export default function FeaturedList({ items, onRefresh, refreshing }) {
   const colors = useThemedColors();
+  const { item, setItem } = useItemStore();
+
+  function handlePressItem(item) {
+    setItem(item);
+  }
 
   return (
     <FlatList
@@ -27,8 +33,9 @@ export default function FeaturedList({ items, onRefresh, refreshing }) {
       data={items}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <Link href={`/item/${item.id}`} asChild>
-          <Pressable style={styles.item}>
+        // remove "profile" when you're done
+        <Link href={`/(home)/item/${item.id}`} asChild>
+          <Pressable style={styles.item} onPress={() => handlePressItem(item)}>
             <View style={[{ backgroundColor: colors.card }, styles.card]}>
               <Image style={{ height: IMG_HEIGHT }} src={item.image_urls[0]} />
             </View>

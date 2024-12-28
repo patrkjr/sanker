@@ -20,6 +20,7 @@ interface InputProps extends TextInputProps {
   helperMessage?: string;
   errorMessage?: string;
   containerStyle?: ViewStyle;
+  otherProps: React.ComponentProps<typeof Input>;
 }
 
 const Input = forwardRef(function Input(
@@ -30,7 +31,7 @@ const Input = forwardRef(function Input(
     errorMessage,
     containerStyle,
     style,
-    ...textInputProps
+    ...otherProps
   }: InputProps,
   ref
 ) {
@@ -73,7 +74,7 @@ const Input = forwardRef(function Input(
         selectionColor={colors.textSecondary}
         style={[inputStyles, style]}
         placeholderTextColor={colors.textPlaceholder}
-        {...textInputProps}
+        {...otherProps}
       />
       {helperMessage && (
         <Small style={{ paddingHorizontal: Spacings.sm }} secondary>

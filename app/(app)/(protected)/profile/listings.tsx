@@ -1,3 +1,3 @@
-import Listings from "@/components/profile/Listings";
+import UserListings from '@/components/profile/UserListings';
 
-export default Listings
+export default UserListings;

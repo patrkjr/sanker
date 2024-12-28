@@ -5,6 +5,10 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { DarkTheme, DefaultTheme } from '@/constants/Themes';
 import { HeaderLargeStyle } from '@/constants/HeaderStyle';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -15,6 +19,11 @@ export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(app)',
 };
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 export default function RootLayout() {
   return <RootLayoutNav />;
