@@ -11,6 +11,7 @@ import Animated, {
 import { ViewProps } from '../Themed';
 import { timingConfig } from '@/constants/Animations';
 import * as Haptics from 'expo-haptics';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
@@ -30,8 +31,7 @@ export default function Card({
   onPress = undefined,
   ...otherProps
 }: CardProps) {
-  const theme = useColorScheme() || 'light';
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   const cardStyle: ViewStyle = {
     backgroundColor: themed ? colors.themed.card : colors.card,

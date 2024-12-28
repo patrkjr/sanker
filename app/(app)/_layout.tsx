@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider, useTheme } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
@@ -9,6 +9,8 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import usePreferencesStore from '@/stores/preferenceStore';
+import { useEffect, useState } from 'react';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -31,10 +33,21 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { userPreferences } = usePreferencesStore();
+  // const [preferredTheme, setPrefferedTheme] = useState<string>('light');
+  var preferredTheme: 'light' | 'dark' | 'system' = userPreferences.theme;
+  if (userPreferences.theme === 'system') {
+    preferredTheme = colorScheme;
+  }
+  // useEffect(() => {
+
+  // }, [userPreferences.theme])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider
+        value={preferredTheme === 'dark' ? DarkTheme : DefaultTheme}
+      >
         <Stack
           screenOptions={{
             headerShown: true,

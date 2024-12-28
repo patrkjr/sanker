@@ -12,6 +12,7 @@ import FontScale from '@/constants/FontScale';
 import { useColorScheme } from 'react-native';
 import { Label, P, Small } from '../typography';
 import { forwardRef } from 'react';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface InputProps extends TextInputProps {
   /** Optional style for the container wrapping the TextInput */
@@ -36,8 +37,7 @@ const Input = forwardRef(function Input(
   ref
 ) {
   //const theme = useThemeColor();
-  const theme = useColorScheme() || 'light';
-  const colors = Colors[theme];
+  const colors = useThemedColors();
   const fontSize = FontScale;
 
   const inputStyles: TextStyle = {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { View } from '../Themed';
 import { P, Label } from '../typography';
@@ -12,6 +13,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { timingConfig } from '@/constants/Animations';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface ItemProps {
   label: string;
@@ -23,7 +25,9 @@ interface ItemProps {
   animate?: boolean;
   disabled?: boolean;
   isLastItem?: boolean;
-  hasTrailingIcon?: boolean;
+  skeleton?: boolean;
+  onPress: () => void;
+  children: ChildNode;
   trailingIcon?: JSX.Element;
 }
 
@@ -36,8 +40,7 @@ export default function Item({
   skeleton = false,
   children,
 }: ItemProps) {
-  const theme = useColorScheme() || 'light';
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
@@ -106,18 +109,14 @@ export default function Item({
 const Value = ({
   children,
   hasTrailingIcon = true,
-  trailingIcon = <TrailingIcon />,
+  trailingIconName = 'ChevronRight',
 }) => {
   return (
     <View style={styles.valueContainer}>
       <P bold>{children}</P>
-      {hasTrailingIcon && trailingIcon}
+      {hasTrailingIcon && <Icon name={trailingIconName} />}
     </View>
   );
-};
-
-const TrailingIcon = ({ trailingIcon = <Icon name="ChevronRight" /> }) => {
-  return trailingIcon;
 };
 
 Item.Label = P;

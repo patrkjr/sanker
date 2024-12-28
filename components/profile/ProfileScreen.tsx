@@ -15,15 +15,24 @@ import { Link, useFocusEffect } from 'expo-router';
 import React from 'react';
 import { useUserItems } from '@/hooks/useUserItems';
 import ProfileCard from './ProfileCard';
+import usePreferencesStore from '@/stores/preferenceStore';
+
+const THEME_NAME = {
+  dark: 'Dark',
+  light: 'Light',
+  system: 'System',
+};
 
 export default function ProfileScreen() {
   const { signOut, user } = useSupabase();
   const profile = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
   const { isLoading, fetchUserItems } = useUserItems();
+  const { userPreferences } = usePreferencesStore();
 
   useFocusEffect(
     useCallback(() => {
+      console.log(userPreferences);
       fetchUserItems();
     }, [])
   );
@@ -95,9 +104,9 @@ export default function ProfileScreen() {
             <Item.Label>Location</Item.Label>
             <Item.Value></Item.Value>
           </Item>
-          <Item disabled isLastItem>
+          <Item href="/profile/theme-preferences" isLastItem>
             <Item.Label>Theme</Item.Label>
-            <Item.Value>System</Item.Value>
+            <Item.Value>{THEME_NAME[userPreferences.theme]}</Item.Value>
           </Item>
         </Card>
       </View>

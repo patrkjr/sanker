@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { timingConfig } from '@/constants/Animations';
 import FontScale from '@/constants/FontScale';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface ButtonProps {
   title: string;
@@ -39,8 +40,7 @@ const Button = forwardRef(
     }: ButtonProps,
     ref
   ) => {
-    const theme = useColorScheme() || 'light';
-    const colors = Colors[theme];
+    const colors = useThemedColors();
 
     const opacity = useSharedValue(1);
     const scale = useSharedValue(1);

@@ -18,6 +18,13 @@ export default function ProfileLayout() {
         }}
       />
       <Stack.Screen
+        name="theme-preferences"
+        options={{
+          title: 'Theme',
+          ...HeaderStyle,
+        }}
+      />
+      <Stack.Screen
         name="item/[id]"
         options={{
           headerTitle: '',

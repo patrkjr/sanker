@@ -7,6 +7,8 @@ import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from './useColorScheme';
+import usePreferencesStore from '@/stores/preferenceStore';
+import { useTheme } from '@react-navigation/native';
 
 type ThemeProps = {
   lightColor?: string;
@@ -20,7 +22,14 @@ export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
-  const theme = useColorScheme() ?? 'light';
+  const { dark } = useTheme();
+  const theme = dark ? 'dark' : 'light';
+  // let theme = 'light';
+  // if (userPreferences.theme === 'dark') {
+  //   theme = 'dark';
+  // } else if (userPreferences.theme === 'system') {
+  //   theme = useColorScheme() ?? 'light';
+  // }
   const colorFromProps = props[theme];
 
   if (colorFromProps) {

@@ -2,6 +2,7 @@ import FontScale from '@/constants/FontScale';
 import Colors from '@/constants/Colors';
 import Spacings from '@/constants/Spacings';
 import { Text, TextProps as RnTextProps, useColorScheme } from 'react-native';
+import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface TextProps extends RnTextProps {
   secondary?: boolean;
@@ -21,9 +22,7 @@ const Mono = function ({
   secondary = false,
   ...textProps
 }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
@@ -49,9 +48,7 @@ const Label = function ({
   indent = 'md',
   ...textProps
 }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
@@ -79,9 +76,7 @@ const P = function ({
   error = false,
   ...textProps
 }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   let textColor = colors.text;
 
@@ -115,9 +110,7 @@ const Small = function ({
   error = false,
   ...textProps
 }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   let textColor = colors.text;
 
@@ -151,9 +144,7 @@ const Large = function ({
   bold = false,
   ...textProps
 }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   let textColor = colors.text;
 
@@ -182,9 +173,7 @@ const Large = function ({
 Large.displayName = 'Large';
 
 const H1 = function ({ children, ...textProps }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
@@ -201,9 +190,7 @@ const H1 = function ({ children, ...textProps }: TextProps) {
 H1.displayName = 'H1';
 
 const H2 = function ({ children, ...textProps }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
@@ -220,9 +207,7 @@ const H2 = function ({ children, ...textProps }: TextProps) {
 H2.displayName = 'H2';
 
 const H3 = function ({ children, ...textProps }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
@@ -239,9 +224,7 @@ const H3 = function ({ children, ...textProps }: TextProps) {
 H3.displayName = 'H3';
 
 const H4 = function ({ children, secondary = false, ...textProps }: TextProps) {
-  const theme = useColorScheme() || 'light';
-
-  const colors = Colors[theme];
+  const colors = useThemedColors();
 
   return (
     <Text
