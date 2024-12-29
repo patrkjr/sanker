@@ -4,12 +4,17 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/config/supabase';
 import FeaturedList from './home/FeaturedList';
 import * as Haptics from 'expo-haptics';
+import usePreferencesStore from '@/stores/preferenceStore';
 
 export default function Home() {
+  const { userPreferences } = usePreferencesStore();
   const [isLoading, setIsLoading] = useState(true);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
+    if (userPreferences.hasSeenOnboarding === false) {
+      //TODO: Show an onboarding screen
+    }
     getFeaturedItemsAsync();
   }, []);
 

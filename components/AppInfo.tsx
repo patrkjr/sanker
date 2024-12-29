@@ -1,8 +1,10 @@
 import Spacings from '@/constants/Spacings';
 import { View } from './Themed';
 import { H4, Mono, P } from './typography';
+import Constants from 'expo-constants';
 
 export default function AppInfo() {
+  const version = Constants.expoConfig?.version;
   return (
     <View
       style={{
@@ -13,7 +15,7 @@ export default function AppInfo() {
     >
       <View style={{ gap: Spacings.xs, alignItems: 'center' }}>
         <H4 secondary>Sanker</H4>
-        <Mono secondary>v0.0.1</Mono>
+        <Mono secondary>v{version}</Mono>
       </View>
       <P bold secondary>
         Kechu studio

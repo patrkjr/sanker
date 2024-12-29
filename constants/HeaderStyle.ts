@@ -1,6 +1,6 @@
 type HeaderStyleType = {
   headerShadowVisible: boolean;
-  headerTitleStyle: { fontFamily: string; fontWeight: string };
+  headerTitleStyle: { fontFamily: string};
   headerBackTitleStyle: { fontFamily: string };
   headerLargeTitleStyle?: { fontFamily: string; fontWeight: string };
   headerLargeTitle?: boolean;
@@ -10,13 +10,15 @@ type HeaderStyleType = {
 
 const HeaderStyle: HeaderStyleType = {
   headerShadowVisible: false,
-  headerTitleStyle: { fontFamily: 'Nunito', fontWeight: '800' },
+  headerTitleStyle: { fontFamily: 'Nunito-ExtraBold' },
   headerBackTitleStyle: { fontFamily: 'Nunito' },
 };
 
 const HeaderLargeStyle: HeaderStyleType = {
   ...HeaderStyle,
-  headerLargeTitleStyle: { fontFamily: 'Nunito', fontWeight: '800' },
+  headerLargeTitleStyle: {
+    fontFamily: 'NunNunito-ExtraBoldito'
+  },
   headerLargeTitle: true,
   // headerTransparent: true,
   // headerBlurEffect: 'systemUltraThinMaterial',

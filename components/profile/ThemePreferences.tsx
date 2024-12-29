@@ -7,36 +7,37 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import Spacings from '@/constants/Spacings';
 import usePreferencesStore from '@/stores/preferenceStore';
+import DefaultStyles from '@/constants/DefaultStyles';
 
 export default function ThemePreferences() {
   const { userPreferences, setPreferences } = usePreferencesStore();
-  const prefferedTheme = userPreferences.theme;
+  const preferredTheme = userPreferences.theme;
 
-  function handleUpdatePrefferedTheme(theme: 'light' | 'dark' | 'system') {
+  function handleUpdatePreferredTheme(theme: 'light' | 'dark' | 'system') {
     setPreferences({ theme });
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.pageContainer}>
+    <ScrollView contentContainerStyle={pageContainer}>
       <Card>
-        <Item onPress={() => handleUpdatePrefferedTheme('light')}>
+        <Item onPress={() => handleUpdatePreferredTheme('light')}>
           <Item.Label>Light</Item.Label>
           <Item.Value
-            hasTrailingIcon={prefferedTheme === 'light'}
+            hasTrailingIcon={preferredTheme === 'light'}
             trailingIconName="Check"
           ></Item.Value>
         </Item>
-        <Item onPress={() => handleUpdatePrefferedTheme('dark')}>
+        <Item onPress={() => handleUpdatePreferredTheme('dark')}>
           <Item.Label>Dark</Item.Label>
           <Item.Value
-            hasTrailingIcon={prefferedTheme === 'dark'}
+            hasTrailingIcon={preferredTheme === 'dark'}
             trailingIconName="Check"
           ></Item.Value>
         </Item>
-        <Item onPress={() => handleUpdatePrefferedTheme('system')} isLastItem>
+        <Item onPress={() => handleUpdatePreferredTheme('system')} isLastItem>
           <Item.Label>Follow system</Item.Label>
           <Item.Value
-            hasTrailingIcon={prefferedTheme === 'system'}
+            hasTrailingIcon={preferredTheme === 'system'}
             trailingIconName="Check"
           ></Item.Value>
         </Item>
@@ -45,9 +46,10 @@ export default function ThemePreferences() {
   );
 }
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    paddingHorizontal: Spacings.md,
-    paddingVertical: Spacings.md,
-  },
-});
+const { pageContainer } = DefaultStyles;
+// const styles = StyleSheet.create({
+//   pageContainer: {
+//     paddingHorizontal: Spacings.md,
+//     paddingVertical: Spacings.md,
+//   },
+// });

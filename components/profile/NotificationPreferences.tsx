@@ -1,5 +1,3 @@
-import { StyleSheet } from 'react-native';
-import { View } from '../Themed';
 import React from 'react';
 import Item from '../ui/Item';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,6 +13,7 @@ import Animated, {
   FadeOutUp,
   LinearTransition,
 } from 'react-native-reanimated';
+import DefaultStyles from '@/constants/DefaultStyles';
 
 export default function NotificationPreferences() {
   const { userPreferences, setPreferences } = usePreferencesStore();
@@ -26,7 +25,7 @@ export default function NotificationPreferences() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.pageContainer}>
+    <ScrollView contentContainerStyle={pageContainer}>
       <Card layout={LinearTransition}>
         <Item
           useHaptics={false}
@@ -55,9 +54,8 @@ export default function NotificationPreferences() {
   );
 }
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    paddingHorizontal: Spacings.md,
-    paddingVertical: Spacings.md,
-  },
-});
+const { pageContainer } = DefaultStyles;
+
+// const styles = StyleSheet.create({
+//   ...DefaultStyles.pageContainer,
+// });

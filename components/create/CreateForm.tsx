@@ -30,6 +30,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import ControlledInputField from '../ui/ControlledInputField';
 import useItemFormStore from '@/stores/itemFormStore';
+import usePreferencesStore from '@/stores/preferenceStore';
 
 const formSchema = z.object({
   price: z
@@ -62,6 +63,7 @@ export default function CreateForm() {
   const params = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { setForm } = useItemFormStore();
+  const { userPreferences } = usePreferencesStore();
 
   const {
     control,
@@ -76,8 +78,8 @@ export default function CreateForm() {
       title: '',
       condition: '',
       description: '',
-      use_user_address: true,
-      show_exact_address: true,
+      use_user_address: userPreferences.location.use_user_address,
+      show_exact_address: userPreferences.location.show_exact_address,
     },
   });
 
@@ -132,14 +134,6 @@ export default function CreateForm() {
       },
     ]);
   }
-
-  // if (true) {
-  //   return (
-  //     <View style={styles.fullPageFill}>
-  //       <Large>HEllo</Large>
-  //     </View>
-  //   );
-  // }
 
   return (
     <KeyboardAvoidingView

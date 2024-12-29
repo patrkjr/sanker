@@ -101,7 +101,7 @@ export default function ProfileScreen() {
               {userPreferences.notificationsEnabled ? 'Enabled' : 'Disabled'}
             </Item.Value>
           </Item>
-          <Item disabled>
+          <Item href="/profile/location-preferences">
             <Item.Label>Location</Item.Label>
             <Item.Value></Item.Value>
           </Item>

@@ -55,6 +55,14 @@ export default function ProfileLayout() {
       />
 
       <Stack.Screen
+        name="location-preferences"
+        options={{
+          title: 'Location',
+          ...HeaderStyle,
+        }}
+      />
+
+      <Stack.Screen
         name="theme-preferences"
         options={{
           title: 'Theme',
