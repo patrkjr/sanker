@@ -18,7 +18,7 @@ const usePreferencesStore = create<UserPreferencesState>()(
     (set) => ({
       userPreferences: {
         theme: 'system',
-        notificationsEnabled: true,
+        notificationsEnabled: false,
       },
       setPreferences: (newPreferences) =>
         set((state) => ({

@@ -14,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { timingConfig } from '@/constants/Animations';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import * as Haptics from 'expo-haptics';
 
 interface ItemProps {
   label: string;
@@ -26,7 +27,8 @@ interface ItemProps {
   disabled?: boolean;
   isLastItem?: boolean;
   skeleton?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
+  useHaptics: boolean;
   children: ChildNode;
   trailingIcon?: JSX.Element;
 }
@@ -35,6 +37,7 @@ export default function Item({
   onPress,
   isLastItem = false,
   href,
+  useHaptics = true,
   disabled = false,
   animate = true,
   skeleton = false,
@@ -56,6 +59,13 @@ export default function Item({
     };
   });
 
+  function handleOnPress() {
+    if (useHaptics) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    onPress();
+  }
+
   const content = (
     <Pressable
       onPressIn={() => (
@@ -67,7 +77,7 @@ export default function Item({
         animate && ((translateX.value = 0), (scale.value = 1))
       )}
       disabled={disabled || skeleton}
-      onPress={onPress}
+      onPress={onPress && handleOnPress}
     >
       <Animated.View
         style={[

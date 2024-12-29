@@ -32,7 +32,6 @@ export default function ProfileScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(userPreferences);
       fetchUserItems();
     }, [])
   );
@@ -96,9 +95,11 @@ export default function ProfileScreen() {
       <View style={styles.sectionStyle}>
         <Label>Preferences</Label>
         <Card style={styles.cardWithListStyle}>
-          <Item disabled>
+          <Item href="/profile/notification-preferences">
             <Item.Label>Notifications</Item.Label>
-            <Item.Value></Item.Value>
+            <Item.Value>
+              {userPreferences.notificationsEnabled ? 'Enabled' : 'Disabled'}
+            </Item.Value>
           </Item>
           <Item disabled>
             <Item.Label>Location</Item.Label>
