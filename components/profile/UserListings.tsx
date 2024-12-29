@@ -26,7 +26,6 @@ export default function UserListings() {
     <ScrollView
       contentContainerStyle={styles.page}
       contentInsetAdjustmentBehavior="automatic"
-      showsVerticalScrollIndicator={false}
       style={{ flex: 1 }}
     >
       {!items ? (

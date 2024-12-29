@@ -92,7 +92,6 @@ export default function SignupForm() {
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         gap: Spacings.md,
         paddingHorizontal: Spacings.sm,

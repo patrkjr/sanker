@@ -54,7 +54,6 @@ export default function ProfileScreen() {
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         gap: Spacings.md,
         paddingVertical: Spacings.md,

@@ -49,11 +49,7 @@ export default function Success() {
   const { title, price, condition, image_urls } = item;
 
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.container}
-    >
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
       <H3 style={{ textAlign: 'center' }}>{succesMessage}</H3>
       {/* //Only show the first image, but we recieve all the images here */}
       <ImageCarousel imageUrls={image_urls} />

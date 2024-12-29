@@ -144,7 +144,6 @@ export default function CreateForm() {
       <Animated.ScrollView
         ref={scrollViewRef}
         layout={LinearTransition}
-        showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={[

@@ -133,10 +133,7 @@ export default function ItemScreen() {
   }
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View style={styles.pageContent}>
         <ImageCarousel imageUrls={item?.image_urls} />
         <View style={styles.subHeader}>
