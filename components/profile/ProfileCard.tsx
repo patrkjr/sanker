@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { View } from '../Themed';
 import { Alert, StyleSheet } from 'react-native';
@@ -65,7 +66,9 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
   // COMPONENT HERE
 
   return (
-    <View style={[styles.shadowWrapper, { shadowColor: colors.text }]}>
+    <View
+      style={[styles.shadowWrapper, { shadowColor: colors.permanent.black }]}
+    >
       <View
         style={[
           { backgroundColor: colors.card, borderColor: colors.border },

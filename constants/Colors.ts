@@ -1,6 +1,62 @@
+type ColorShades = {
+  50: string;
+  100: string;
+  200: string;
+  300: string;
+  400: string;
+  500: string;
+  600: string;
+  700: string;
+  800: string;
+  900: string;
+  1000: string;
+  1100: string;
+};
+
+type ThemeColors = {
+  text: string;
+  textSecondary: string;
+  textPlaceholder: string;
+  textError: string;
+  textActive: string;
+  background: string;
+  card: string;
+  cardDisabled: string;
+  tint: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+  border: string;
+  borderActive: string;
+  primary: string;
+  thumb: string;
+  thumbDisabled: string;
+  thumbBackground: string;
+  themed: {
+    text: string;
+    textSecondary: string;
+    card: string;
+    border: string;
+  };
+  descructive: {
+    text: string;
+    border: string;
+    background: string;
+  };
+  permanent: {
+    white: string;
+    black: string;
+  };
+  darkScrim: string;
+};
+
+type ThemeObject = {
+  light: ThemeColors;
+  dark: ThemeColors;
+};
+
 const darkScrim = 'rgba(0,0,0,0.52)';
 
-const green = {
+const green: ColorShades = {
   50: '#fdfefc',
   100: '#e6f5dd',
   200: '#c8ecbd',
@@ -16,7 +72,7 @@ const green = {
 };
 
 // "Neutral" from tail wind
-const grey = {
+const grey: ColorShades = {
   50: '#ffffff',
   '100': '#F7F7F7',
   '200': '#EBEBEB',
@@ -31,7 +87,7 @@ const grey = {
   1100: '#000000',
 };
 
-const blue = {
+const blue: ColorShades = {
   50: '#ffffff',
   100: '#f9fafb',
   200: '#f3f4f6',
@@ -46,7 +102,7 @@ const blue = {
   1100: '#000000',
 };
 
-const red = {
+const red: ColorShades = {
   50: '#fff5f5', // Very light red, almost white
   100: '#ffe3e3', // Pale red
   200: '#ffc9c9', // Light red
@@ -63,7 +119,7 @@ const red = {
 
 export { grey, green, blue, red };
 
-export default {
+const Colors: ThemeObject = {
   light: {
     text: grey['800'],
     textSecondary: grey[500],
@@ -134,4 +190,6 @@ export default {
     },
     darkScrim,
   },
-} as ThemeObject;
+};
+
+export default Colors;
