@@ -16,6 +16,7 @@ import React from 'react';
 import { useUserItems } from '@/hooks/useUserItems';
 import ProfileCard from './ProfileCard';
 import usePreferencesStore from '@/stores/preferenceStore';
+import DefaultStyles from '@/constants/DefaultStyles';
 
 const THEME_NAME = {
   dark: 'Dark',
@@ -54,11 +55,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{
-        gap: Spacings.md,
-        paddingVertical: Spacings.md,
-        paddingHorizontal: Spacings.sm,
-      }}
+      contentContainerStyle={pageContainer}
     >
       {profile && (
         <>
@@ -118,27 +115,27 @@ export default function ProfileScreen() {
             <Item.Label>Support</Item.Label>
             <Item.Value />
           </Item>
-          <Item disabled isLastItem>
+          <Item href={'/profile/about'} isLastItem>
             <Item.Label>About Sanker</Item.Label>
             <Item.Value trailingIcon={<Icon name="ExternalLink" />} />
           </Item>
         </Card>
       </View>
 
-      <View style={{ paddingHorizontal: Spacings.sm }}>
-        <Button
-          title="Sign out"
-          onPress={() => {
-            signOut();
-            clearUser();
-          }}
-        />
-      </View>
+      <Button
+        title="Sign out"
+        onPress={() => {
+          signOut();
+          clearUser();
+        }}
+      />
 
       <AppInfo />
     </ScrollView>
   );
 }
+
+const { pageContainer } = DefaultStyles;
 
 const styles = StyleSheet.create({
   sectionStyle: {

@@ -34,6 +34,7 @@ export default function Card({
   const colors = useThemedColors();
 
   const cardStyle: ViewStyle = {
+    overflow: 'hidden',
     backgroundColor: themed ? colors.themed.card : colors.card,
     borderWidth: borderLess ? 0 : 1,
     borderRadius: Spacings.borderRadius.md,

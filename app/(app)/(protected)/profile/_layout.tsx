@@ -69,6 +69,14 @@ export default function ProfileLayout() {
           ...HeaderStyle,
         }}
       />
+
+      <Stack.Screen
+        name="about"
+        options={{
+          title: 'About Sanker',
+          ...HeaderStyle,
+        }}
+      />
     </Stack>
   );
 }

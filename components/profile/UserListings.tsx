@@ -8,6 +8,7 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import ProductItem from '../item/ProductItem';
 import { useUserItems } from '@/hooks/useUserItems';
 import { useFocusEffect } from 'expo-router';
+import DefaultStyles from '@/constants/DefaultStyles';
 
 export default function UserListings() {
   const user = useUserStore((state) => state.user);
@@ -24,7 +25,7 @@ export default function UserListings() {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.page}
+      contentContainerStyle={pageContainer}
       contentInsetAdjustmentBehavior="automatic"
       style={{ flex: 1 }}
     >
@@ -47,9 +48,4 @@ export default function UserListings() {
   );
 }
 
-const styles = StyleSheet.create({
-  page: {
-    paddingHorizontal: Spacings.sm,
-    gap: Spacings.lg,
-  },
-});
+const { pageContainer } = DefaultStyles;

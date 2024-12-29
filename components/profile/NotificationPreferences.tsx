@@ -6,13 +6,7 @@ import Spacings from '@/constants/Spacings';
 import Switch from '../ui/Switch';
 import usePreferencesStore from '@/stores/preferenceStore';
 import { P, Small } from '../typography';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInUp,
-  FadeOutUp,
-  LinearTransition,
-} from 'react-native-reanimated';
+import Animated, { FadeOutUp, LinearTransition } from 'react-native-reanimated';
 import DefaultStyles from '@/constants/DefaultStyles';
 
 export default function NotificationPreferences() {
@@ -42,7 +36,7 @@ export default function NotificationPreferences() {
           </Item.Value>
         </Item>
         {userPreferences.notificationsEnabled && (
-          <Animated.View entering={FadeInUp} exiting={FadeOutUp}>
+          <Animated.View exiting={FadeOutUp}>
             <P secondary>
               Right on brother, but unfortunately, we haven't made this feature
               yet. We're working on it though ✌️

@@ -1,5 +1,5 @@
 import Spacings from '@/constants/Spacings';
-import { View } from './Themed';
+import { View } from 'react-native';
 import { H4, Mono, P } from './typography';
 import Constants from 'expo-constants';
 
