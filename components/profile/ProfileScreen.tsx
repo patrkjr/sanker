@@ -52,6 +52,26 @@ export default function ProfileScreen() {
     year: 'numeric',
   }).format(date);
 
+  function onPressSignout() {
+    Alert.alert('Are you sure you want to sign out?', '', [
+      {
+        text: 'Stay signed in',
+        style: 'cancel',
+        isPreferred: true,
+      },
+      {
+        text: 'Sign out',
+        style: 'destructive',
+        onPress: handleSignOut,
+      },
+    ]);
+  }
+
+  function handleSignOut() {
+    signOut();
+    clearUser();
+  }
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -122,15 +142,7 @@ export default function ProfileScreen() {
         </Card>
       </View>
 
-      <Button
-        title="Sign out"
-        onPress={() => {
-          signOut();
-          clearUser();
-        }}
-      />
-
-      <AppInfo />
+      <Button title="Sign out" onPress={onPressSignout} />
     </ScrollView>
   );
 }
