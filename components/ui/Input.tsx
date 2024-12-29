@@ -43,8 +43,7 @@ const Input = forwardRef(function Input(
   const inputStyles: TextStyle = {
     color: colors.text,
     fontSize: fontSize['lg'],
-    fontFamily: 'Nunito',
-    fontWeight: '600',
+    fontFamily: 'Nunito-SemiBold',
     paddingHorizontal: Spacings.md,
     paddingVertical: Spacings.sm,
     backgroundColor: colors.card,

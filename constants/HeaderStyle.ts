@@ -1,8 +1,8 @@
 type HeaderStyleType = {
   headerShadowVisible: boolean;
-  headerTitleStyle: { fontFamily: string};
+  headerTitleStyle: { fontFamily: string };
   headerBackTitleStyle: { fontFamily: string };
-  headerLargeTitleStyle?: { fontFamily: string; fontWeight: string };
+  headerLargeTitleStyle?: { fontFamily: string };
   headerLargeTitle?: boolean;
   // headerTransparent?: boolean;
   // headerBlurEffect?: string;
@@ -11,13 +11,13 @@ type HeaderStyleType = {
 const HeaderStyle: HeaderStyleType = {
   headerShadowVisible: false,
   headerTitleStyle: { fontFamily: 'Nunito-ExtraBold' },
-  headerBackTitleStyle: { fontFamily: 'Nunito' },
+  headerBackTitleStyle: { fontFamily: 'Nunito-SemiBold' },
 };
 
 const HeaderLargeStyle: HeaderStyleType = {
   ...HeaderStyle,
   headerLargeTitleStyle: {
-    fontFamily: 'NunNunito-ExtraBoldito'
+    fontFamily: 'Nunito-ExtraBold',
   },
   headerLargeTitle: true,
   // headerTransparent: true,

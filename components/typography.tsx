@@ -12,8 +12,7 @@ interface TextProps extends RnTextProps {
 }
 
 const basicFontStyle = {
-  fontFamily: 'Nunito',
-  fontWeight: '500',
+  fontFamily: 'Nunito-SemiBold',
 };
 
 const Mono = function ({
@@ -28,8 +27,7 @@ const Mono = function ({
     <Text
       style={[
         {
-          fontFamily: 'Fira Mono',
-          fontWeight: bold ? '700' : '500',
+          fontFamily: bold ? 'Nunito-ExtraBold' : 'FiraMono-Medium',
           fontSize: FontScale['sm'],
           color: secondary ? colors.textSecondary : colors.text,
         },
@@ -56,7 +54,7 @@ const Label = function ({
         basicFontStyle,
         indent && { paddingHorizontal: Spacings[indent] },
         {
-          fontWeight: '800',
+          fontFamily: 'Nunito-ExtraBold',
           fontSize: FontScale['sm'],
           color: secondary ? colors.textSecondary : colors.text,
         },
@@ -93,7 +91,7 @@ const P = function ({
       style={[
         basicFontStyle,
         { fontSize: FontScale['md'], color: textColor },
-        bold && { fontWeight: '800' },
+        bold && { fontFamily: 'Nunito-ExtraBold' },
         textProps?.style,
       ]}
     >
@@ -127,7 +125,7 @@ const Small = function ({
       style={[
         basicFontStyle,
         { fontSize: FontScale['sm'], color: textColor },
-        bold && { fontWeight: '700' },
+        bold && { fontFamily: 'Nunito-Bold' },
         textProps?.style,
       ]}
     >
@@ -162,7 +160,7 @@ const Large = function ({
       style={[
         basicFontStyle,
         { fontSize: FontScale['lg'], color: textColor },
-        bold && { fontWeight: '800' },
+        bold && { fontFamily: 'Nunito-ExtraBold' },
         textProps?.style,
       ]}
     >
@@ -179,7 +177,11 @@ const H1 = function ({ children, ...textProps }: TextProps) {
     <Text
       style={[
         basicFontStyle,
-        { fontSize: FontScale['3xl'], fontWeight: '800', color: colors.text },
+        {
+          fontSize: FontScale['3xl'],
+          fontFamily: 'Nunito-ExtraBold',
+          color: colors.text,
+        },
         textProps?.style,
       ]}
     >
@@ -196,7 +198,11 @@ const H2 = function ({ children, ...textProps }: TextProps) {
     <Text
       style={[
         basicFontStyle,
-        { fontSize: FontScale['2xl'], fontWeight: '800', color: colors.text },
+        {
+          fontSize: FontScale['2xl'],
+          fontFamily: 'Nunito-ExtraBold',
+          color: colors.text,
+        },
         textProps?.style,
       ]}
     >
@@ -213,7 +219,11 @@ const H3 = function ({ children, ...textProps }: TextProps) {
     <Text
       style={[
         basicFontStyle,
-        { fontSize: FontScale['xl'], fontWeight: '800', color: colors.text },
+        {
+          fontSize: FontScale['xl'],
+          fontFamily: 'Nunito-ExtraBold',
+          color: colors.text,
+        },
         textProps?.style,
       ]}
     >
@@ -232,7 +242,7 @@ const H4 = function ({ children, secondary = false, ...textProps }: TextProps) {
         basicFontStyle,
         {
           fontSize: FontScale['lg'],
-          fontWeight: '800',
+          fontFamily: 'Nunito-ExtraBold',
           color: secondary ? colors.textSecondary : colors.text,
         },
         textProps?.style,

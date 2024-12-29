@@ -65,7 +65,7 @@ const Button = forwardRef(
     const textStyle = {
       color: themed ? colors.themed.text : colors.text,
       fontSize: size === 'sm' ? FontScale.md : FontScale.lg,
-      fontWeight: '800',
+      fontFamily: 'Nunito-ExtraBold',
       textAlign: 'center',
     };
 

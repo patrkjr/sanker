@@ -1,4 +1,4 @@
-import { ThemeProvider, useTheme } from '@react-navigation/native';
+import { ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
@@ -10,7 +10,6 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import usePreferencesStore from '@/stores/preferenceStore';
-import { useEffect, useState } from 'react';
 
 export {
   // Catch any errors thrown by the Layout component.
