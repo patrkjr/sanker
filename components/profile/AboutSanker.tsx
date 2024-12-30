@@ -18,13 +18,13 @@ export default function AboutSanker() {
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={pageContainer}
     >
-      <AppInfo />
       <Card>
-        <Item isLastItem>
+        <Item disabled isLastItem>
           <Item.Label>Onboarding</Item.Label>
           <Item.Value></Item.Value>
         </Item>
       </Card>
+      <AppInfo />
     </ScrollView>
   );
 }
