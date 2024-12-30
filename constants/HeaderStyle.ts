@@ -11,7 +11,7 @@ type HeaderStyleType = {
 const HeaderStyle: HeaderStyleType = {
   headerShadowVisible: false,
   headerTitleStyle: { fontFamily: 'Nunito-ExtraBold' },
-  headerBackTitleStyle: { fontFamily: 'Nunito-SemiBold' },
+  headerBackTitleStyle: { fontFamily: 'Nunito-Bold' },
 };
 
 const HeaderLargeStyle: HeaderStyleType = {
