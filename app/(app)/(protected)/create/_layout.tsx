@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack } from 'expo-router';
 import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
 
-export default function NewLayout() {
+export default function CreateFormLayout() {
   return (
     <Stack>
       <Stack.Screen
@@ -29,6 +29,15 @@ export default function NewLayout() {
           presentation: 'modal',
           title: 'Item for sale',
           headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="pick-category"
+        options={{
+          title: 'Pick category',
+          presentation: 'modal',
+          ...HeaderStyle,
         }}
       />
     </Stack>
