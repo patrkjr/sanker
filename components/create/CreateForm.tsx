@@ -20,7 +20,12 @@ import Switch from '../ui/Switch';
 import Item from '../ui/Item';
 import Card from '../ui/Card';
 import useUserStore from '@/stores/userStore';
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import {
+  Link,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from 'expo-router';
 import 'react-native-get-random-values';
 import ImageUploadGallery from './ImageUploadGallery';
 import Animated, {
@@ -294,6 +299,13 @@ export default function CreateForm() {
               </Item>
             )}
           ></Controller>
+        </Card>
+
+        <Card>
+          <Item href={'/create/pick-category'} isLastItem>
+            <Item.Label>Pick category</Item.Label>
+            <Item.Value>Gear</Item.Value>
+          </Item>
         </Card>
 
         {/* Submit button */}
