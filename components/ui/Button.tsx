@@ -23,7 +23,7 @@ interface ButtonProps {
   [key: string]: any; // Allow other props for Pressable
 }
 
-const Button = forwardRef(
+const Button = forwardRef<typeof Pressable, ButtonProps>(
   (
     {
       title,
@@ -37,7 +37,7 @@ const Button = forwardRef(
       onPressOut,
       onPressIn,
       ...otherProps
-    }: ButtonProps,
+    },
     ref
   ) => {
     const colors = useThemedColors();
