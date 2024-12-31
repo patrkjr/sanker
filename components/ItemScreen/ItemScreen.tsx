@@ -183,8 +183,8 @@ export default function ItemScreen() {
           <>
             <Card variant="warning">
               <P>
-                You can't edit an item at this time. But you can delete it, and
-                create a new one. Sorry about that.
+                You can't edit an item yet. But you can delete it, and create a
+                new one. Sorry about that.
               </P>
             </Card>
             <Button
