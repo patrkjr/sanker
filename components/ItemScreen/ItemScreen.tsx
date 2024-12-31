@@ -5,7 +5,7 @@ import {
   useNavigation,
 } from 'expo-router';
 import { View } from '../Themed';
-import { H2, H4, Label, P } from '../typography';
+import { H2, H4, Label, P, Small } from '../typography';
 import { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
 import { supabase } from '@/config/supabase';
@@ -18,6 +18,7 @@ import { useSupabase } from '@/context/supabase-provider';
 import ItemScreenLoader from './ItemScreenLoader';
 import ItemNotFound from './ItemNotFound';
 import useItemStore from '@/stores/itemStore';
+import Card from '../ui/Card';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -80,6 +81,20 @@ export default function ItemScreen() {
     return <ItemNotFound />;
   }
 
+  function getPrettyDate(dateStr: string) {
+    //Get created time and make a Date object.
+    const date = new Date(dateStr);
+
+    //Form at the date as "m YYYY"
+    const formattedCreatedAt = new Intl.DateTimeFormat('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(date);
+
+    return formattedCreatedAt;
+  }
+
   function askForDeletion() {
     Alert.alert('Delete this item?', 'You cannot recreate it, ever.', [
       {
@@ -136,6 +151,7 @@ export default function ItemScreen() {
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View style={styles.pageContent}>
         <ImageCarousel imageUrls={item?.image_urls} />
+
         <View style={styles.subHeader}>
           <H4 bold secondary>
             {item.price} kr.
@@ -145,7 +161,15 @@ export default function ItemScreen() {
             text={conditionStrings[item.condition]}
           />
         </View>
-        <H2>{item.title}</H2>
+        <View style={{ gap: Spacings.xs }}>
+          <H2>{item.title}</H2>
+          <Small secondary>
+            Created{' '}
+            <Small secondary bold>
+              {getPrettyDate(item?.created_at)}
+            </Small>
+          </Small>
+        </View>
         <ProfileCard profileId={item.owner_id} />
         <Button title="Message seller" themed disabled />
         <Button title="Share" ghost disabled />
@@ -156,11 +180,19 @@ export default function ItemScreen() {
           </View>
         )}
         {item.owner_id === user.id && (
-          <Button
-            variant="descructive"
-            title="Delete item"
-            onPress={askForDeletion}
-          />
+          <>
+            <Card variant="warning">
+              <P>
+                You can't edit an item at this time. But you can delete it, and
+                create a new one. Sorry about that.
+              </P>
+            </Card>
+            <Button
+              variant="descructive"
+              title="Delete item"
+              onPress={askForDeletion}
+            />
+          </>
         )}
       </View>
     </ScrollView>

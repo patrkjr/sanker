@@ -82,7 +82,7 @@ export default function ProfileScreen() {
           <ProfileCard profileId={profile.id} />
           <View style={styles.editContainer}>
             <Mono secondary>
-              Member since <Mono>{formattedCreatedAt}</Mono>
+              Joined <Mono>{formattedCreatedAt}</Mono>
             </Mono>
             <Link
               style={{ width: 'auto' }}

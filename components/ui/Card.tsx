@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, useColorScheme, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, useColorScheme, ViewStyle } from 'react-native';
 import Colors from '@/constants/Colors';
 import Spacings from '@/constants/Spacings';
 import { PropsWithChildren } from 'react';
@@ -15,7 +15,7 @@ import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
-  themed?: boolean;
+  variant: 'default' | 'themed' | 'warning';
   style: ViewStyle | ViewStyle[] | [];
   onPress?: (() => void) | undefined;
   useHaptics?: boolean;
@@ -24,8 +24,8 @@ interface CardProps extends PropsWithChildren {
 
 export default function Card({
   children,
-  themed = false,
   borderLess = false,
+  variant = 'default',
   style,
   useHaptics = true,
   onPress = undefined,
@@ -33,16 +33,33 @@ export default function Card({
 }: CardProps) {
   const colors = useThemedColors();
 
-  const cardStyle: ViewStyle = {
-    overflow: 'hidden',
-    backgroundColor: themed ? colors.themed.card : colors.card,
-    borderWidth: borderLess ? 0 : 1,
-    borderRadius: Spacings.borderRadius.md,
-    borderColor: themed ? colors.themed.border : colors.border,
-    paddingVertical: Spacings.xs,
-    paddingHorizontal: Spacings.md,
-    width: '100%',
-  };
+  function getCardStyle() {
+    const baseCardStyle: ViewStyle[] = [
+      { ...styles.baseCardStyle },
+      {
+        backgroundColor: colors.card,
+        borderColor: colors.border,
+      },
+    ];
+    if (variant === 'themed') {
+      baseCardStyle.push({
+        backgroundColor: colors.themed.card,
+        borderColor: colors.themed.border,
+      });
+    }
+    if (variant === 'warning') {
+      baseCardStyle.push({
+        backgroundColor: colors.warning.background,
+        borderColor: colors.warning.border,
+      });
+    }
+
+    if (borderLess) {
+      baseCardStyle.push({ borderWidth: 0 });
+    }
+
+    return baseCardStyle;
+  }
 
   const opacity = useSharedValue(1);
   const scale = useSharedValue(1);
@@ -73,7 +90,7 @@ export default function Card({
       onPressOut={onPress && onPressOut}
     >
       <Animated.View
-        style={[cardStyle, style, animatedCardStyle]}
+        style={[...getCardStyle(), style, animatedCardStyle]}
         {...otherProps}
       >
         {children}
@@ -81,3 +98,14 @@ export default function Card({
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  baseCardStyle: {
+    borderWidth: 1,
+    borderRadius: Spacings.borderRadius.md,
+    paddingVertical: Spacings.xs,
+    paddingHorizontal: Spacings.md,
+    width: '100%',
+    overflow: 'hidden',
+  },
+});

@@ -12,7 +12,7 @@ interface TextProps extends RnTextProps {
 }
 
 const basicFontStyle = {
-  fontFamily: 'Nunito-SemiBold',
+  fontFamily: 'Nunito-Medium',
 };
 
 const Mono = function ({
@@ -125,7 +125,7 @@ const Small = function ({
       style={[
         basicFontStyle,
         { fontSize: FontScale['sm'], color: textColor },
-        bold && { fontFamily: 'Nunito-Bold' },
+        bold && { fontFamily: 'Nunito-ExtraBold' },
         textProps?.style,
       ]}
     >

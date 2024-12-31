@@ -37,6 +37,11 @@ type ThemeColors = {
     card: string;
     border: string;
   };
+  warning: {
+    text: string;
+    border: string;
+    background: string;
+  };
   descructive: {
     text: string;
     border: string;
@@ -102,6 +107,21 @@ const blue: ColorShades = {
   1100: '#000000',
 };
 
+const yellow: ColorShades = {
+  '50': '#fefce8',
+  '100': '#fef9c3',
+  '200': '#fef08a',
+  '300': '#fde047',
+  '400': '#facc15',
+  '500': '#eab308',
+  '600': '#ca8a04',
+  '700': '#a16207',
+  '800': '#854d0e',
+  '900': '#713f12',
+  '1000': '#422006',
+  '1100': '#271202',
+};
+
 const red: ColorShades = {
   50: '#fff5f5', // Very light red, almost white
   100: '#ffe3e3', // Pale red
@@ -117,7 +137,7 @@ const red: ColorShades = {
   1100: '#5a0707', // Almost black with the faintest red tint
 };
 
-export { grey, green, blue, red };
+export { grey, green, blue, red, yellow };
 
 const Colors: ThemeObject = {
   light: {
@@ -143,6 +163,11 @@ const Colors: ThemeObject = {
       textSecondary: green[500],
       card: green[100],
       border: green[200],
+    },
+    warning: {
+      text: yellow[600],
+      border: yellow[300],
+      background: yellow[50],
     },
     descructive: {
       text: red[600],
@@ -179,9 +204,14 @@ const Colors: ThemeObject = {
       card: green[1000],
       border: green[900],
     },
+    warning: {
+      text: yellow[500],
+      background: yellow[1100],
+      border: yellow[800],
+    },
     descructive: {
       text: red[500],
-      border: red[1000],
+      border: red[900],
       background: red[1100],
     },
     permanent: {
