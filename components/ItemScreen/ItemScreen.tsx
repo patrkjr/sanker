@@ -153,7 +153,7 @@ export default function ItemScreen() {
       <View style={styles.pageContent}>
         <ImageCarousel imageUrls={item?.image_urls} />
 
-        <View style={styles.subHeader}>
+        <View style={[styles.subHeader, styles.indent]}>
           <H4 bold secondary>
             {item.price} kr.
           </H4>
@@ -162,14 +162,8 @@ export default function ItemScreen() {
             text={conditionStrings[item.condition]}
           />
         </View>
-        <View style={{ gap: Spacings.xs }}>
+        <View style={[{ gap: Spacings.xs }, styles.indent]}>
           <H2>{item.title}</H2>
-          <Small secondary>
-            Created{' '}
-            <Small secondary bold>
-              {getPrettyDate(item?.created_at)}
-            </Small>
-          </Small>
         </View>
         {item.description && (
           <View style={styles.description}>
@@ -202,6 +196,14 @@ export default function ItemScreen() {
             />
           </>
         )}
+        <View style={styles.indent}>
+          <Small secondary>
+            Created{' '}
+            <Small secondary bold>
+              {getPrettyDate(item?.created_at)}
+            </Small>
+          </Small>
+        </View>
       </View>
     </ScrollView>
   );
@@ -219,6 +221,9 @@ const styles = StyleSheet.create({
   },
   description: {
     gap: Spacings.xs,
+    paddingHorizontal: Spacings.md,
+  },
+  indent: {
     paddingHorizontal: Spacings.md,
   },
 });
