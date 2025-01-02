@@ -171,18 +171,23 @@ export default function ItemScreen() {
             </Small>
           </Small>
         </View>
-        <ProfileCard profileId={item.owner_id} />
-        <Link href={'/chat'} push asChild>
-          <Button title="Message seller" themed />
-        </Link>
-        <Button title="Share" ghost disabled />
         {item.description && (
           <View style={styles.description}>
             <Label indent={false}>Description</Label>
             {item.description && <P>{item.description}</P>}
           </View>
         )}
-        {item.owner_id === user.id && (
+        <ProfileCard profileId={item.owner_id} />
+
+        {item.owner_id !== user.id ? (
+          <>
+            <Link href={'/chat'} push asChild>
+              <Button title="Message seller" themed />
+            </Link>
+            <Button title="Share" ghost disabled />
+          </>
+        ) : (
+          // If the current user is the owner:
           <>
             <Card variant="warning">
               <P>
