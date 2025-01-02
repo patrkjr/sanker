@@ -1,6 +1,7 @@
 import Icon from '@/components/ui/Icon';
 import { useThemedColors } from '@/hooks/useThemedColors';
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 export default function ProtectedLayout() {
@@ -47,6 +48,17 @@ export default function ProtectedLayout() {
           tabBarLabelStyle: styles.tabBarLabelStyle,
         }}
       />
+      <Stack.Screen
+        name="chat"
+        options={{ href: null, presentation: 'modal' }}
+      />
+      {/* 
+      <Tabs.Screen
+        name="chat"
+        options={{
+          href: null,
+        }}
+      /> */}
     </Tabs>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ErrorBoundary,
+  Link,
   useLocalSearchParams,
   useNavigation,
 } from 'expo-router';
@@ -171,7 +172,9 @@ export default function ItemScreen() {
           </Small>
         </View>
         <ProfileCard profileId={item.owner_id} />
-        <Button title="Message seller" themed disabled />
+        <Link href={'/chat'} push asChild>
+          <Button title="Message seller" themed />
+        </Link>
         <Button title="Share" ghost disabled />
         {item.description && (
           <View style={styles.description}>
