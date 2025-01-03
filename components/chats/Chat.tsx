@@ -96,11 +96,12 @@ export default function Chat() {
 
   async function handleSendMessage() {
     //TODO: Better validation
-    if (text !== '') {
+    if (text.trim() !== '' && !text.match(/^ +$/)) {
+      const cleanedText = text.replace(/\s{2,}/g, ' ');
       const message = {
         conversation_id: id,
         sender_id: user?.id,
-        content: text,
+        content: cleanedText,
       };
       try {
         const { error } = await supabase.from('messages').insert(message);
