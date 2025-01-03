@@ -41,7 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="chats"
         options={{
-          title: 'Chats',
+          title: 'Messages',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} iconName={'Send'} />
           ),

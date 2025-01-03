@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Stack,
   useFocusEffect,
   useLocalSearchParams,
   useNavigation,
@@ -24,6 +25,7 @@ import IconButton from '../ui/IconButton';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { useSupabase } from '@/context/supabase-provider';
 import { timingConfig } from '@/constants/Animations';
+import { HeaderStyle } from '@/constants/HeaderStyle';
 
 const STICKY_HEIGHT = 62 + 8 + 8;
 
@@ -38,18 +40,18 @@ export default function Chat() {
 
   const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      // Hide tab bar when showing this screen
-      navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
-      return () => {
-        //Show tab bar when navigating away
-        navigation
-          .getParent()
-          ?.setOptions({ tabBarStyle: { display: 'flex' } });
-      };
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // Hide tab bar when showing this screen
+  //     navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
+  //     return () => {
+  //       //Show tab bar when navigating away
+  //       navigation
+  //         .getParent()
+  //         ?.setOptions({ tabBarStyle: { display: 'flex' } });
+  //     };
+  //   }, [])
+  // );
 
   useEffect(() => {
     getMessagesAsync();
@@ -138,6 +140,14 @@ export default function Chat() {
 
   return (
     <>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitle: 'Chat with...',
+          headerBackTitle: 'Messages',
+          ...HeaderStyle,
+        }}
+      />
       <Animated.FlatList
         ref={listRef}
         inverted

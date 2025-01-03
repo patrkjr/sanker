@@ -7,10 +7,8 @@ export default function ChatLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: 'Chats', ...HeaderLargeStyle }}
+        options={{ title: 'Messages', ...HeaderLargeStyle }}
       />
-
-      <Stack.Screen name="[id]" options={{ title: 'Chat', ...HeaderStyle }} />
     </Stack>
   );
 }

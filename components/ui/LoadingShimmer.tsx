@@ -25,7 +25,6 @@ export default function LoadingShimmer({ ...otherProps }) {
 
   return (
     <Animated.View
-      exiting={FadeOut}
       style={[
         styles.shimmer,
         {

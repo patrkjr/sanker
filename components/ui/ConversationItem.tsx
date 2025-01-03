@@ -50,7 +50,7 @@ export default function ConversationItem({
   }
 
   return (
-    <Link href={href}>
+    <Link href={href} relativeToDirectory push>
       <View style={styles.container}>
         <ProfilePicture avatarUrl={user.avatar_url} />
         <View style={styles.middle}>

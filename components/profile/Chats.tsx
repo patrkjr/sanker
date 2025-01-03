@@ -61,7 +61,7 @@ export default function Chats() {
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <ConversationItem
-            href={`/chats/${item.id}`}
+            href={`chat/${item.id}`}
             userId={getParticipantId(item?.seller_id, item?.buyer_id)}
             tagMessage={tagMessage(item.seller_id)}
           />
