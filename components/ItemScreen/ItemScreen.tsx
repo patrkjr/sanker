@@ -175,7 +175,7 @@ export default function ItemScreen() {
 
         {item.owner_id !== user.id ? (
           <>
-            <Link href={'/chat'} push asChild>
+            <Link href={'/new-message'} relativeToDirectory push asChild>
               <Button title="Message seller" themed />
             </Link>
             <Button title="Share" ghost disabled />

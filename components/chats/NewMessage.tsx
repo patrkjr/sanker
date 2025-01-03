@@ -40,7 +40,7 @@ export default function Conversation() {
   useEffect(() => {
     if (conversationId) {
       const subscription = supabase
-        .channel('test_room')
+        .channel('new_chat_room')
         .on(
           'postgres_changes',
           {

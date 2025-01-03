@@ -28,7 +28,7 @@ export default function ProfileScreen() {
   const { signOut, user } = useSupabase();
   const profile = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
-  const { isLoading, fetchUserItems } = useUserItems();
+  const { isLoading: isLoadingUserItems, fetchUserItems } = useUserItems();
   const { userPreferences } = usePreferencesStore();
 
   useFocusEffect(
@@ -97,13 +97,14 @@ export default function ProfileScreen() {
       <View style={styles.sectionStyle}>
         <Label>Listings</Label>
         <Card style={styles.cardWithListStyle}>
-          <Item href={'/profile/listings'} skeleton={isLoading}>
+          <Item href={'/profile/listings'} skeleton={isLoadingUserItems}>
             <Item.Label>My listings</Item.Label>
             <Item.Value>{profile?.items?.length}</Item.Value>
           </Item>
-          <Item href={'/listings'} isLastItem disabled>
+          <Item href={'/profile/favorits'} disabled isLastItem>
             <Item.Label>Favorites</Item.Label>
-            <Item.Value>4</Item.Value>
+            <Item.Value></Item.Value>
+            {/* Show the count here at some point */}
           </Item>
         </Card>
       </View>

@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 type HeaderStyleType = {
   headerShadowVisible: boolean;
   headerTitleStyle: { fontFamily: string };
@@ -10,14 +12,18 @@ type HeaderStyleType = {
 
 const HeaderStyle: HeaderStyleType = {
   headerShadowVisible: false,
-  headerTitleStyle: { fontFamily: 'Nunito-ExtraBold' },
-  headerBackTitleStyle: { fontFamily: 'Nunito-Bold' },
+  headerTitleStyle: {
+    fontFamily: 'Nunito-ExtraBold',
+    fontWeight: Platform.OS !== 'android' ? '800' : '400',
+  },
+  headerBackTitleStyle: { fontFamily: 'Nunito-ExtraBold' },
 };
 
 const HeaderLargeStyle: HeaderStyleType = {
   ...HeaderStyle,
   headerLargeTitleStyle: {
     fontFamily: 'Nunito-ExtraBold',
+    fontWeight: '800',
   },
   headerLargeTitle: true,
   // headerTransparent: true,

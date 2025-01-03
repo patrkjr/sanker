@@ -4,6 +4,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { v4 as uuidv4 } from 'uuid';
 import { useSupabase } from '@/context/supabase-provider';
 import useItemStore from '@/stores/itemStore';
+import { compressImage } from '@/utils/compressImage';
 
 const useCreateItem = () => {
   const { user } = useSupabase();
@@ -17,20 +18,24 @@ const useCreateItem = () => {
 
   const [id, setId] = useState<null | string>(null);
 
-  const compressImage = useCallback(async (uri: string) => {
-    try {
-      const manipulatedImage = await ImageManipulator.manipulateAsync(
-        uri,
-        [{ resize: { width: 1000 } }],
-        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
-      );
-      return manipulatedImage;
-    } catch (error) {
-      console.error('compressImage function: ' + error.message);
-      setUploadStatus((prev) => ({ ...prev, error: error.message }));
-      throw error;
-    }
-  }, []);
+  // const compressImage = useCallback(async (uri: string) => {
+  //   try {
+  //     const manipulatedImage = await ImageManipulator.manipulateAsync(
+  //       uri,
+  //       [{ resize: { width: 1000 } }],
+  //       { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+  //     );
+  //     return manipulatedImage;
+  //   } catch (error) {
+  //     console.error('compressImage function: ' + error.message);
+  //     setUploadStatus((prev) => ({ ...prev, error: error.message }));
+  //     throw error;
+  //   }
+  // }, []);
+
+  function setErrorStatus() {
+    setUploadStatus((prev) => ({ ...prev, error: error.message }));
+  }
 
   const uploadImages = useCallback(
     async (itemId: string, images: [{ uri: string }]) => {
@@ -46,7 +51,10 @@ const useCreateItem = () => {
       for (let i = 0; i < images.length; i++) {
         try {
           const image = images[i];
-          const compressedImage = await compressImage(image.uri);
+          const compressedImage = await compressImage(
+            image.uri,
+            setErrorStatus
+          );
           const fileName = `items/${itemId}/${Date.now()}.jpeg`;
           const { data, error } = await supabase.storage
             .from('images')

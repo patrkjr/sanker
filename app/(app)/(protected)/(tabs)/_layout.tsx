@@ -39,6 +39,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="chats"
+        options={({ route }) => {
+          console.log(route);
+          return {
+            title: 'Chats',
+            tabBarStyle: { display: route.params ? 'flex' : 'none' },
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} iconName={'Send'} />
+            ),
+            tabBarLabelStyle: styles.tabBarLabelStyle,
+          };
+        }}
+      />
+
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
@@ -54,7 +69,6 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBarLabelStyle: {
-    fontFamily: 'Nunito',
-    fontWeight: '800',
+    fontFamily: 'Nunito-Bold',
   },
 });

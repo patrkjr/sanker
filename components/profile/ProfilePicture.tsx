@@ -22,6 +22,7 @@ import { boolean, number } from 'zod';
 interface ProfilePictureProps {
   //Missing profile type definition
   profile: {};
+  avatarUrl: string;
   size: number;
   isLoading: boolean;
 }
