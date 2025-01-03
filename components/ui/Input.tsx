@@ -53,6 +53,7 @@ const Input = forwardRef(function Input(
   };
 
   const wrapperStyles = {
+    backgroundColor: 'transparent',
     gap: Spacings.xs,
   };
 

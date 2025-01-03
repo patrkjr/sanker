@@ -1,6 +1,6 @@
 import Icon from '@/components/ui/Icon';
 import { useThemedColors } from '@/hooks/useThemedColors';
-import { Stack, Tabs } from 'expo-router';
+import { Stack, Tabs, useNavigation } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -40,16 +40,12 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="chats"
-        options={({ route }) => {
-          console.log(route);
-          return {
-            title: 'Chats',
-            tabBarStyle: { display: route.params ? 'flex' : 'none' },
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused} iconName={'Send'} />
-            ),
-            tabBarLabelStyle: styles.tabBarLabelStyle,
-          };
+        options={{
+          title: 'Chats',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} iconName={'Send'} />
+          ),
+          tabBarLabelStyle: styles.tabBarLabelStyle,
         }}
       />
 

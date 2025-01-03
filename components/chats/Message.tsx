@@ -25,12 +25,15 @@ export default function Message({ senderId, content }: MessageProps) {
     <View style={[styles.container, senderIsUser && styles.senderFlex]}>
       <View
         style={[
-          styles.messageContainer,
-          senderIsUser && styles.senderFlex,
           { backgroundColor: colors.card },
+          styles.messageContainer,
+          senderIsUser && {
+            ...styles.senderFlex,
+            backgroundColor: colors.themed.card,
+          },
         ]}
       >
-        <P>{content}</P>
+        <P style={senderIsUser && { textAlign: 'right' }}>{content}</P>
       </View>
     </View>
   );
@@ -43,9 +46,10 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     flexDirection: 'row',
-    borderRadius: Spacings.borderRadius.md,
-    padding: Spacings.md,
-    maxWidth: 500,
+    borderRadius: Spacings.borderRadius.xl,
+    padding: Spacings.sm,
+    paddingHorizontal: Spacings.md,
+    maxWidth: '90%',
   },
   senderFlex: {
     flexDirection: 'row-reverse',
