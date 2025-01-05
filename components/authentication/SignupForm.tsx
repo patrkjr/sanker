@@ -141,55 +141,31 @@ export default function SignupForm() {
         />
 
         {/* Email field */}
-        <Controller
+        <ControlledInputField
           control={control}
           name="email"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Email"
-              placeholder="eg. jane@youremaildomain.com"
-              onBlur={() => {
-                setActiveField(null);
-                onBlur();
-              }}
-              onFocus={() => setActiveField('email')}
-              active={activeField === 'email'}
-              autoCapitalize="none"
-              autoComplete="email"
-              keyboardType="email-address"
-              onChangeText={onChange}
-              value={value}
-              editable={!isSubmitting}
-              errorMessage={errors.email && errors.email.message}
-            />
-          )}
+          isActive={activeField === 'email'}
+          setActiveField={setActiveField}
+          handleFocus={handleFocus}
+          editable={!isSubmitting}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          errorMessage={errors.email && errors.email.message}
         />
 
         {/* Password field */}
-        <Controller
+        <ControlledInputField
           control={control}
           name="password"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Password"
-              placeholder="Please type a uniq password"
-              onBlur={() => {
-                setActiveField(null);
-                onBlur();
-              }}
-              onFocus={() => setActiveField('password')}
-              active={activeField === 'password'}
-              autoComplete="password"
-              autoCapitalize="none"
-              secureTextEntry={true}
-              onChangeText={onChange}
-              value={value}
-              editable={!isSubmitting}
-              errorMessage={errors.password && errors.password.message}
-            />
-          )}
+          isActive={activeField === 'password'}
+          setActiveField={setActiveField}
+          handleFocus={handleFocus}
+          autoComplete="password"
+          autoCapitalize="none"
+          secureTextEntry={true}
+          editable={!isSubmitting}
+          errorMessage={errors.password && errors.password.message}
         />
 
         <Button
