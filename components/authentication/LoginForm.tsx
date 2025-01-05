@@ -1,16 +1,17 @@
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
-import { View } from '../Themed';
 import * as z from 'zod';
 import Input from '../ui/Input';
 import Spacings from '@/constants/Spacings';
-import { H2, P } from '../typography';
 import Button from '../ui/Button';
 import { useSupabase } from '@/context/supabase-provider';
 import { useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert } from 'react-native';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
+import ControlledInputField from '../ui/ControlledInputField';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email adress.'),
@@ -59,6 +60,10 @@ export default function LoginForm() {
     }
   };
 
+  function handleFocus(inputRef) {
+    // Scroll here
+  }
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
@@ -69,55 +74,30 @@ export default function LoginForm() {
       }}
     >
       {/* Email field */}
-      <Controller
+      <ControlledInputField
         control={control}
         name="email"
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Email"
-            placeholder="eg. jane@youremaildomain.com"
-            onBlur={() => {
-              setActiveField(null);
-              onBlur();
-            }}
-            onFocus={() => setActiveField('email')}
-            active={activeField === 'email'}
-            autoCapitalize="none"
-            autoComplete="email"
-            keyboardType="email-address"
-            onChangeText={onChange}
-            value={value}
-            editable={!isSubmitting}
-            errorMessage={errors.email && errors.email.message}
-          />
-        )}
+        isActive={activeField === 'email'}
+        setActiveField={setActiveField}
+        autoCapitalize="none"
+        autoComplete="email"
+        keyboardType="email-address"
+        editable={!isSubmitting}
+        errorMessage={errors.email && errors.email.message}
       />
 
       {/* Password field */}
-      <Controller
+      <ControlledInputField
         control={control}
         name="password"
-        rules={{ required: true }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Password"
-            placeholder="eg. the name of your dead cat"
-            onBlur={() => {
-              setActiveField(null);
-              onBlur();
-            }}
-            active={activeField === 'password'}
-            onFocus={() => setActiveField('password')}
-            autoComplete="password"
-            autoCapitalize="none"
-            secureTextEntry={true}
-            onChangeText={onChange}
-            value={value}
-            editable={!isSubmitting}
-            errorMessage={errors.password && errors.password.message}
-          />
-        )}
+        isActive={activeField === 'password'}
+        setActiveField={setActiveField}
+        handleFocus={handleFocus}
+        autoComplete="password"
+        autoCapitalize="none"
+        secureTextEntry={true}
+        editable={!isSubmitting}
+        errorMessage={errors.password && errors.password.message}
       />
 
       <Button

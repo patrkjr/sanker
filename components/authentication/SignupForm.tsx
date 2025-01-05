@@ -10,10 +10,11 @@ import Spacings from '@/constants/Spacings';
 import { H1, H2, H3, H4, P } from '../typography';
 import Button from '../ui/Button';
 import { useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert } from 'react-native';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
 import ControlledInputField from '../ui/ControlledInputField';
+import { ScrollView } from 'react-native-gesture-handler';
 
 // ___ Template code for signing up new users ___
 
