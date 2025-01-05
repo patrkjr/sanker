@@ -93,9 +93,6 @@ export default function CreateForm() {
 
   //Refs
   const scrollViewRef = useRef<ScrollView>(null);
-  const titleRef = useRef(null);
-  const priceRef = useRef(null);
-  const descriptionRef = useRef(null);
 
   const keyboard = useAnimatedKeyboard();
 
@@ -103,19 +100,18 @@ export default function CreateForm() {
     transform: [{ translateY: -keyboard.height.value }],
   }));
 
-  const handleFocus = (ref, fieldName: string) => {
-    if (ref?.current && scrollViewRef?.current) {
-      ref.current.measureLayout(
+  const handleFocus = (inputRef) => {
+    if (inputRef?.current && scrollViewRef?.current) {
+      inputRef.current.measureLayout(
         scrollViewRef.current,
         (x, y) => {
-          scrollViewRef.current?.scrollTo({ x: 0, y: y - 128, animated: true });
+          scrollViewRef.current?.scrollTo({ x: 0, y: y - 156, animated: true });
         },
         (error) => {
           console.error('measureLayout error:', error);
         }
       );
     }
-    setActiveField(fieldName);
   };
 
   function handleResetForm() {
@@ -180,7 +176,6 @@ export default function CreateForm() {
           name="title"
           title="Title"
           control={control}
-          ref={titleRef}
           isActive={activeField === 'title'}
           setActiveField={setActiveField}
           handleFocus={handleFocus}
@@ -192,7 +187,6 @@ export default function CreateForm() {
           name="price"
           title="Price"
           control={control}
-          ref={priceRef}
           isActive={activeField === 'price'}
           setActiveField={setActiveField}
           handleFocus={handleFocus}
@@ -237,31 +231,18 @@ export default function CreateForm() {
         />
 
         {/* Description field */}
-        <Controller
+        <ControlledInputField
           control={control}
+          title="Description"
           name="description"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <Input
-                ref={descriptionRef}
-                label="Description"
-                value={value}
-                style={{ minHeight: 120, maxHeight: 140 }}
-                multiline
-                onChangeText={onChange}
-                onBlur={() => {
-                  setActiveField(null);
-                  onBlur();
-                }}
-                onFocus={() => handleFocus(descriptionRef, 'description')}
-                active={activeField === 'description'}
-                helperMessage="Description is optional"
-                errorMessage={errors.description?.message}
-              />
-            </>
-          )}
-        ></Controller>
+          style={{ minHeight: 120, maxHeight: 140 }}
+          setActiveField={setActiveField}
+          isActive={activeField === 'description'}
+          handleFocus={handleFocus}
+          helperMessage="Description is optional"
+          multiline
+          errorMessage={errors.description?.message}
+        />
 
         {/* Address fields */}
         <Card>

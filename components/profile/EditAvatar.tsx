@@ -27,7 +27,6 @@ interface Profile {
   avatar_url?: string;
   first_name?: string;
   last_name?: string;
-  full_name?: string;
   phone_verified?: boolean;
   // Add any other properties that are relevant to the profile
 }

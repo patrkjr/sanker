@@ -1,3 +1,4 @@
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { View } from '../Themed';
@@ -12,18 +13,31 @@ import { useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
+import ControlledInputField from '../ui/ControlledInputField';
 
 // ___ Template code for signing up new users ___
 
+const PASSWORD_MAX = 80;
+const PASSWORD_MIN = 7;
+
 const formSchema = z.object({
-  full_name: z
+  first_name: z
     .string()
-    .regex(/^[\p{L}\- ]+$/u, 'Name can only contain letters and hyphens.'),
-  email: z.string().email('Please enter a valid email adress.'),
+    .regex(
+      /^[\p{L}\- ]+$/u,
+      'First name can only contain letters and hyphens.'
+    ),
+  last_name: z
+    .string()
+    .regex(/^[\p{L}\- ]+$/u, 'Last name can only contain letters and hyphens.'),
+  email: z.string().email('Please enter a valid email address.'),
   password: z
     .string()
-    .min(7, 'Password must be at least 7 characters long.')
-    .max(64, 'Password can be no more than 64 characters long.'),
+    .min(
+      PASSWORD_MIN,
+      `Password must be at least ${PASSWORD_MIN} characters long.`
+    )
+    .max(80, `Password can be no more than ${PASSWORD_MAX} characters long.`),
   // .regex(
   //   /^(?=.*[a-z])/,
   //   'Your password must have at lease one uppercase letter.'
@@ -47,6 +61,12 @@ export default function SignupForm() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+    },
   });
 
   const [activeField, setActiveField] = useState<string | null>(null);
@@ -65,13 +85,10 @@ export default function SignupForm() {
 
       const user = authData.user;
 
-      // Take out the fields you need here.
-      const { full_name } = formData;
-
       if (user) {
         const { error: userError } = await supabase.from('users').insert([
           {
-            full_name,
+            ...formData,
             id: user.id, // Use the id from the `auth` table
           },
         ]);
@@ -81,13 +98,17 @@ export default function SignupForm() {
         }
 
         // Set both normal table data
-        setUser({ full_name, email, id: user.id, items: [] });
+        setUser({ ...formData, id: user.id, items: [] });
       }
     } catch (error) {
       Alert.alert(error?.message);
       return null;
     }
   };
+
+  function handleFocus(inputRef) {
+    // Scroll here
+  }
 
   return (
     <ScrollView
@@ -99,28 +120,24 @@ export default function SignupForm() {
     >
       {/* Name field */}
       <View style={{ gap: Spacings.sm }}>
-        <Controller
+        <ControlledInputField
           control={control}
-          name="full_name"
-          rules={{ required: true }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="Full name"
-              placeholder="eg. Jane Smith"
-              onBlur={() => {
-                setActiveField(null);
-                onBlur();
-              }}
-              onFocus={() => setActiveField('full_name')}
-              active={activeField === 'full_name'}
-              autoCapitalize="words"
-              autoComplete="name"
-              onChangeText={onChange}
-              value={value}
-              editable={!isSubmitting}
-              errorMessage={errors?.full_name && errors?.full_name.message}
-            />
-          )}
+          title="First name"
+          name="first_name"
+          setActiveField={setActiveField}
+          isActive={activeField === 'first_name'}
+          handleFocus={handleFocus}
+          errorMessage={errors?.first_name && errors.first_name.message}
+        />
+
+        <ControlledInputField
+          control={control}
+          title="Last name"
+          name="last_name"
+          setActiveField={setActiveField}
+          isActive={activeField === 'last_name'}
+          handleFocus={handleFocus}
+          errorMessage={errors?.last_name && errors.last_name.message}
         />
 
         {/* Email field */}

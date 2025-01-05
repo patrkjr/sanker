@@ -105,7 +105,9 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
         </View>
         <View style={styles.nameContainer}>
           {profile ? (
-            <H3>{profile.full_name}</H3>
+            <H3>
+              {profile.first_name} {profile.last_name}
+            </H3>
           ) : (
             <View
               style={{ backgroundColor: 'transparent', height: 32, width: 180 }}

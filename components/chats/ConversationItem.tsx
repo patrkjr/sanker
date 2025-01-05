@@ -31,7 +31,7 @@ export default function ConversationItem({
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('full_name, first_name, last_name, avatar_url')
+        .select('first_name, last_name, avatar_url')
         .eq('id', userId)
         .single();
 
@@ -54,7 +54,9 @@ export default function ConversationItem({
       <View style={styles.container}>
         <ProfilePicture avatarUrl={user.avatar_url} />
         <View style={styles.middle}>
-          <H4>{user.full_name}</H4>
+          <H4>
+            {user.first_name} {user.last_name}
+          </H4>
           <SelectableTag text={tagMessage} showSelectable={false} />
         </View>
       </View>

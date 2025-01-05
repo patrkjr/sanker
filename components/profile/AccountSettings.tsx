@@ -32,8 +32,10 @@ export default function AccountSettings() {
         <Label>Profile</Label>
         <Card>
           <Item href="profile/edit-name">
-            <Item.Label>Full name</Item.Label>
-            <Item.Value>{userProfile?.full_name}</Item.Value>
+            <Item.Label>Name</Item.Label>
+            <Item.Value>
+              {userProfile?.first_name} {userProfile?.last_name}
+            </Item.Value>
           </Item>
 
           <Item disabled>

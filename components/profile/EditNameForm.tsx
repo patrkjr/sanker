@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 import { P } from '../typography';
 import { useSupabase } from '@/context/supabase-provider';
 
-export default function EditNameForm({ fullName = '...!' }) {
+export default function EditNameForm() {
   const { user } = useSupabase();
   const profile = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -20,9 +20,12 @@ export default function EditNameForm({ fullName = '...!' }) {
   // ___ chatGPT regex ____
   // /^[\p{L}]+(?:[-' ][\p{L}]+)*$/u
   const formSchema = z.object({
-    full_name: z
+    first_name: z
       .string()
-      .regex(/^[\p{L}]+(?:[-' ][\p{L}]+)*$/u, 'Set a name for yourself.'),
+      .regex(/^[\p{L}]+(?:[-' ][\p{L}]+)*$/u, 'Set a first name.'),
+    last_name: z
+      .string()
+      .regex(/^[\p{L}]+(?:[-' ][\p{L}]+)*$/u, 'Set a last name.'),
   });
 
   const {
@@ -32,19 +35,20 @@ export default function EditNameForm({ fullName = '...!' }) {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: profile?.full_name,
+      first_name: profile?.first_name,
+      last_name: profile?.last_name,
     },
   });
 
   async function onSubmit(data) {
     try {
-      const { full_name } = data;
+      const { first_name, last_name } = data;
       const { error: userError } = await supabase
         .from('users')
-        .update({ full_name })
-        .eq('id', user.id);
+        .update({ first_name, last_name })
+        .eq('id', user?.id);
 
-      setUser({ ...profile, full_name });
+      setUser({ ...profile, first_name, last_name });
 
       router.back();
     } catch (error) {
@@ -62,19 +66,36 @@ export default function EditNameForm({ fullName = '...!' }) {
       <Controller
         control={control}
         rules={{ required: true }}
-        name="full_name"
+        name="first_name"
         render={({ field: { onBlur, onChange, value } }) => (
           <>
             <Input
-              autoFocus
-              label="Full name"
+              label="First name"
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
               submitBehavior="blurAndSubmit"
               onSubmitEditing={onBlur}
             />
-            {errors?.full_name && <P error>{errors.full_name.message}</P>}
+            {errors?.first_name && <P error>{errors.first_name.message}</P>}
+          </>
+        )}
+      />
+      <Controller
+        control={control}
+        rules={{ required: true }}
+        name="last_name"
+        render={({ field: { onBlur, onChange, value } }) => (
+          <>
+            <Input
+              label="Last name"
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              submitBehavior="blurAndSubmit"
+              onSubmitEditing={onBlur}
+            />
+            {errors?.last_name && <P error>{errors.last_name.message}</P>}
           </>
         )}
       />
