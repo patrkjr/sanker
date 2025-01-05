@@ -20,12 +20,7 @@ import Switch from '../ui/Switch';
 import Item from '../ui/Item';
 import Card from '../ui/Card';
 import useUserStore from '@/stores/userStore';
-import {
-  Link,
-  useFocusEffect,
-  useLocalSearchParams,
-  useRouter,
-} from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import 'react-native-get-random-values';
 import ImageUploadGallery from './ImageUploadGallery';
 import Animated, {
@@ -63,9 +58,7 @@ const formSchema = z.object({
 });
 
 export default function CreateForm() {
-  const user = useUserStore((state) => state.user);
   const router = useRouter();
-  const params = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { setForm } = useItemFormStore();
   const { userPreferences } = usePreferencesStore();

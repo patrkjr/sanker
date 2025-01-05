@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { View } from '../Themed';
 import { H4, P } from '../typography';
 import { supabase } from '@/config/supabase';
-import LoadingShimmer from './LoadingShimmer';
+import LoadingShimmer from '../ui/LoadingShimmer';
 import ProfilePicture from '../profile/ProfilePicture';
 import Spacings from '@/constants/Spacings';
-import SelectableTag from './SelectableTag';
+import SelectableTag from '../ui/SelectableTag';
 import { Link } from 'expo-router';
 
 export default function ConversationItem({
@@ -16,7 +16,7 @@ export default function ConversationItem({
   tagMessage,
 }: {
   userId: string;
-  href: string;
+  href: { pathname: string; params: {} };
   message: string;
   tagMessage: string;
 }) {
@@ -31,7 +31,7 @@ export default function ConversationItem({
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('full_name, avatar_url')
+        .select('full_name, first_name, last_name, avatar_url')
         .eq('id', userId)
         .single();
 

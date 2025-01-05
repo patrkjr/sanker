@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
-  ErrorBoundary,
   Link,
+  useFocusEffect,
   useLocalSearchParams,
   useNavigation,
 } from 'expo-router';
@@ -20,6 +20,7 @@ import ItemScreenLoader from './ItemScreenLoader';
 import ItemNotFound from './ItemNotFound';
 import useItemStore from '@/stores/itemStore';
 import Card from '../ui/Card';
+import getConversationIdAsync from '@/utils/getConversationIdAsync';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -35,15 +36,18 @@ export default function ItemScreen() {
   // TODO: Get item from itemStore, then set it in state to prevent showing the same item across multiple ItemScreens
   //const { item, setItem } = useItemStore();
   const [item, setItem] = useState();
+  const [conversationHref, setConversationHref] = useState<boolean | string>(
+    false
+  );
 
-  useEffect(() => {
-    getItemAsync();
-    return () => {
-      // Cleanup function to reset item state and loading status
-      //setItem(null);
-      setIsLoading(false);
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getItemAsync();
+      return () => {
+        setIsLoading(false);
+      };
+    }, [getItemAsync])
+  );
 
   async function getItemAsync() {
     try {
@@ -64,6 +68,18 @@ export default function ItemScreen() {
 
       if (data) {
         setItem(data);
+        if (data.owner_id !== user?.id) {
+          const conversationId = await getConversationIdAsync({
+            item_id: id,
+            buyer_id: user?.id,
+            seller_id: data.owner_id,
+          });
+          if (conversationId) {
+            setConversationHref(conversationId);
+          } else {
+            setConversationHref('new');
+          }
+        }
         navigation.setOptions({ title: data.title });
       } else {
         setItem(null);
@@ -175,8 +191,25 @@ export default function ItemScreen() {
 
         {item.owner_id !== user.id ? (
           <>
-            <Link href={'/new-message'} relativeToDirectory push asChild>
-              <Button title="Message seller" themed />
+            <Link
+              href={{
+                pathname: `/chat/[id]`,
+                params: {
+                  id: conversationHref,
+                  buyer_id: user?.id,
+                  seller_id: item.owner_id,
+                  item_id: id,
+                  back_title: 'Item',
+                },
+              }}
+              push
+              asChild
+            >
+              <Button
+                title="Message seller"
+                themed
+                disabled={!conversationHref}
+              />
             </Link>
             <Button title="Share" ghost disabled />
           </>

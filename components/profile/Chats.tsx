@@ -1,23 +1,30 @@
 import { StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from '../Themed';
 import { H3, P } from '../typography';
 import { useSupabase } from '@/context/supabase-provider';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import DefaultStyles from '@/constants/DefaultStyles';
 import { supabase } from '@/config/supabase';
-import ConversationItem from '../ui/ConversationItem';
 import Spacings from '@/constants/Spacings';
-import { useThemedColors } from '@/hooks/useThemedColors';
 import Card from '../ui/Card';
+import ConversationItem from '../chats/ConversationItem';
+import { useFocusEffect } from 'expo-router';
 
 export default function Chats() {
   const { user } = useSupabase();
   const [conversations, setConversations] = useState<[]>([]);
 
-  useEffect(() => {
-    getConversationsAsync();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getConversationsAsync();
+      return () => {};
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   getConversationsAsync();
+  // }, []);
 
   async function getConversationsAsync() {
     try {
@@ -43,9 +50,9 @@ export default function Chats() {
 
   function tagMessage(sellerId) {
     if (user?.id === sellerId) {
-      return "You're selling";
+      return 'Selling';
     }
-    return "You're buying";
+    return 'Buying';
   }
 
   return (
@@ -61,7 +68,16 @@ export default function Chats() {
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <ConversationItem
-            href={`chat/${item.id}`}
+            href={{
+              pathname: '/chat/[id]',
+              params: {
+                id: item.id,
+                seller_id: item.seller_id,
+                buyer_id: item.buyer_id,
+                item_id: item.item_id,
+                back_title: 'Messages',
+              },
+            }}
             userId={getParticipantId(item?.seller_id, item?.buyer_id)}
             tagMessage={tagMessage(item.seller_id)}
           />

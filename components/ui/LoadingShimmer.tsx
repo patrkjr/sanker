@@ -12,7 +12,7 @@ import Spacings from '@/constants/Spacings';
 
 export default function LoadingShimmer({ ...otherProps }) {
   const colors = useThemedColors();
-  const shimmerValue = useSharedValue(0);
+  const shimmerValue = useSharedValue(0.32);
 
   // Animate the shimmer effect
   shimmerValue.value = withRepeat(withTiming(1, { duration: 1500 }), -1, true);

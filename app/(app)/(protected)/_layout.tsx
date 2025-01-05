@@ -4,15 +4,14 @@ import { HeaderStyle } from '@/constants/HeaderStyle';
 
 export default function ProtectedLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="new-message" options={{ presentation: 'modal' }} />
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
-        name="chat"
+        name="chat/[id]"
         options={{
-          title: 'chat with...',
-          headerShown: true,
-          headerBackTitle: 'Chats',
+          title: 'Chat',
+          headerTitle: 'Chat',
+          headerBackTitle: 'Back',
           animation: 'default',
           ...HeaderStyle,
         }}
