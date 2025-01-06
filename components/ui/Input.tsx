@@ -1,16 +1,8 @@
-import {
-  TextInput,
-  TextInputProps,
-  ViewStyle,
-  TextStyle,
-  StyleSheetProperties,
-} from 'react-native';
-import React, { Ref, useRef } from 'react';
+import { TextInput, TextInputProps, ViewStyle, TextStyle } from 'react-native';
+import React from 'react';
 import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
-import Colors from '@/constants/Colors';
 import FontScale from '@/constants/FontScale';
-import { useColorScheme } from 'react-native';
 import { Label, P, Small } from '../typography';
 import { forwardRef } from 'react';
 import { useThemedColors } from '@/hooks/useThemedColors';
