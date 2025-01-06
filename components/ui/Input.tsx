@@ -73,9 +73,6 @@ const Input = forwardRef(function Input(
       )}
       <TextInput
         ref={ref}
-        onFocus={() => (
-          console.log('Recieved focus'), getRef(inputContainerRef)
-        )}
         selectionColor={colors.textSecondary}
         style={[inputStyles, style]}
         placeholderTextColor={colors.textPlaceholder}

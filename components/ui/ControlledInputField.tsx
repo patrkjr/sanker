@@ -37,7 +37,7 @@ const ControlledInputField = forwardRef<any, ControlledInputFieldProps>(
     function onFocus(ref) {
       setActiveField(name);
       ref?.current?.measure((x, y, width, height, pageX, pageY) => {
-        handleFocus(pageY);
+        handleFocus(ref, pageY);
       });
     }
 

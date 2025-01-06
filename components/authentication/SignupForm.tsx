@@ -121,7 +121,7 @@ export default function SignupForm() {
     transform: [{ translateY: -keyboard.height.value }],
   }));
 
-  const handleFocus = (pageY) => {
+  const handleFocus = (ref, pageY) => {
     // Kinda works but theres a bug with the top most field. TODO: fix it later
     scrollViewRef.current?.scrollTo({
       y: pageY - 200,
