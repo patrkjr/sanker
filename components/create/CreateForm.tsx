@@ -32,6 +32,12 @@ import ControlledInputField from '../ui/ControlledInputField';
 import useItemFormStore from '@/stores/itemFormStore';
 import usePreferencesStore from '@/stores/preferenceStore';
 
+const INDICATOR_COLOR = {
+  system: 'default',
+  light: 'black',
+  dark: 'white',
+};
+
 const formSchema = z.object({
   price: z
     .string({
@@ -137,6 +143,7 @@ export default function CreateForm() {
     >
       <Animated.ScrollView
         ref={scrollViewRef}
+        indicatorStyle={INDICATOR_COLOR[userPreferences.theme]}
         layout={LinearTransition}
         keyboardShouldPersistTaps="handled"
         contentInsetAdjustmentBehavior="automatic"

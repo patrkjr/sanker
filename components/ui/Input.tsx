@@ -14,6 +14,7 @@ import { useColorScheme } from 'react-native';
 import { Label, P, Small } from '../typography';
 import { forwardRef } from 'react';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import usePreferencesStore from '@/stores/preferenceStore';
 
 interface InputProps extends TextInputProps {
   /** Optional style for the container wrapping the TextInput */
@@ -21,7 +22,6 @@ interface InputProps extends TextInputProps {
   active?: boolean;
   helperMessage?: string;
   errorMessage?: string;
-  getRef: (ref) => typeof ref;
   containerStyle?: ViewStyle;
 }
 
@@ -29,7 +29,6 @@ const Input = forwardRef(function Input(
   {
     label,
     active = false,
-    getRef,
     helperMessage,
     errorMessage,
     containerStyle,
@@ -41,6 +40,7 @@ const Input = forwardRef(function Input(
   //const theme = useThemeColor();
   const colors = useThemedColors();
   const fontSize = FontScale;
+  const { userPreferences } = usePreferencesStore();
 
   const inputStyles: TextStyle = {
     color: colors.text,
@@ -73,6 +73,9 @@ const Input = forwardRef(function Input(
       )}
       <TextInput
         ref={ref}
+        keyboardAppearance={
+          userPreferences.theme === 'system' ? 'default' : userPreferences.theme
+        }
         selectionColor={colors.textSecondary}
         style={[inputStyles, style]}
         placeholderTextColor={colors.textPlaceholder}
