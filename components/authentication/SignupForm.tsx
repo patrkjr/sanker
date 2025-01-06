@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
-import { View } from '../Themed';
+import { View, ViewProps } from '../Themed';
 import { Link } from 'expo-router';
 import * as z from 'zod';
-import Input from '../ui/Input';
 
 import Spacings from '@/constants/Spacings';
-import { H1, H2, H3, H4, P } from '../typography';
+import { P } from '../typography';
 import Button from '../ui/Button';
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { supabase } from '@/config/supabase';
 import useUserStore from '@/stores/userStore';
 import ControlledInputField from '../ui/ControlledInputField';
+import Animated, {
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
 
 // ___ Template code for signing up new users ___
@@ -107,81 +112,107 @@ export default function SignupForm() {
     }
   };
 
-  function handleFocus(inputRef) {
-    // Scroll here
-  }
+  //Refs
+  const scrollViewRef = useRef<Animated.ScrollView>(null);
+
+  const keyboard = useAnimatedKeyboard();
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value }],
+  }));
+
+  const handleFocus = (pageY) => {
+    // Kinda works but theres a bug with the top most field. TODO: fix it later
+    scrollViewRef.current?.scrollTo({
+      y: pageY - 200,
+      animated: true,
+    });
+  };
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{
-        gap: Spacings.md,
-        paddingHorizontal: Spacings.sm,
-      }}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'android' ? 98 : 0}
     >
-      {/* Name field */}
-      <View style={{ gap: Spacings.sm }}>
-        <ControlledInputField
-          control={control}
-          title="First name"
-          name="first_name"
-          setActiveField={setActiveField}
-          isActive={activeField === 'first_name'}
-          handleFocus={handleFocus}
-          errorMessage={errors?.first_name && errors.first_name.message}
-        />
+      <ScrollView
+        ref={scrollViewRef}
+        contentInsetAdjustmentBehavior="automatic"
+        scrollToOverflowEnabled={false}
+        contentContainerStyle={[
+          {
+            gap: Spacings.md,
+            paddingHorizontal: Spacings.sm,
+          },
+          animatedStyles,
+        ]}
+      >
+        {/* Name field */}
+        <View style={{ gap: Spacings.sm }}>
+          <ControlledInputField
+            control={control}
+            title="First name"
+            name="first_name"
+            setActiveField={setActiveField}
+            isActive={activeField === 'first_name'}
+            handleFocus={handleFocus}
+            errorMessage={errors?.first_name && errors.first_name.message}
+          />
 
-        <ControlledInputField
-          control={control}
-          title="Last name"
-          name="last_name"
-          setActiveField={setActiveField}
-          isActive={activeField === 'last_name'}
-          handleFocus={handleFocus}
-          errorMessage={errors?.last_name && errors.last_name.message}
-        />
+          <ControlledInputField
+            control={control}
+            title="Last name"
+            name="last_name"
+            setActiveField={setActiveField}
+            isActive={activeField === 'last_name'}
+            handleFocus={handleFocus}
+            errorMessage={errors?.last_name && errors.last_name.message}
+          />
 
-        {/* Email field */}
-        <ControlledInputField
-          control={control}
-          name="email"
-          isActive={activeField === 'email'}
-          setActiveField={setActiveField}
-          handleFocus={handleFocus}
-          editable={!isSubmitting}
-          autoCapitalize="none"
-          autoComplete="email"
-          keyboardType="email-address"
-          errorMessage={errors.email && errors.email.message}
-        />
+          {/* Email field */}
+          <ControlledInputField
+            control={control}
+            title="Email"
+            name="email"
+            isActive={activeField === 'email'}
+            setActiveField={setActiveField}
+            handleFocus={handleFocus}
+            editable={!isSubmitting}
+            autoCapitalize="none"
+            autoComplete="email"
+            keyboardType="email-address"
+            errorMessage={errors.email && errors.email.message}
+          />
 
-        {/* Password field */}
-        <ControlledInputField
-          control={control}
-          name="password"
-          isActive={activeField === 'password'}
-          setActiveField={setActiveField}
-          handleFocus={handleFocus}
-          autoComplete="password"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          editable={!isSubmitting}
-          errorMessage={errors.password && errors.password.message}
-        />
+          {/* Password field */}
+          <ControlledInputField
+            control={control}
+            name="password"
+            title="Password"
+            isActive={activeField === 'password'}
+            setActiveField={setActiveField}
+            handleFocus={handleFocus}
+            autoComplete="password"
+            autoCapitalize="none"
+            secureTextEntry={true}
+            editable={!isSubmitting}
+            errorMessage={errors.password && errors.password.message}
+          />
 
-        <Button
-          title="Submit"
-          disabled={isSubmitting}
-          onPress={handleSubmit(onSubmit)}
-        />
-      </View>
+          <Button
+            title="Submit"
+            disabled={isSubmitting}
+            onPress={handleSubmit(onSubmit)}
+          />
+        </View>
 
-      <View style={{ alignItems: 'center', gap: Spacings.sm }}>
-        <P secondary>Already got an account?</P>
-        <Link href="/login" asChild>
-          <Button ghost title="Log in" />
-        </Link>
-      </View>
-    </ScrollView>
+        <View style={{ alignItems: 'center', gap: Spacings.sm }}>
+          <P secondary>Already got an account?</P>
+          <Link href="/login" asChild>
+            <Button ghost title="Log in" />
+          </Link>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

@@ -60,8 +60,8 @@ export default function LoginForm() {
     }
   };
 
-  function handleFocus(inputRef) {
-    // Scroll here
+  function handleFocus(pageY) {
+    console.log(pageY);
   }
 
   return (
@@ -77,11 +77,13 @@ export default function LoginForm() {
       <ControlledInputField
         control={control}
         name="email"
+        title="Email"
         isActive={activeField === 'email'}
         setActiveField={setActiveField}
         autoCapitalize="none"
         autoComplete="email"
         keyboardType="email-address"
+        handleFocus={handleFocus}
         editable={!isSubmitting}
         errorMessage={errors.email && errors.email.message}
       />
@@ -90,6 +92,7 @@ export default function LoginForm() {
       <ControlledInputField
         control={control}
         name="password"
+        title="Password"
         isActive={activeField === 'password'}
         setActiveField={setActiveField}
         handleFocus={handleFocus}

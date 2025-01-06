@@ -12,7 +12,7 @@ interface ControlledInputFieldProps extends TextInputProps {
   rules?: { required: boolean };
   isActive: boolean;
   setActiveField: (field: string | null) => void;
-  handleFocus: (ref: React.RefObject<any>) => void;
+  handleFocus: (ref: React.RefObject<any>, pageY: number) => void;
   helperMessage?: string;
   errorMessage?: string;
   otherProps?: any;
@@ -34,12 +34,15 @@ const ControlledInputField = forwardRef<any, ControlledInputFieldProps>(
     },
     ref
   ) => {
-    function onFocus() {
+    function onFocus(ref) {
       setActiveField(name);
-      handleFocus(inputRef);
+      ref?.current?.measure((x, y, width, height, pageX, pageY) => {
+        handleFocus(pageY);
+      });
     }
 
     const inputRef = useRef(null);
+    const containerRef = useRef(null);
 
     return (
       <Controller
@@ -56,7 +59,7 @@ const ControlledInputField = forwardRef<any, ControlledInputFieldProps>(
               setActiveField(null);
               onBlur();
             }}
-            onFocus={onFocus}
+            onFocus={() => onFocus(inputRef)}
             active={isActive}
             helperMessage={helperMessage}
             errorMessage={errorMessage}

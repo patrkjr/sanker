@@ -5,6 +5,7 @@ import {
   TextStyle,
   StyleSheetProperties,
 } from 'react-native';
+import React, { Ref, useRef } from 'react';
 import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
 import Colors from '@/constants/Colors';
@@ -20,14 +21,15 @@ interface InputProps extends TextInputProps {
   active?: boolean;
   helperMessage?: string;
   errorMessage?: string;
+  getRef: (ref) => typeof ref;
   containerStyle?: ViewStyle;
-  otherProps: React.ComponentProps<typeof Input>;
 }
 
 const Input = forwardRef(function Input(
   {
     label,
     active = false,
+    getRef,
     helperMessage,
     errorMessage,
     containerStyle,
@@ -71,6 +73,9 @@ const Input = forwardRef(function Input(
       )}
       <TextInput
         ref={ref}
+        onFocus={() => (
+          console.log('Recieved focus'), getRef(inputContainerRef)
+        )}
         selectionColor={colors.textSecondary}
         style={[inputStyles, style]}
         placeholderTextColor={colors.textPlaceholder}
