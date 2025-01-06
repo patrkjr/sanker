@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from '../Themed';
 import { H4, P } from '../typography';
 import { supabase } from '@/config/supabase';
@@ -7,7 +7,9 @@ import LoadingShimmer from '../ui/LoadingShimmer';
 import ProfilePicture from '../profile/ProfilePicture';
 import Spacings from '@/constants/Spacings';
 import SelectableTag from '../ui/SelectableTag';
-import { Link } from 'expo-router';
+import { Link, useFocusEffect } from 'expo-router';
+
+const MINUTES = 1000 * 60;
 
 export default function ConversationItem({
   userId,
@@ -23,9 +25,18 @@ export default function ConversationItem({
   const [user, setUser] = useState<{} | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    getUserDetailsAsync();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      //Fetch data on focus and set a interval for regular updates.
+      getUserDetailsAsync();
+      const intervalId = setInterval(() => {
+        getUserDetailsAsync();
+      }, 0.1 * MINUTES);
+
+      //Clear the interval when screen is not focused.
+      return () => clearInterval(intervalId);
+    }, [])
+  );
 
   async function getUserDetailsAsync() {
     try {
