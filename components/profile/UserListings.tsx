@@ -9,6 +9,8 @@ import ProductItem from '../item/ProductItem';
 import { useUserItems } from '@/hooks/useUserItems';
 import { useFocusEffect } from 'expo-router';
 import DefaultStyles from '@/constants/DefaultStyles';
+import PageScrollView from '../ui/PageScrollView';
+import React from 'react';
 
 export default function UserListings() {
   const user = useUserStore((state) => state.user);
@@ -24,11 +26,7 @@ export default function UserListings() {
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <ScrollView
-      contentContainerStyle={pageContainer}
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ flex: 1 }}
-    >
+    <PageScrollView nestedScrollEnabled={true}>
       {!items ? (
         <P>It seems you've got not listings.</P>
       ) : (
@@ -44,8 +42,6 @@ export default function UserListings() {
           ))}
         </View>
       )}
-    </ScrollView>
+    </PageScrollView>
   );
 }
-
-const { pageContainer } = DefaultStyles;

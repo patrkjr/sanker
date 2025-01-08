@@ -31,6 +31,7 @@ import Animated, {
 import ControlledInputField from '../ui/ControlledInputField';
 import useItemFormStore from '@/stores/itemFormStore';
 import usePreferencesStore from '@/stores/preferenceStore';
+import PageScrollView from '../ui/PageScrollView';
 
 const INDICATOR_COLOR = {
   system: 'default',
@@ -141,12 +142,9 @@ export default function CreateForm() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'android' ? 98 : 0}
     >
-      <Animated.ScrollView
+      <PageScrollView
         ref={scrollViewRef}
-        indicatorStyle={INDICATOR_COLOR[userPreferences.theme]}
         layout={LinearTransition}
-        keyboardShouldPersistTaps="handled"
-        contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={[
           {
             paddingHorizontal: Spacings.md,
@@ -299,7 +297,7 @@ export default function CreateForm() {
         {isDirty && (
           <Button ghost title="Reset form" onPress={handleResetForm} />
         )}
-      </Animated.ScrollView>
+      </PageScrollView>
     </KeyboardAvoidingView>
   );
 }

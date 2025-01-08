@@ -6,7 +6,6 @@ import { Label, Mono, P } from '../typography';
 import Card from '../ui/Card';
 import { View, Text } from '../Themed';
 import Item from '../ui/Item';
-import { ScrollView } from 'react-native';
 import AppInfo from '../AppInfo';
 import Icon from '../ui/Icon';
 import useUserStore from '@/stores/userStore';
@@ -17,6 +16,7 @@ import { useUserItems } from '@/hooks/useUserItems';
 import ProfileCard from './ProfileCard';
 import usePreferencesStore from '@/stores/preferenceStore';
 import DefaultStyles from '@/constants/DefaultStyles';
+import PageScrollView from '../ui/PageScrollView';
 
 const THEME_NAME = {
   dark: 'Dark',
@@ -29,7 +29,7 @@ export default function ProfileScreen() {
   const profile = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
   const { isLoading: isLoadingUserItems, fetchUserItems } = useUserItems();
-  const { userPreferences } = usePreferencesStore();
+  const { userPreferences, resetPreferences } = usePreferencesStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -70,13 +70,11 @@ export default function ProfileScreen() {
   function handleSignOut() {
     signOut();
     clearUser();
+    resetPreferences();
   }
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={pageContainer}
-    >
+    <PageScrollView>
       {profile && (
         <>
           <ProfileCard profileId={profile.id} />
@@ -144,11 +142,9 @@ export default function ProfileScreen() {
       </View>
 
       <Button title="Sign out" onPress={onPressSignout} />
-    </ScrollView>
+    </PageScrollView>
   );
 }
-
-const { pageContainer } = DefaultStyles;
 
 const styles = StyleSheet.create({
   sectionStyle: {

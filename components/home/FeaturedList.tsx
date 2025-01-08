@@ -6,12 +6,14 @@ import Spacings from '@/constants/Spacings';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { Link } from 'expo-router';
 import useItemStore from '@/stores/itemStore';
+import { usePreferredTheme } from '@/hooks/usePreferredTheme';
 
 const IMG_HEIGHT = 180;
 
 export default function FeaturedList({ items, onRefresh, refreshing }) {
   const colors = useThemedColors();
   const { item, setItem } = useItemStore();
+  const usePreferedTheme = usePreferredTheme();
 
   function handlePressItem(item) {
     setItem(item);
@@ -24,6 +26,7 @@ export default function FeaturedList({ items, onRefresh, refreshing }) {
       onRefresh={onRefresh}
       refreshing={refreshing}
       showsVerticalScrollIndicator={false}
+      indicatorStyle={usePreferedTheme === 'dark' ? 'white' : 'black'}
       columnWrapperStyle={{
         justifyContent: 'space-between',
         gap: Spacings.md,

@@ -11,6 +11,7 @@ import Message from './Message';
 import { timingConfig } from '@/constants/Animations';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { usePreferredTheme } from '@/hooks/usePreferredTheme';
 
 interface MessageListProps {
   item: {
@@ -33,6 +34,7 @@ export default function MessagesList({
 }: MessageListProps) {
   const { bottom } = useSafeAreaInsets();
   const listRef = useRef<FlatList>(null);
+  const usePreferedTheme = usePreferredTheme();
 
   useEffect(() => {
     if (listRef) {
@@ -60,6 +62,7 @@ export default function MessagesList({
       inverted
       itemLayoutAnimation={LinearTransition.duration(100)}
       contentContainerStyle={[styles.listContainer]}
+      indicatorStyle={usePreferedTheme === 'dark' ? 'white' : 'black'}
       style={[animatedListStyle]}
       data={messages}
       keyExtractor={(item) => item.created_at}

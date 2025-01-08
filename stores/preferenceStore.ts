@@ -43,6 +43,7 @@ const migrate = (persistedState: any) => {
 type UserPreferencesState = {
   userPreferences: UserPreferences;
   setPreferences: (newPreferences: Partial<UserPreferences>) => void;
+  resetPreferences: () => void;
 };
 
 const usePreferencesStore = create<UserPreferencesState>()(
@@ -68,6 +69,18 @@ const usePreferencesStore = create<UserPreferencesState>()(
             },
           },
         })),
+      resetPreferences: () =>
+        set({
+          userPreferences: {
+            theme: 'system',
+            location: {
+              use_user_address: true,
+              show_exact_address: true,
+            },
+            hasSeenOnboarding: false,
+            notificationsEnabled: false,
+          },
+        }),
     }),
     {
       name: 'preferences-store',

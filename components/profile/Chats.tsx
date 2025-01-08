@@ -10,6 +10,7 @@ import Spacings from '@/constants/Spacings';
 import Card from '../ui/Card';
 import ConversationItem from '../chats/ConversationItem';
 import { useFocusEffect } from 'expo-router';
+import PageScrollView from '../ui/PageScrollView';
 
 export default function Chats() {
   const { user } = useSupabase();
@@ -56,11 +57,7 @@ export default function Chats() {
   }
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="scrollableAxes"
-      contentContainerStyle={[pageContainer]}
-      nestedScrollEnabled={true}
-    >
+    <PageScrollView nestedScrollEnabled={true}>
       <FlatList
         scrollEnabled={false}
         contentContainerStyle={{ gap: Spacings.lg }}
@@ -84,7 +81,7 @@ export default function Chats() {
         )}
         ListEmptyComponent={ChatEmptyScreen}
       />
-    </ScrollView>
+    </PageScrollView>
   );
 }
 
@@ -101,8 +98,6 @@ function ChatEmptyScreen() {
     </View>
   );
 }
-
-const { pageContainer } = DefaultStyles;
 
 const styles = StyleSheet.create({
   emptyContainer: {
