@@ -2,18 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface User {
-  id: string;
+interface UserProfile {
   email: string;
   avatar_url?: string;
+  avatar_file_name?: string;
   first_name?: string;
   last_name?: string;
-  phone_verified: boolean;
   items: Item[];
 }
 
 interface Item {
-  id: string; // UUID of the item
   created_at: string; // Timestamp in ISO format
   title: string; // Title of the item
   price: number; // Numeric price
@@ -29,22 +27,29 @@ interface Item {
   image_urls?: string[][]; // Array of JSONB image URLs
 }
 
-interface UserStore {
-  user: User | null;
-  setUser: (user: User) => void;
-  clearUser: () => void;
+interface UserProfileStore {
+  userProfile: UserProfile | null;
+  setUserProfile: (userProfile: UserProfile) => void;
+  clearUserProfile: () => void;
   setItems: (items: Item[]) => void;
 }
 
-const useUserStore = create<UserStore>()(
+const useUserProfileStore = create<UserProfileStore>()(
   persist(
     (set) => ({
-      user: null,
-      setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null }),
+      userProfile: null,
+      setUserProfile: (newUserState) =>
+        set((state) => ({
+          userProfile: state.userProfile
+            ? { ...state.userProfile, ...newUserState }
+            : newUserState,
+        })),
+      clearUserProfile: () => set({ userProfile: null }),
       setItems: (items) =>
         set((state) => ({
-          user: state.user ? { ...state.user, items } : null,
+          userProfile: state.userProfile
+            ? { ...state.userProfile, items }
+            : null,
         })),
     }),
     {
@@ -54,4 +59,4 @@ const useUserStore = create<UserStore>()(
   )
 );
 
-export default useUserStore;
+export default useUserProfileStore;

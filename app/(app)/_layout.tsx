@@ -75,7 +75,6 @@ function RootLayoutNav() {
               ...HeaderLargeStyle,
             }}
           />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
     </GestureHandlerRootView>

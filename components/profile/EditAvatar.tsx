@@ -1,3 +1,4 @@
+import React from 'react';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { View } from '../Themed';
 import { P } from '../typography';
@@ -12,12 +13,13 @@ import {
 import Spacings from '@/constants/Spacings';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { supabase } from '@/config/supabase';
 import * as Haptics from 'expo-haptics';
 import Button from '../ui/Button';
 import { useSupabase } from '@/context/supabase-provider';
 import ProfilePicture from './ProfilePicture';
+import { compressImage } from '@/utils/compressImage';
 
 // This component can be updated to only take needed props
 // Right now it takes a whole profile, but only uses names and image url
@@ -44,8 +46,8 @@ export default function EditAvatar({
   size = 72,
 }: ProfilePictureProps) {
   const { user } = useSupabase();
-  const userProfile = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const setUserProfile = useUserProfileStore((state) => state.setUserProfile);
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleUpdateProfilePicture() {
@@ -71,17 +73,18 @@ export default function EditAvatar({
         throw new Error('No image uri!'); // Realistically, this should never happen, but just in case...
       }
 
-      // Get URI of the image
-      const arraybuffer = await fetch(image.uri).then((res) =>
+      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg';
+      const path = `${Date.now()}.${fileExt}`;
+
+      const compressedImage = await compressImage(image.uri, 500, (error) => {
+        throw new Error(error);
+      });
+
+      const arraybuffer = await fetch(compressedImage.uri).then((res) =>
         res.arrayBuffer()
       );
 
-      // Get the file extention of the image
-      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg';
-      // make a new filename for the image based on current time
-      const path = `${Date.now()}.${fileExt}`;
-
-      // Upload the image and return the url
+      // Upload the compressed image and return the url
       const { data, error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(path, arraybuffer, {
@@ -92,27 +95,56 @@ export default function EditAvatar({
         throw uploadError;
       }
 
-      const { error: avatarError } = await supabase
+      // Get the public url of the uploaded image
+      const { data: publicUrlData } = await supabase.storage
+        .from('avatars')
+        .getPublicUrl(path);
+
+      // Get the current avatar file name
+      const { data: currentAvatarData, error: currentAvatarError } =
+        await supabase
+          .from('users')
+          .select('avatar_file_name')
+          .eq('id', user?.id);
+
+      if (currentAvatarError) {
+        throw currentAvatarError;
+      }
+
+      // Update the avatar url and file name
+      const { data: avatarData, error: avatarError } = await supabase
         .from('users')
-        .update({ avatar_url: path })
-        .eq('id', user.id);
+        .update({ avatar_url: publicUrlData.publicUrl, avatar_file_name: path })
+        .eq('id', user?.id)
+        .select('avatar_url, avatar_file_name');
 
       if (avatarError) {
         throw avatarError;
       }
 
-      const { error: deleteError } = await supabase.storage
-        .from('avatars')
-        .remove([userProfile?.avatar_url]);
+      // Check if there is an existing avatar to delete
+      if (currentAvatarData[0].avatar_file_name) {
+        const { error: deleteError } = await supabase.storage
+          .from('avatars')
+          .remove([currentAvatarData[0].avatar_file_name]);
 
-      if (deleteError) {
-        throw deleteError;
+        if (deleteError) {
+          throw deleteError;
+        }
       }
 
-      setUser({ ...userProfile, avatar_url: path });
-    } catch (error) {
-      console.log(error);
-      Alert.alert(error?.message);
+      setUserProfile({
+        ...userProfile,
+        avatar_url: publicUrlData.publicUrl,
+        avatar_file_name: path,
+        email: userProfile?.email || '',
+        first_name: userProfile?.first_name || '',
+        last_name: userProfile?.last_name || '',
+        items: userProfile?.items || [],
+      });
+    } catch (error: any) {
+      console.warn(error);
+      Alert.alert(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -135,17 +167,16 @@ export default function EditAvatar({
     <>
       <ProfilePicture
         isLoading={isLoading}
-        profile={userProfile}
-        avatarUrl={userProfile?.avatar_url}
+        profile={userProfile || {}}
+        avatarUrl={userProfile?.avatar_url || ''}
+        size={size}
       />
       <Button
         size="sm"
         title="Edit profile picture"
         style={{ width: 'auto' }}
         disabled={!editable || isLoading}
-        onPress={() =>
-          userProfile?.id === user?.id && handleUpdateProfilePicture()
-        }
+        onPress={() => handleUpdateProfilePicture()}
         onPressOut={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}

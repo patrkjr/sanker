@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import { View, ViewProps } from '../Themed';
+import { useForm } from 'react-hook-form';
+import { View } from '../Themed';
 import { Link } from 'expo-router';
 import * as z from 'zod';
 
@@ -11,13 +11,11 @@ import Button from '../ui/Button';
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { supabase } from '@/config/supabase';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import ControlledInputField from '../ui/ControlledInputField';
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -59,7 +57,7 @@ const formSchema = z.object({
 });
 
 export default function SignupForm() {
-  const setUser = useUserStore((state) => state.setUser);
+  const setUserProfile = useUserProfileStore((state) => state.setUserProfile);
 
   const {
     control,
@@ -104,7 +102,7 @@ export default function SignupForm() {
         }
 
         // Set both normal table data
-        setUser({ ...formData, id: user.id, items: [] });
+        setUserProfile({ ...formData, id: user.id, items: [] });
       }
     } catch (error) {
       Alert.alert(error?.message);

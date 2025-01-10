@@ -8,14 +8,13 @@ import { View, Text } from '../Themed';
 import Item from '../ui/Item';
 import AppInfo from '../AppInfo';
 import Icon from '../ui/Icon';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { useCallback } from 'react';
 import { Link, useFocusEffect } from 'expo-router';
 import React from 'react';
 import { useUserItems } from '@/hooks/useUserItems';
 import ProfileCard from './ProfileCard';
 import usePreferencesStore from '@/stores/preferenceStore';
-import DefaultStyles from '@/constants/DefaultStyles';
 import PageScrollView from '../ui/PageScrollView';
 
 const THEME_NAME = {
@@ -26,8 +25,10 @@ const THEME_NAME = {
 
 export default function ProfileScreen() {
   const { signOut, user } = useSupabase();
-  const profile = useUserStore((state) => state.user);
-  const clearUser = useUserStore((state) => state.clearUser);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const clearUserProfile = useUserProfileStore(
+    (state) => state.clearUserProfile
+  );
   const { isLoading: isLoadingUserItems, fetchUserItems } = useUserItems();
   const { userPreferences, resetPreferences } = usePreferencesStore();
 
@@ -69,22 +70,22 @@ export default function ProfileScreen() {
 
   function handleSignOut() {
     signOut();
-    clearUser();
+    clearUserProfile();
     resetPreferences();
   }
 
   return (
     <PageScrollView>
-      {profile && (
+      {userProfile && (
         <>
-          <ProfileCard profileId={profile.id} />
+          <ProfileCard profileId={userProfile.id} />
           <View style={styles.editContainer}>
             <Mono secondary>
               Joined <Mono>{formattedCreatedAt}</Mono>
             </Mono>
             <Link
               style={{ width: 'auto' }}
-              href={'/profile/account-settings'}
+              href={'/profile/edit-profile'}
               asChild
             >
               <Button size="sm" title="Edit profile" />
@@ -97,7 +98,7 @@ export default function ProfileScreen() {
         <Card style={styles.cardWithListStyle}>
           <Item href={'/profile/listings'} skeleton={isLoadingUserItems}>
             <Item.Label>My listings</Item.Label>
-            <Item.Value>{profile?.items?.length}</Item.Value>
+            <Item.Value>{userProfile?.items?.length}</Item.Value>
           </Item>
           <Item href={'/profile/favorits'} disabled isLastItem>
             <Item.Label>Favorites</Item.Label>

@@ -2,12 +2,13 @@ import * as ImageManipulator from 'expo-image-manipulator';
 
 export const compressImage = async (
   uri: string,
+  width = 1000,
   onError: (error: string) => void
 ) => {
   try {
     const manipulatedImage = await ImageManipulator.manipulateAsync(
       uri,
-      [{ resize: { width: 1000 } }],
+      [{ resize: { width } }],
       { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
     );
     return manipulatedImage;

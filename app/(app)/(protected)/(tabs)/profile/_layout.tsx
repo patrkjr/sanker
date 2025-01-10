@@ -39,7 +39,7 @@ export default function ProfileLayout() {
       />
 
       <Stack.Screen
-        name="account-settings"
+        name="edit-profile"
         options={{
           title: 'Edit profile',
           ...HeaderLargeStyle,

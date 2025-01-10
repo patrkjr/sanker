@@ -9,7 +9,7 @@ import { useSupabase } from '@/context/supabase-provider';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { supabase } from '@/config/supabase';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import ControlledInputField from '../ui/ControlledInputField';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -20,7 +20,7 @@ const formSchema = z.object({
 
 export default function LoginForm() {
   const { signInWithPassword } = useSupabase();
-  const setUser = useUserStore((state) => state.setUser);
+  const setUserProfile = useUserProfileStore((state) => state.setUserProfile);
 
   const {
     control,
@@ -53,15 +53,15 @@ export default function LoginForm() {
         throw error;
       }
 
-      setUser({ ...data, ...user });
+      setUserProfile({ ...data, ...user });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
       Alert.alert(error?.message);
     }
   };
 
   function handleFocus(pageY) {
-    console.log(pageY);
+    //console.log(pageY);
   }
 
   return (

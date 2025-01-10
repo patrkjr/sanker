@@ -156,7 +156,7 @@ export default function ItemScreen() {
         throw itemError;
       }
     } catch (e) {
-      console.log(e);
+      console.warn(e);
       alert(e.message);
     } finally {
       navigation.goBack();

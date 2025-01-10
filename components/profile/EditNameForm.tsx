@@ -2,7 +2,7 @@ import { Alert, ScrollView, StyleSheet } from 'react-native';
 import Input from '../ui/Input';
 import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,8 +13,8 @@ import { useSupabase } from '@/context/supabase-provider';
 
 export default function EditNameForm() {
   const { user } = useSupabase();
-  const profile = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
+  const profile = useUserProfileStore((state) => state.userProfile);
+  const setUserProfile = useUserProfileStore((state) => state.setUserProfile);
   const router = useRouter();
 
   // ___ chatGPT regex ____
@@ -48,7 +48,7 @@ export default function EditNameForm() {
         .update({ first_name, last_name })
         .eq('id', user?.id);
 
-      setUser({ ...profile, first_name, last_name });
+      setUserProfile({ ...profile, first_name, last_name });
 
       router.back();
     } catch (error) {

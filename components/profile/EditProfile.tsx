@@ -4,13 +4,15 @@ import { View } from '../Themed';
 import { H2, Label, P } from '../typography';
 import Card from '../ui/Card';
 import Item from '../ui/Item';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import EditAvatar from './EditAvatar';
 import { useSupabase } from '@/context/supabase-provider';
 
-export default function AccountSettings() {
+export default function EditProfile() {
   const { user } = useSupabase();
-  const userProfile = useUserStore((state) => state.user);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+
+  //console.log(userProfile);
 
   return (
     <ScrollView

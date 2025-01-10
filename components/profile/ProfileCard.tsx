@@ -4,7 +4,7 @@ import { View } from '../Themed';
 import { Alert, StyleSheet } from 'react-native';
 import { H3, P, Small } from '../typography';
 import { supabase } from '@/config/supabase';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import Spacings from '@/constants/Spacings';
 import SelectableTag from '../ui/SelectableTag';
@@ -24,7 +24,7 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
   const colors = useThemedColors();
   const [profile, setProfile] = useState(null);
   const { user } = useSupabase();
-  const userProfile = useUserStore((state) => state.user);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

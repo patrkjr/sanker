@@ -2,7 +2,7 @@ import { View } from '@/components/Themed';
 import { H3, P } from '@/components/typography';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { useCallback } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import ProductItem from '../item/ProductItem';
@@ -13,9 +13,9 @@ import PageScrollView from '../ui/PageScrollView';
 import React from 'react';
 
 export default function UserListings() {
-  const user = useUserStore((state) => state.user);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
   const { isLoading, fetchUserItems } = useUserItems();
-  const items = useUserStore((state) => state.user?.items);
+  const items = useUserProfileStore((state) => state.userProfile?.items);
 
   useFocusEffect(
     useCallback(() => {

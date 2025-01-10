@@ -4,7 +4,6 @@ import { P } from '../typography';
 import {
   ActivityIndicator,
   Alert,
-  Image,
   Pressable,
   StyleSheet,
   Platform,
@@ -15,6 +14,7 @@ import { useEffect, useState } from 'react';
 import useUserStore from '@/stores/userStore';
 import { supabase } from '@/config/supabase';
 import { boolean, number } from 'zod';
+import { Image } from 'expo-image';
 
 // This component can be updated to only take needed props
 // Right now it takes a whole profile, but only uses names and image url
@@ -36,38 +36,38 @@ export default function ProfilePicture({
   // const setUser = useUserStore((state) => state.setUser);
   const [pictureUrl, setPictureUrl] = useState(null);
 
-  useEffect(() => {
-    if (avatarUrl) {
-      downloadImage(avatarUrl);
-    }
-  }, [avatarUrl]);
+  // useEffect(() => {
+  //   if (avatarUrl) {
+  //     downloadImage(avatarUrl);
+  //   }
+  // }, [avatarUrl]);
 
-  async function downloadImage(path: string) {
-    try {
-      //Download the avatar image
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .download(path);
+  // async function downloadImage(path: string) {
+  //   try {
+  //     //Download the avatar image
+  //     const { data, error } = await supabase.storage
+  //       .from('avatars')
+  //       .download(path);
 
-      if (error) {
-        throw error;
-      }
+  //     if (error) {
+  //       throw error;
+  //     }
 
-      //Set the image as URI
-      const fr = new FileReader();
-      fr.readAsDataURL(data);
-      fr.onload = () => {
-        setPictureUrl(fr.result as string);
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log('Error downloading image: ', error.message);
-        Alert.alert(error?.message);
-      }
-    }
-  }
+  //     //Set the image as URI
+  //     const fr = new FileReader();
+  //     fr.readAsDataURL(data);
+  //     fr.onload = () => {
+  //       setPictureUrl(fr.result as string);
+  //     };
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       console.log('Error downloading image: ', error.message);
+  //       Alert.alert(error?.message);
+  //     }
+  //   }
+  // }
 
-  //Get the initials from the first and last name (first and last name not yet implemented in supabase)
+  // Optional function to get initials from first and last name. Use if profile is a prop.
   // function getInitials() {
   //   if (!profile || !profile.first_name || !profile.last_name) {
   //     return '🥾';
@@ -102,11 +102,11 @@ export default function ProfilePicture({
             />
           </View>
         )}
-        {pictureUrl ? (
+        {avatarUrl ? (
           <Image
             style={{ width: size, height: size }}
             accessibilityLabel="Avatar"
-            source={{ uri: pictureUrl }}
+            source={avatarUrl}
           />
         ) : (
           <P bold style={{ textAlign: 'center' }}>

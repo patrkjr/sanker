@@ -1,19 +1,19 @@
 import { supabase } from '@/config/supabase';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import useUserStore from '@/stores/userStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 
 export function useUserItems() {
   const [isLoading, setIsLoading] = useState(true);
-  const user = useUserStore((state) => state.user);
-  const setItems = useUserStore((state) => state.setItems);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const setItems = useUserProfileStore((state) => state.setItems);
 
   const fetchUserItems = useCallback(async () => {
     try {
       const { data, error, status } = await supabase
         .from('items')
         .select('*')
-        .eq('owner_id', user?.id)
+        .eq('owner_id', userProfile?.id)
         .order('created_at', { ascending: false });
 
       if (error && status !== 406) throw error;
@@ -23,11 +23,11 @@ export function useUserItems() {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id, setItems]);
+  }, [userProfile?.id, setItems]);
 
   useEffect(() => {
-    if (user?.id) fetchUserItems();
-  }, [user?.id, fetchUserItems]);
+    if (userProfile?.id) fetchUserItems();
+  }, [userProfile?.id, fetchUserItems]);
 
   return { isLoading, fetchUserItems };
 }
