@@ -3,11 +3,13 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserProfile {
-  email: string;
+  id: string;
+  created_at: string;
   avatar_url?: string;
   avatar_file_name?: string;
   first_name?: string;
   last_name?: string;
+  phone_verified?: boolean;
   items: Item[];
 }
 
@@ -53,7 +55,7 @@ const useUserProfileStore = create<UserProfileStore>()(
         })),
     }),
     {
-      name: 'user-store',
+      name: 'user-profile-store',
       storage: createJSONStorage(() => AsyncStorage),
     }
   )

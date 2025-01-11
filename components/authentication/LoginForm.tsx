@@ -53,7 +53,7 @@ export default function LoginForm() {
         throw error;
       }
 
-      setUserProfile({ ...data, ...user });
+      setUserProfile({ ...data });
     } catch (error) {
       console.warn(error);
       Alert.alert(error?.message);
