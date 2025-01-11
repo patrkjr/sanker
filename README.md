@@ -12,9 +12,11 @@ Sanker is a marketplace app designed for buying and selling secondhand outdoor g
 - **[Supabase](https://supabase.com/)**: Used as the backend service for authentication and database management.
 - **[Reanimated](https://docs.swmansion.com/react-native-reanimated/)**: For animations within the app.
 - **[React Hook Form](https://react-hook-form.com/)**: For form management.
+- **[Zod](https://zod.dev/)**: For data validation.
 - **[Zustand](https://github.com/pmndrs/zustand)**: For state management.
 - **[Jest](https://jestjs.io/)**: For testing (WIP).
 - **[Prettier](https://prettier.io/)**: For code formatting.
+- **[Reactron](https://docs.infinite.red/reactotron/)**: For debugging and inspecting state.
 
 ## Features
 
