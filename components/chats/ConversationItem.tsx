@@ -28,6 +28,7 @@ export default function ConversationItem({
   useFocusEffect(
     useCallback(() => {
       //Fetch data on focus and set a interval for regular updates.
+      // Should probably be refactored to use realtime database, plus a "last message" field in the conversation table.
       getUserDetailsAsync();
       const intervalId = setInterval(() => {
         getUserDetailsAsync();

@@ -46,7 +46,7 @@ export default function ItemScreen() {
       return () => {
         setIsLoading(false);
       };
-    }, [getItemAsync])
+    }, [])
   );
 
   async function getItemAsync() {
