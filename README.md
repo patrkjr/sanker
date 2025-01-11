@@ -7,6 +7,7 @@ Sanker is a marketplace app designed for buying and selling secondhand outdoor g
 ## Video Demo
 
 Working on embedding the video here. 😅
+
 <a href="assets/video/sanker-demo.mov">
 <img src="assets/images/thumbnail.png" alt="Sanker Demo" width="250" />
 </a>
