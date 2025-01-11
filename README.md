@@ -4,6 +4,10 @@
 
 Sanker is a marketplace app designed for buying and selling secondhand outdoor goods. This app provides a platform for users to list, browse, and purchase items related to outdoor activities.
 
+## Video Demo
+
+![Sanker Demo](assets/video/sanker-demo.mov)
+
 ## Technologies Used
 
 - **[Expo](https://expo.dev/)**: A framework and platform for universal React applications.
