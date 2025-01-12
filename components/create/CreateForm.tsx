@@ -293,18 +293,25 @@ export default function CreateForm() {
         </Card>
 
         {/* Category field */}
-        <Controller
-          control={control}
-          name="category_slug"
-          render={({ field: { value } }) => (
-            <Card>
-              <Item href={'/create/pick-category'} isLastItem>
-                <Item.Label>Pick category</Item.Label>
-                <Item.Value>{value ? CATEGORY_NAME[value] : 'None'}</Item.Value>
-              </Item>
-            </Card>
-          )}
-        />
+        <View style={{ gap: Spacings.sm }}>
+          <Controller
+            control={control}
+            name="category_slug"
+            render={({ field: { value } }) => (
+              <Card>
+                <Item href={'/create/pick-category'} isLastItem>
+                  <Item.Label>Category</Item.Label>
+                  <Item.Value>
+                    {value ? CATEGORY_NAME[value] : 'None'}
+                  </Item.Value>
+                </Item>
+              </Card>
+            )}
+          />
+          <Small style={{ paddingHorizontal: Spacings.md }} secondary>
+            Categories are optional, but they help buyers find your item.
+          </Small>
+        </View>
 
         {/* Submit button */}
         <Button
