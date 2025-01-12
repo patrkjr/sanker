@@ -1,18 +1,18 @@
 import { StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from '../Themed';
 import { P } from '../typography';
 import DefaultStyles from '@/constants/DefaultStyles';
-import { ScrollView } from 'react-native-gesture-handler';
 import Card from '../ui/Card';
 import Item from '../ui/Item';
 import { Link, Stack, useRouter } from 'expo-router';
 import SmallButton from '../ui/SmallButton';
 import Button from '../ui/Button';
-
-interface CategoryType {
-  categoryId?: number | null;
-}
+import useItemFormStore from '@/stores/itemFormStore';
+import { supabase } from '@/config/supabase';
+import SkeletonBox from '../ui/SkeletonBox';
+import LoadingShimmer from '../ui/LoadingShimmer';
+import PageScrollView from '../ui/PageScrollView';
 
 // function headerRight() {
 //   return (
@@ -22,62 +22,74 @@ interface CategoryType {
 //   );
 // }
 
-export default function PickCategory({ categoryId = null }: CategoryType) {
-  const [selected, setSelected] = useState<null | number>(null);
+interface Category {
+  name: string;
+  slug: string;
+}
+
+export default function PickCategory() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { data, setForm } = useItemFormStore();
   const router = useRouter();
 
   function handleDismiss() {
     router.dismiss();
   }
 
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('name, slug');
+      if (data) setCategories(data);
+      if (error) console.error('Error fetching categories:', error);
+    }
+    fetchCategories();
+  }, []);
+
+  if (categories.length === 0) {
+    return (
+      <PageScrollView>
+        <LoadingShimmer style={{ height: 350 }} />
+      </PageScrollView>
+    );
+  }
+
   return (
-    <ScrollView contentContainerStyle={pageContainer}>
+    <PageScrollView>
       <Card>
-        <Item onPress={() => setSelected(1)}>
-          <Item.Label>Gear</Item.Label>
-          <Item.Value
-            hasTrailingIcon={selected === 1}
-            trailingIconName="Check"
-          ></Item.Value>
-        </Item>
-
-        <Item onPress={() => setSelected(2)}>
-          <Item.Label>Clothing</Item.Label>
-          <Item.Value
-            hasTrailingIcon={selected === 2}
-            trailingIconName="Check"
-          ></Item.Value>
-        </Item>
-
-        <Item onPress={() => setSelected(3)}>
-          <Item.Label>Food & cooking</Item.Label>
-          <Item.Value
-            hasTrailingIcon={selected === 3}
-            trailingIconName="Check"
-          ></Item.Value>
-        </Item>
-
-        <Item onPress={() => setSelected(4)}>
-          <Item.Label>Navigation & safety</Item.Label>
-          <Item.Value
-            hasTrailingIcon={selected === 4}
-            trailingIconName="Check"
-          ></Item.Value>
-        </Item>
-
-        <Item onPress={() => setSelected(5)} isLastItem>
-          <Item.Label>Kids and family</Item.Label>
-          <Item.Value
-            hasTrailingIcon={selected === 5}
-            trailingIconName="Check"
-          ></Item.Value>
-        </Item>
+        {categories.map((category, index) => (
+          <Item
+            key={index}
+            onPress={() => {
+              setForm({
+                category_slug: category.slug,
+              });
+            }}
+            isLastItem={index === categories.length - 1}
+          >
+            <Item.Label>{category.name}</Item.Label>
+            <Item.Value
+              hasTrailingIcon={data.category_slug === category.slug}
+              trailingIconName="Check"
+            >
+              {/* Add any necessary children here */}
+            </Item.Value>
+          </Item>
+        ))}
       </Card>
       <Button themed title="Done" onPress={handleDismiss} />
-    </ScrollView>
+      {data.category_slug && (
+        <Button
+          title="Remove category"
+          ghost
+          onPress={() => {
+            setForm({ category_slug: null });
+          }}
+        />
+      )}
+    </PageScrollView>
   );
 }
-
-const { pageContainer } = DefaultStyles;
 
 const styles = StyleSheet.create({});

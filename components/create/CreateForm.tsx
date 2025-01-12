@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { View } from '../Themed';
-import { H3, Label, Large, P, Small } from '../typography';
-import Input from '../ui/Input';
+import { H3, Label, Small } from '../typography';
 import Spacings from '@/constants/Spacings';
 import Button from '../ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller, set } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as z from 'zod';
 import { useRef, useState } from 'react';
 import {
@@ -19,8 +18,7 @@ import SelectableTag from '../ui/SelectableTag';
 import Switch from '../ui/Switch';
 import Item from '../ui/Item';
 import Card from '../ui/Card';
-import useUserStore from '@/stores/userStore';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import 'react-native-get-random-values';
 import ImageUploadGallery from './ImageUploadGallery';
 import Animated, {
@@ -32,12 +30,6 @@ import ControlledInputField from '../ui/ControlledInputField';
 import useItemFormStore from '@/stores/itemFormStore';
 import usePreferencesStore from '@/stores/preferenceStore';
 import PageScrollView from '../ui/PageScrollView';
-
-const INDICATOR_COLOR = {
-  system: 'default',
-  light: 'black',
-  dark: 'white',
-};
 
 const formSchema = z.object({
   price: z
@@ -64,16 +56,29 @@ const formSchema = z.object({
     .min(1, 'You need at least 1 image'),
 });
 
+// This basically serves a temporary translation file.
+const CATEGORY_NAME = {
+  gear: 'Gear',
+  clothing: 'Clothing',
+  'food-and-cooking': 'Food & Cooking',
+  'navigation-and-safety': 'Navigation & Safety',
+  'kids-and-family': 'Kids & Family',
+};
+
 export default function CreateForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { setForm } = useItemFormStore();
+  const { setForm, resetForm } = useItemFormStore();
+  const selectedCategorySlug = useItemFormStore(
+    (state) => state.data.category_slug
+  );
   const { userPreferences } = usePreferencesStore();
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -83,12 +88,17 @@ export default function CreateForm() {
       title: '',
       condition: '',
       description: '',
+      category_slug: null,
       use_user_address: userPreferences.location.use_user_address,
       show_exact_address: userPreferences.location.show_exact_address,
     },
   });
 
   const [activeField, setActiveField] = useState<string | null>(null);
+
+  useEffect(() => {
+    setValue('category_slug', selectedCategorySlug, { shouldDirty: true });
+  }, [selectedCategorySlug, setValue]);
 
   const onSubmit = async (data) => {
     //router.push('/create/uploading-item');
@@ -131,7 +141,9 @@ export default function CreateForm() {
       {
         text: 'Reset form',
         style: 'destructive',
-        onPress: () => (reset(), scrollViewRef?.current?.scrollTo({ y: 0 })),
+        onPress: () => (
+          reset(), resetForm(), scrollViewRef?.current?.scrollTo({ y: 0 })
+        ),
       },
     ]);
   }
@@ -280,12 +292,19 @@ export default function CreateForm() {
           ></Controller>
         </Card>
 
-        <Card>
-          <Item href={'/create/pick-category'} isLastItem>
-            <Item.Label>Pick category</Item.Label>
-            <Item.Value>Gear</Item.Value>
-          </Item>
-        </Card>
+        {/* Category field */}
+        <Controller
+          control={control}
+          name="category_slug"
+          render={({ field: { value } }) => (
+            <Card>
+              <Item href={'/create/pick-category'} isLastItem>
+                <Item.Label>Pick category</Item.Label>
+                <Item.Value>{value ? CATEGORY_NAME[value] : 'None'}</Item.Value>
+              </Item>
+            </Card>
+          )}
+        />
 
         {/* Submit button */}
         <Button
@@ -307,9 +326,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacings.xs,
     flexWrap: 'wrap',
-  },
-  fullPageFill: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: 'red',
   },
 });
