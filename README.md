@@ -4,13 +4,14 @@
 
 Sanker is a marketplace app designed for buying and selling secondhand outdoor goods. This app provides a platform for users to list, browse, and purchase items related to outdoor activities.
 
-## Video Demo
+## Demo
 
-Working on embedding the video here. 😅
-
-<a href="assets/video/sanker-demo.mov">
-<img src="assets/images/thumbnail.png" alt="Sanker Demo" width="250" />
-</a>
+<div style="display: flex; justify-content: space-between;">
+  <img src="./gifs/item.gif?raw=true" alt="A demo of viewing an item" width="20%" />
+  <img src="./gifs/create.gif?raw=true" alt="A demo of creating a new listing" width="20%" />
+  <img src="./gifs/messages.gif?raw=true" alt="A demo of messaging" width="20%" />
+  <img src="./gifs/darkmode.gif?raw=true" alt="A demo of dark mode" width="20%" />
+</div>
 
 ## Technologies Used
 
@@ -35,3 +36,7 @@ Working on embedding the video here. 😅
 ## Note
 
 This project is not intended for public use or deployment. It serves as a personal project to explore and implement a marketplace for outdoor goods.
+
+## License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). You can view the full license at [Creative Commons](https://creativecommons.org/licenses/by-nc-nd/4.0/).
