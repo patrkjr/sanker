@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
-import { View } from '../Themed';
-import { H3, Label, Small } from '../typography';
 import Spacings from '@/constants/Spacings';
-import Button from '../ui/Button';
+import useItemFormStore from '@/stores/itemFormStore';
+import usePreferencesStore from '@/stores/preferenceStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import * as z from 'zod';
-import { useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -14,22 +12,23 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
-import SelectableTag from '../ui/SelectableTag';
-import Switch from '../ui/Switch';
-import Item from '../ui/Item';
-import Card from '../ui/Card';
-import { useRouter } from 'expo-router';
 import 'react-native-get-random-values';
-import ImageUploadGallery from './ImageUploadGallery';
-import Animated, {
+import {
   LinearTransition,
   useAnimatedKeyboard,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import * as z from 'zod';
+import { View } from '../Themed';
+import { Label, Small } from '../typography';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
 import ControlledInputField from '../ui/ControlledInputField';
-import useItemFormStore from '@/stores/itemFormStore';
-import usePreferencesStore from '@/stores/preferenceStore';
+import Item from '../ui/Item';
 import PageScrollView from '../ui/PageScrollView';
+import SelectableTag from '../ui/SelectableTag';
+import Switch from '../ui/Switch';
+import ImageUploadGallery from './ImageUploadGallery';
 
 const formSchema = z.object({
   price: z
