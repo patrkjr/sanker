@@ -68,6 +68,7 @@ Testing and Quality Assurance
 
 Project Structure and Environment
 
+- The app folder contains routes for the app. Using expo router.
 - Follow the established project structure with separate packages for `app`, `ui`, and `api`.
 - Follow patterns for environment-specific configurations in `eas.json`.
 
