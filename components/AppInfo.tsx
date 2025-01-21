@@ -1,8 +1,8 @@
-import React from 'react';
 import Spacings from '@/constants/Spacings';
+import Constants from 'expo-constants';
+import React from 'react';
 import { View } from 'react-native';
 import { H4, Mono, P } from './typography';
-import Constants from 'expo-constants';
 
 export default function AppInfo() {
   const version = 'v' + Constants.expoConfig?.version || 'Unknown version';
@@ -17,9 +17,10 @@ export default function AppInfo() {
       <View style={{ gap: Spacings.xxs, alignItems: 'center' }}>
         <H4 secondary>Sanker</H4>
         <Mono secondary>{version}</Mono>
+        <Mono secondary>Build version 0.2</Mono>
       </View>
       <P bold secondary>
-        Kechu studio
+        Hechu studio
       </P>
     </View>
   );
