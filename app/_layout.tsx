@@ -1,7 +1,7 @@
-import React from 'react';
 import { SupabaseProvider } from '@/context/supabase-provider';
+import React from 'react';
 
-import { Slot, SplashScreen } from 'expo-router';
+import { Slot } from 'expo-router';
 
 if (__DEV__) {
   require('../ReactotronConfig');

@@ -1,15 +1,19 @@
+import { useColorScheme } from '@/components/useColorScheme';
+import { HeaderLargeStyle } from '@/constants/HeaderStyle';
+import { DarkTheme, DefaultTheme } from '@/constants/Themes';
+import { defaultToastStyles } from '@/constants/ToastsConfig';
+import usePreferencesStore from '@/stores/preferenceStore';
+import { Toasts, useToasterStore } from '@backpackapp-io/react-native-toast';
 import { ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import 'react-native-reanimated';
-import { useColorScheme } from '@/components/useColorScheme';
-import { DarkTheme, DefaultTheme } from '@/constants/Themes';
-import { HeaderLargeStyle } from '@/constants/HeaderStyle';
+import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-reanimated';
 import {
-  configureReanimatedLogger,
   ReanimatedLogLevel,
+  configureReanimatedLogger,
 } from 'react-native-reanimated';
-import usePreferencesStore from '@/stores/preferenceStore';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -38,45 +42,62 @@ function RootLayoutNav() {
   if (userPreferences.theme === 'system') {
     preferredTheme = colorScheme;
   }
-  // useEffect(() => {
+  const { toasts } = useToasterStore(); //Note, no provider key passed in
 
-  // }, [userPreferences.theme])
+  // useEffect(() => {
+  //   toasts.forEach((t) => {
+  //     toast(t.message, {
+  //       ...t,
+  //       providerKey: isModalVisible ? 'MODAL::1' : 'DEFAULT', //Switch provider key here
+  //     });
+  //   });
+  // }, [isModalVisible]);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider
-        value={preferredTheme === 'dark' ? DarkTheme : DefaultTheme}
-      >
-        <Stack
-          screenOptions={{
-            headerShown: true,
-            title: 'Sign up',
-            gestureEnabled: false,
-          }}
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider
+          value={preferredTheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-          <Stack.Screen name="(protected)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="welcome"
-            options={{ title: 'Welcome', headerShown: false }}
-          />
-          <Stack.Screen
-            name="signup"
-            options={{
-              gestureEnabled: true,
+          <Stack
+            screenOptions={{
+              headerShown: true,
               title: 'Sign up',
-              ...HeaderLargeStyle,
+              gestureEnabled: false,
             }}
-          />
-          <Stack.Screen
-            name="login"
-            options={{
-              gestureEnabled: true,
-              title: 'Log in',
-              ...HeaderLargeStyle,
-            }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+          >
+            <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="welcome"
+              options={{ title: 'Welcome', headerShown: false }}
+            />
+            <Stack.Screen
+              name="signup"
+              options={{
+                gestureEnabled: true,
+                title: 'Sign up',
+                ...HeaderLargeStyle,
+              }}
+            />
+            <Stack.Screen
+              name="login"
+              options={{
+                gestureEnabled: true,
+                title: 'Log in',
+                ...HeaderLargeStyle,
+              }}
+            />
+          </Stack>
+        </ThemeProvider>
+        <Toasts
+          globalAnimationType="spring"
+          globalAnimationConfig={{
+            duration: 500,
+            stiffness: 100,
+          }}
+          defaultStyle={defaultToastStyles}
+        />
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }

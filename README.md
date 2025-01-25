@@ -25,7 +25,7 @@ Sanker is a marketplace app designed for buying and selling secondhand outdoor g
 - **[Zustand](https://github.com/pmndrs/zustand)**: For state management.
 - **[Jest](https://jestjs.io/)**: For testing (WIP).
 - **[Prettier](https://prettier.io/)**: For code formatting.
-- **[Reactron](https://docs.infinite.red/reactotron/)**: For debugging and inspecting state.
+- **[Reacotron](https://docs.infinite.red/reactotron/)**: For debugging and inspecting state.
 
 ## Features
 
