@@ -1,8 +1,9 @@
-import { Session, User } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import { SplashScreen, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { supabase } from '@/config/supabase';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 
 type SupabaseContextProps = {
   user: User | null;
@@ -73,6 +74,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session ? session.user : null);
+      fetchUserProfile();
     });
   }, []);
 
@@ -111,3 +113,28 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     </SupabaseContext.Provider>
   );
 };
+
+async function fetchUserProfile() {
+  const { setUserProfile, clearUserProfile } = useUserProfileStore.getState();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user profile:', error);
+      clearUserProfile();
+    } else {
+      setUserProfile(data);
+    }
+  } else {
+    clearUserProfile();
+  }
+}
