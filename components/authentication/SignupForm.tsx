@@ -1,23 +1,21 @@
-import React, { useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { View } from '../Themed';
 import { Link } from 'expo-router';
+import React, { useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { View } from '../Themed';
 
+import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
-import { P } from '../typography';
-import Button from '../ui/Button';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { supabase } from '@/config/supabase';
-import useUserProfileStore from '@/stores/useUserProfileStore';
-import ControlledInputField from '../ui/ControlledInputField';
-import Animated, {
-  useAnimatedKeyboard,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
+import type Animated from 'react-native-reanimated';
+import { useAnimatedKeyboard, useAnimatedStyle } from 'react-native-reanimated';
+import { P } from '../typography';
+import Button from '../ui/Button';
+import ControlledInputField from '../ui/ControlledInputField';
 
 // ___ Template code for signing up new users ___
 
