@@ -1,22 +1,20 @@
-import React from 'react';
-import { Pressable, StyleSheet, useColorScheme, ViewStyle } from 'react-native';
-import Colors from '@/constants/Colors';
+import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
-import { PropsWithChildren } from 'react';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import * as Haptics from 'expo-haptics';
+import React, { PropsWithChildren } from 'react';
+import { Pressable, StyleSheet, ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { ViewProps } from '../Themed';
-import { timingConfig } from '@/constants/Animations';
-import * as Haptics from 'expo-haptics';
-import { useThemedColors } from '@/hooks/useThemedColors';
 
 interface CardProps extends PropsWithChildren {
   borderLess?: boolean;
-  variant: 'default' | 'themed' | 'warning';
-  style: ViewStyle | ViewStyle[] | [];
+  variant?: 'default' | 'themed' | 'warning';
+  style?: ViewStyle | ViewStyle[] | [];
   onPress?: (() => void) | undefined;
   useHaptics?: boolean;
   otherProps?: ViewProps;

@@ -1,21 +1,18 @@
-import { Alert, StyleSheet } from 'react-native';
-import { useSupabase } from '@/context/supabase-provider';
-import Button from '../ui/Button';
 import Spacings from '@/constants/Spacings';
-import { Label, Mono, P } from '../typography';
-import Card from '../ui/Card';
-import { View, Text } from '../Themed';
-import Item from '../ui/Item';
-import AppInfo from '../AppInfo';
-import Icon from '../ui/Icon';
-import useUserProfileStore from '@/stores/useUserProfileStore';
-import { useCallback } from 'react';
-import { Link, useFocusEffect } from 'expo-router';
-import React from 'react';
-import { useUserItems } from '@/hooks/useUserItems';
-import ProfileCard from './ProfileCard';
+import { useSupabase } from '@/context/supabase-provider';
 import usePreferencesStore from '@/stores/preferenceStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
+import { Link } from 'expo-router';
+import React from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import { View } from '../Themed';
+import { Label, Mono } from '../typography';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import Icon from '../ui/Icon';
+import Item from '../ui/Item';
 import PageScrollView from '../ui/PageScrollView';
+import ProfileCard from './ProfileCard';
 
 const THEME_NAME = {
   dark: 'Dark',
@@ -29,14 +26,7 @@ export default function ProfileScreen() {
   const clearUserProfile = useUserProfileStore(
     (state) => state.clearUserProfile
   );
-  const { isLoading: isLoadingUserItems, fetchUserItems } = useUserItems();
   const { userPreferences, resetPreferences } = usePreferencesStore();
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchUserItems();
-    }, [])
-  );
 
   // Check for user
   if (!user) {
@@ -93,20 +83,6 @@ export default function ProfileScreen() {
           </View>
         </>
       )}
-      <View style={styles.sectionStyle}>
-        <Label>Listings</Label>
-        <Card style={styles.cardWithListStyle}>
-          <Item href={'/profile/listings'} skeleton={isLoadingUserItems}>
-            <Item.Label>My listings</Item.Label>
-            <Item.Value>{userProfile?.items?.length}</Item.Value>
-          </Item>
-          <Item href={'/profile/favorits'} disabled isLastItem>
-            <Item.Label>Favorites</Item.Label>
-            <Item.Value></Item.Value>
-            {/* Show the count here at some point */}
-          </Item>
-        </Card>
-      </View>
 
       <View style={styles.sectionStyle}>
         <Label>Preferences</Label>

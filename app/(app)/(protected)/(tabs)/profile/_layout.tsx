@@ -1,6 +1,6 @@
-import React from 'react';
-import { Stack, useLocalSearchParams } from 'expo-router';
 import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
+import { Stack } from 'expo-router';
+import React from 'react';
 
 export default function ProfileLayout() {
   // const { title } = useLocalSearchParams();
@@ -25,15 +25,6 @@ export default function ProfileLayout() {
         options={{
           title: 'Edit name',
           presentation: 'modal',
-          ...HeaderLargeStyle,
-        }}
-      />
-
-      <Stack.Screen
-        name="listings"
-        options={{
-          title: 'My listings',
-          headerShown: true,
           ...HeaderLargeStyle,
         }}
       />

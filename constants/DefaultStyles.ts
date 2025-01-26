@@ -7,6 +7,9 @@ const DefaultStyles = StyleSheet.create({
     paddingHorizontal: Spacings.md,
     paddingVertical: Spacings.lg,
   },
+  sectionStyle: {
+    gap: Spacings.xs,
+  },
 });
 
 export default DefaultStyles;

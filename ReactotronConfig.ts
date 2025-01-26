@@ -31,3 +31,12 @@ Reactotron.onCustomCommand({
     }),
   description: 'Send a error toast',
 });
+
+// Reactotron.onCustomCommand({
+//   title: 'Show navigation',
+//   command: 'Show navigation',
+//   handler: () => {
+//     console.log(useSegments());
+//   },
+//   description: 'Show navigation',
+// });

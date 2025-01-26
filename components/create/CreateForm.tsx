@@ -299,7 +299,11 @@ export default function CreateForm() {
             name="category_slug"
             render={({ field: { value } }) => (
               <Card>
-                <Item href={'/create/pick-category'} isLastItem>
+                <Item
+                  href={'./pick-category'}
+                  relativeToDirectory={true}
+                  isLastItem
+                >
                   <Item.Label>Category</Item.Label>
                   <Item.Value>
                     {value ? CATEGORY_NAME[value] : 'None'}

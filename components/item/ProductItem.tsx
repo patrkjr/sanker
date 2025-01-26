@@ -1,17 +1,17 @@
-import { Image, Pressable, StyleSheet } from 'react-native';
-import { View } from '../Themed';
-import { Large, P, Small } from '../typography';
+import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { Link } from 'expo-router';
-import Icon from '../ui/Icon';
+import { useState } from 'react';
+import { Image, Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
-import { timingConfig } from '@/constants/Animations';
+import { View } from '../Themed';
+import { P, Small } from '../typography';
+import Icon from '../ui/Icon';
 
 const IMAGE_SIZE = 64;
 
@@ -44,7 +44,7 @@ export default function ProductItem({
   });
 
   return (
-    <Link href={`/profile/item/${id}`} asChild>
+    <Link href={`/item/${id}`} push asChild>
       <Pressable
         onPressIn={() => (
           (opacity.value = 0.6),

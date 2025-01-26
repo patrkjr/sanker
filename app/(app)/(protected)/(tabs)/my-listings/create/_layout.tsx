@@ -10,7 +10,6 @@ export default function CreateFormLayout() {
         options={{
           title: 'Create',
           ...HeaderLargeStyle,
-          presentation: 'modal',
         }}
       />
       <Stack.Screen

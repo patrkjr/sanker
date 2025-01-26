@@ -1,6 +1,6 @@
 import Icon from '@/components/ui/Icon';
 import { useThemedColors } from '@/hooks/useThemedColors';
-import { Stack, Tabs, useNavigation } from 'expo-router';
+import { Tabs } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -29,11 +29,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="create"
+        name="my-listings"
         options={{
-          title: 'Create',
+          title: 'My listings',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} iconName={'CirclePlus'} />
+            <TabBarIcon focused={focused} iconName={'Newspaper'} />
           ),
           tabBarLabelStyle: styles.tabBarLabelStyle,
         }}

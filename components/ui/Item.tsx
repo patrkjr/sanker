@@ -1,25 +1,25 @@
-import React from 'react';
-import { Pressable, StyleSheet, useColorScheme } from 'react-native';
-import { View } from '../Themed';
-import { P, Label } from '../typography';
-import Colors from '@/constants/Colors';
+import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import * as Haptics from 'expo-haptics';
 import { Link } from 'expo-router';
 import { LinkComponent } from 'expo-router/build/link/Link';
-import Icon from './Icon';
+import React from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { timingConfig } from '@/constants/Animations';
-import { useThemedColors } from '@/hooks/useThemedColors';
-import * as Haptics from 'expo-haptics';
+import { View } from '../Themed';
+import { P } from '../typography';
+import Icon from './Icon';
 
 interface ItemProps {
   label: string;
   value?: string;
   href?: LinkComponent;
+  relativeToDirectory?: boolean;
   hasTrailingIcon?: boolean;
   leadingIconName?: string;
   trailingIconName?: string;
@@ -37,6 +37,7 @@ export default function Item({
   onPress,
   isLastItem = false,
   href,
+  relativeToDirectory = false,
   useHaptics = true,
   disabled = false,
   animate = true,
@@ -107,7 +108,7 @@ export default function Item({
 
   if (href) {
     return (
-      <Link href={href} asChild>
+      <Link href={href} relativeToDirectory={relativeToDirectory} asChild>
         {content}
       </Link>
     );

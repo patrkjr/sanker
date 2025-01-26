@@ -1,6 +1,6 @@
-import React from 'react';
-import { Stack } from 'expo-router';
 import { HeaderStyle } from '@/constants/HeaderStyle';
+import { Stack } from 'expo-router';
+import React from 'react';
 
 export default function ProtectedLayout() {
   return (
@@ -14,6 +14,16 @@ export default function ProtectedLayout() {
           headerBackTitle: 'Back',
           animation: 'default',
           ...HeaderStyle,
+        }}
+      />
+      <Stack.Screen
+        name="item/[id]"
+        options={{
+          title: 'Item',
+          headerTitle: 'Item',
+          headerBackTitle: 'Back',
+          animation: 'default',
+          presentation: 'modal',
         }}
       />
     </Stack>
