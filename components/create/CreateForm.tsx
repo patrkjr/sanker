@@ -27,6 +27,7 @@ import ControlledInputField from '../ui/ControlledInputField';
 import Item from '../ui/Item';
 import PageScrollView from '../ui/PageScrollView';
 import SelectableTag from '../ui/SelectableTag';
+import SmallButton from '../ui/SmallButton';
 import Switch from '../ui/Switch';
 import ImageUploadGallery from './ImageUploadGallery';
 
@@ -67,9 +68,9 @@ const CATEGORY_NAME = {
 export default function CreateForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { setForm, resetForm } = useItemFormStore();
+  const { setForm, resetForm, isEditing } = useItemFormStore();
   const selectedCategorySlug = useItemFormStore(
-    (state) => state.data.category_slug
+    (state) => state.formData.category_slug
   );
   const { userPreferences } = usePreferencesStore();
 
@@ -78,6 +79,7 @@ export default function CreateForm() {
     handleSubmit,
     reset,
     setValue,
+
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -131,7 +133,7 @@ export default function CreateForm() {
   };
 
   function handleResetForm() {
-    Alert.alert('Reset form?', 'Your changes will not be saved.', [
+    Alert.alert('Start over?', 'Your changes will not be saved.', [
       {
         text: 'Keep editing',
         style: 'cancel',
@@ -153,7 +155,18 @@ export default function CreateForm() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'android' ? 98 : 0}
     >
-      <Stack.Screen options={{ presentation: 'modal' }} />
+      <Stack.Screen
+        options={{
+          headerRight: () =>
+            isDirty ? (
+              <SmallButton
+                title="Start over"
+                variant="ghost"
+                onPress={handleResetForm}
+              />
+            ) : null,
+        }}
+      />
       <PageScrollView
         ref={scrollViewRef}
         layout={LinearTransition}
@@ -324,9 +337,6 @@ export default function CreateForm() {
           themed
           onPress={handleSubmit(onSubmit)}
         />
-        {isDirty && (
-          <Button ghost title="Reset form" onPress={handleResetForm} />
-        )}
       </PageScrollView>
     </KeyboardAvoidingView>
   );

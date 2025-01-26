@@ -1,16 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { supabase } from '@/config/supabase';
+import useItemFormStore from '@/stores/itemFormStore';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View } from '../Themed';
-import { P } from '../typography';
-import DefaultStyles from '@/constants/DefaultStyles';
+import { StyleSheet } from 'react-native';
+import Button from '../ui/Button';
 import Card from '../ui/Card';
 import Item from '../ui/Item';
-import { Link, Stack, useRouter } from 'expo-router';
-import SmallButton from '../ui/SmallButton';
-import Button from '../ui/Button';
-import useItemFormStore from '@/stores/itemFormStore';
-import { supabase } from '@/config/supabase';
-import SkeletonBox from '../ui/SkeletonBox';
 import LoadingShimmer from '../ui/LoadingShimmer';
 import PageScrollView from '../ui/PageScrollView';
 
@@ -29,7 +24,7 @@ interface Category {
 
 export default function PickCategory() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const { data, setForm } = useItemFormStore();
+  const { formData, setForm } = useItemFormStore();
   const router = useRouter();
 
   function handleDismiss() {
@@ -70,7 +65,7 @@ export default function PickCategory() {
           >
             <Item.Label>{category.name}</Item.Label>
             <Item.Value
-              hasTrailingIcon={data.category_slug === category.slug}
+              hasTrailingIcon={formData.category_slug === category.slug}
               trailingIconName="Check"
             >
               {/* Add any necessary children here */}
@@ -79,7 +74,7 @@ export default function PickCategory() {
         ))}
       </Card>
       <Button themed title="Done" onPress={handleDismiss} />
-      {data.category_slug && (
+      {formData.category_slug && (
         <Button
           title="Remove category"
           ghost

@@ -1,52 +1,61 @@
 import { create } from 'zustand';
 
 interface ItemFormState {
-  data: {
+  formData: {
     image_urls: string[];
-    price: string;
-    title: string;
-    condition: string;
-    description: string;
-    use_user_address: boolean;
-    show_exact_address: boolean;
+    price: string | null;
+    title: string | null;
+    condition: string | null;
+    description: string | null;
+    use_user_address: boolean | null;
+    show_exact_address: boolean | null;
     category_slug: string | null;
-    manufacturer: string;
-    model: string;
+    manufacturer: string | null;
+    model: string | null;
   };
-  setForm: (data: Partial<ItemFormState>) => void;
-  resetForm: () => void;
+  isEditing: boolean;
+  setForm: (formData: Partial<ItemFormState['formData']>) => void;
+  resetForm: (initialFormData?: Partial<ItemFormState['formData']>) => void;
+  setIsEditing: (isEditing: boolean) => void;
 }
 
 const useItemFormStore = create<ItemFormState>((set) => ({
-  data: {
+  formData: {
     image_urls: [],
-    price: '',
-    title: '',
-    condition: '',
-    description: '',
+    price: null,
+    title: null,
+    condition: null,
+    description: null,
     category_slug: null,
-    manufacturer: '',
-    model: '',
-    use_user_address: true,
-    show_exact_address: true,
+    manufacturer: null,
+    model: null,
+    use_user_address: null,
+    show_exact_address: null,
   },
-  setForm: (data) =>
-    set((state) => ({ ...state, data: { ...state.data, ...data } })),
-  resetForm: () =>
+  isEditing: false,
+  setForm: (formData) =>
+    set((state) => ({
+      ...state,
+      formData: { ...state.formData, ...formData },
+    })),
+  resetForm: (initialFormData = {}) =>
     set({
-      data: {
+      formData: {
         image_urls: [],
-        price: '',
-        title: '',
-        condition: '',
-        description: '',
-        use_user_address: true,
-        show_exact_address: true,
+        price: null,
+        title: null,
+        condition: null,
+        description: null,
+        use_user_address: null,
+        show_exact_address: null,
         category_slug: null,
-        manufacturer: '',
-        model: '',
+        manufacturer: null,
+        model: null,
+        ...initialFormData,
       },
+      isEditing: false,
     }),
+  setIsEditing: (isEditing) => set({ isEditing }),
 }));
 
 export default useItemFormStore;

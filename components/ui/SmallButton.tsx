@@ -1,18 +1,17 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
-import React, { forwardRef } from 'react';
-import { View } from '../Themed';
-import { useThemedColors } from '@/hooks/useThemedColors';
+import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
-import { P } from '../typography';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import React, { forwardRef } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { timingConfig } from '@/constants/Animations';
+import { P } from '../typography';
 
 interface SmallButtonProps {
-  variant?: 'themed' | 'default';
+  variant?: 'themed' | 'default' | 'ghost';
   title: string;
   disabled: boolean;
   onPress?: () => void;
@@ -31,6 +30,11 @@ const SmallButton = forwardRef<Pressable, SmallButtonProps>(
       default: {
         backgroundColor: colors.card,
         borderColor: colors.border,
+        color: colors.text,
+      },
+      ghost: {
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
         color: colors.text,
       },
     };

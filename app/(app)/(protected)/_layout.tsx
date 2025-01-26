@@ -20,9 +20,8 @@ export default function ProtectedLayout() {
         name="item/[id]"
         options={{
           title: 'Item',
-          headerTitle: 'Item',
           headerBackTitle: 'Back',
-          animation: 'default',
+          headerTitle: '',
           ...HeaderStyle,
         }}
       />
