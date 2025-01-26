@@ -2,7 +2,7 @@ import Spacings from '@/constants/Spacings';
 import useItemFormStore from '@/stores/itemFormStore';
 import usePreferencesStore from '@/stores/preferenceStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -153,6 +153,7 @@ export default function CreateForm() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'android' ? 98 : 0}
     >
+      <Stack.Screen options={{ presentation: 'modal' }} />
       <PageScrollView
         ref={scrollViewRef}
         layout={LinearTransition}

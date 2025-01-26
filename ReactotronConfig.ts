@@ -14,6 +14,7 @@ Reactotron.onCustomCommand({
   handler: () =>
     toast.success('Nice cock bro', {
       icon: '✅',
+      duration: 5000,
       styles: {
         indicator: { backgroundColor: green[700] },
       },
