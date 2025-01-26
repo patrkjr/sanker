@@ -1,18 +1,17 @@
-import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
-import Card from '../ui/Card';
-import { H4, Large, P, Small } from '../typography';
-import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
-import { useThemedColors } from '@/hooks/useThemedColors';
-import { Link } from 'expo-router';
-import useItemStore from '@/stores/itemStore';
 import { usePreferredTheme } from '@/hooks/usePreferredTheme';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import useItemStore from '@/stores/itemStore';
+import { Link } from 'expo-router';
+import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
+import { View } from '../Themed';
+import { P, Small } from '../typography';
 
 const IMG_HEIGHT = 180;
 
 export default function FeaturedList({ items, onRefresh, refreshing }) {
   const colors = useThemedColors();
-  const { item, setItem } = useItemStore();
+  const { setItem } = useItemStore();
   const usePreferedTheme = usePreferredTheme();
 
   function handlePressItem(item) {
@@ -37,7 +36,7 @@ export default function FeaturedList({ items, onRefresh, refreshing }) {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         // remove "profile" when you're done
-        <Link href={`/(home)/item/${item.id}`} asChild>
+        <Link href={`/item/${item.id}`} push asChild>
           <Pressable style={styles.item} onPress={() => handlePressItem(item)}>
             <View style={[{ backgroundColor: colors.card }, styles.card]}>
               <Image style={{ height: IMG_HEIGHT }} src={item.image_urls[0]} />

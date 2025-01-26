@@ -44,7 +44,7 @@ export default function ProductItem({
   });
 
   return (
-    <Link href={`/item/${id}`} push asChild>
+    <Link href={`/item/${id}`} asChild>
       <Pressable
         onPressIn={() => (
           (opacity.value = 0.6),

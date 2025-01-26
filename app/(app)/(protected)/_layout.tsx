@@ -23,7 +23,7 @@ export default function ProtectedLayout() {
           headerTitle: 'Item',
           headerBackTitle: 'Back',
           animation: 'default',
-          presentation: 'modal',
+          ...HeaderStyle,
         }}
       />
     </Stack>
