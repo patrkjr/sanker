@@ -10,8 +10,8 @@ export default function MyListings() {
     <PageScrollView>
       <ListingsCountCard />
       <View>
-        <Link href="./create" relativeToDirectory={true}>
-          <Button title="New item" />
+        <Link href="./create" relativeToDirectory asChild>
+          <Button themed title="New item" />
         </Link>
       </View>
     </PageScrollView>
