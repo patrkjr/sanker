@@ -1,5 +1,6 @@
 import { CATEGORY_NAME } from '@/constants/CategoryNames';
 import Spacings from '@/constants/Spacings';
+import useCreateItem from '@/hooks/useCreateItem';
 import { useDefaultFormValues } from '@/hooks/useDefaultFormValues';
 import useItemFormStore from '@/stores/itemFormStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -56,6 +57,8 @@ export default function CreateForm() {
   });
 
   const [activeField, setActiveField] = useState<string | null>(null);
+  //const { showWidget, setError, hideWidget } = useProgressWidgetStore();
+  const { createItem } = useCreateItem();
 
   const currentFormData = watch();
 
@@ -76,11 +79,17 @@ export default function CreateForm() {
     }
   }, [currentFormData, isDirty, setForm, setIsDraft]);
 
+  // function testSubmit() {
+  //   router.dismiss();
+  //   simulateProgressUpdate();
+  // }
+
   const onSubmit = async (data) => {
     //router.push('/create/uploading-item');
-    setForm(data);
-    router.push('/create/uploading-item');
+    //setForm(data);
+    createItem(data);
     reset(defaultValues);
+    router.dismiss();
     scrollViewRef?.current?.scrollTo({ y: 0 });
   };
 
@@ -314,6 +323,7 @@ export default function CreateForm() {
           disabled={isLoading || isSubmitting}
           themed
           onPress={handleSubmit(onSubmit)}
+          //onPress={testSubmit}
         />
       </PageScrollView>
     </KeyboardAvoidingView>

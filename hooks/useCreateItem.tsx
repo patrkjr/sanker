@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react';
 import { supabase } from '@/config/supabase';
-import * as ImageManipulator from 'expo-image-manipulator';
-import { v4 as uuidv4 } from 'uuid';
 import { useSupabase } from '@/context/supabase-provider';
+import useItemFormStore from '@/stores/itemFormStore';
 import useItemStore from '@/stores/itemStore';
+import { useProgressWidgetStore } from '@/stores/progressWidgetStore';
 import { compressImage } from '@/utils/compressImage';
+import { useCallback, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const useCreateItem = () => {
   const { user } = useSupabase();
@@ -17,7 +18,8 @@ const useCreateItem = () => {
   });
 
   const [id, setId] = useState<null | string>(null);
-
+  const { showWidget, setError } = useProgressWidgetStore();
+  const { resetForm } = useItemFormStore();
   // const compressImage = useCallback(async (uri: string) => {
   //   try {
   //     const manipulatedImage = await ImageManipulator.manipulateAsync(
@@ -33,28 +35,25 @@ const useCreateItem = () => {
   //   }
   // }, []);
 
-  function setErrorStatus() {
-    setUploadStatus((prev) => ({ ...prev, error: error.message }));
-  }
-
   const uploadImages = useCallback(
     async (itemId: string, images: [{ uri: string }]) => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const uploadedUrls = [];
-      setUploadStatus((prev) => ({
-        ...prev,
-        isUploading: true,
-        message: 'Starting image upload...',
+      showWidget('Starting image upload...', {
+        isDismissible: false,
         progress: 10,
-        error: null,
-      }));
+      });
+      // setUploadStatus((prev) => ({
+      //   ...prev,
+      //   isUploading: true,
+      //   message: 'Starting image upload...',
+      //   progress: 10,
+      //   error: null,
+      // }));
       for (let i = 0; i < images.length; i++) {
         try {
           const image = images[i];
-          const compressedImage = await compressImage(
-            image.uri,
-            setErrorStatus
-          );
+          const compressedImage = await compressImage(image.uri);
           const fileName = `items/${itemId}/${Date.now()}.jpeg`;
           const { data, error } = await supabase.storage
             .from('images')
@@ -69,19 +68,25 @@ const useCreateItem = () => {
             uploadedUrls.push(publicUrl);
           } else {
             console.error('Image upload failed: ', error);
+            setError('Image upload failed');
             setUploadStatus((prev) => ({ ...prev, error: error.message }));
             throw error;
           }
 
           // Update progress
-          setUploadStatus((prev) => ({
-            ...prev,
-            message: `Uploading images...`,
+          showWidget('Uploading images...', {
+            isDismissible: false,
             progress: ((i + 1) / images.length) * 80,
-          }));
+          });
+          // setUploadStatus((prev) => ({
+          //   ...prev,
+          //   message: `Uploading images...`,
+          //   progress: ((i + 1) / images.length) * 80,
+          // }));
         } catch (error) {
           console.warn('Error during image upload: ', error);
-          setUploadStatus((prev) => ({ ...prev, error: error.message }));
+          setError('Image upload failed');
+          // setUploadStatus((prev) => ({ ...prev, error: error.message }));
           break;
         }
       }
@@ -92,13 +97,14 @@ const useCreateItem = () => {
 
   const createItem = useCallback(
     async (data) => {
-      setUploadStatus((prev) => ({
-        ...prev,
-        isUploading: true,
-        message: 'Starting creation...',
-        progress: 5,
-        error: null,
-      }));
+      showWidget('Starting creation...', { isDismissible: false, progress: 5 });
+      // setUploadStatus((prev) => ({
+      //   ...prev,
+      //   isUploading: true,
+      //   message: 'Starting creation...',
+      //   progress: 5,
+      //   error: null,
+      // }));
       //   // Upload the images
       try {
         //   // Generate a uuid
@@ -109,11 +115,12 @@ const useCreateItem = () => {
         const imageUrls = await uploadImages(itemId, data?.image_urls);
 
         //Insert the new item into database
-        setUploadStatus((prev) => ({
-          ...prev,
-          progress: 90,
-          message: 'Saving item...',
-        }));
+        showWidget('Saving item...', { isDismissible: false, progress: 90 });
+        // setUploadStatus((prev) => ({
+        //   ...prev,
+        //   progress: 90,
+        //   message: 'Saving item...',
+        // }));
 
         const newItem = {
           ...data,
@@ -132,19 +139,22 @@ const useCreateItem = () => {
 
         setItem(newItem);
 
-        setUploadStatus((prev) => ({
-          ...prev,
-          isUploading: false,
-          message: 'Done',
-          progress: 100,
-          error: null,
-        }));
+        showWidget('Done', { isDismissible: true, progress: 100 });
+        resetForm();
+        // setUploadStatus((prev) => ({
+        //   ...prev,
+        //   isUploading: false,
+        //   message: 'Done',
+        //   progress: 100,
+        //   error: null,
+        // }));
 
         // This is used to delay the succesfull navigation
         await new Promise((resolve) => setTimeout(resolve, 1500));
       } catch (error) {
         console.error('Error saving the item: ', error.message);
-        setUploadStatus((prev) => ({ ...prev, error: error.message }));
+        setError('Error saving the item');
+        // setUploadStatus((prev) => ({ ...prev, error: error.message }));
       }
     },
     [uploadImages]

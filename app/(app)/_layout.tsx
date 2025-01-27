@@ -1,3 +1,4 @@
+import ProgressWidget from '@/components/progress-widget/ProgressWidget';
 import { useColorScheme } from '@/components/useColorScheme';
 import { HeaderLargeStyle } from '@/constants/HeaderStyle';
 import { DarkTheme, DefaultTheme } from '@/constants/Themes';
@@ -70,6 +71,7 @@ function RootLayoutNav() {
           }}
         />
       </Stack>
+      <ProgressWidget />
     </ThemeProvider>
   );
 }
