@@ -2,6 +2,7 @@ import { toast } from '@backpackapp-io/react-native-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Reactotron from 'reactotron-react-native';
 import { green } from './constants/Colors';
+import itemFormStore from './stores/itemFormStore';
 //AsyncStorage.clear();
 
 Reactotron.setAsyncStorageHandler(AsyncStorage)
@@ -32,11 +33,11 @@ Reactotron.onCustomCommand({
   description: 'Send a error toast',
 });
 
-// Reactotron.onCustomCommand({
-//   title: 'Show navigation',
-//   command: 'Show navigation',
-//   handler: () => {
-//     console.log(useSegments());
-//   },
-//   description: 'Show navigation',
-// });
+Reactotron.onCustomCommand({
+  title: 'Form store state',
+  command: 'Log state',
+  handler: () => {
+    console.log(itemFormStore.getState());
+  },
+  description: 'Inspect the form store state',
+});

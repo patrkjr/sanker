@@ -65,47 +65,80 @@ const CATEGORY_NAME = {
   'kids-and-family': 'Kids & Family',
 };
 
+interface FormData {
+  image_urls: string[];
+  price: string | null;
+  title: string | null;
+  condition: string | null;
+  description: string | null;
+  use_user_address: boolean | null;
+  show_exact_address: boolean | null;
+  category_slug: string | null;
+  manufacturer: string | null;
+  model: string | null;
+}
+
 export default function CreateForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { setForm, resetForm, isEditing } = useItemFormStore();
+  const { setForm, resetForm, isDraft, formData, setIsDraft } =
+    useItemFormStore();
   const selectedCategorySlug = useItemFormStore(
     (state) => state.formData.category_slug
   );
   const { userPreferences } = usePreferencesStore();
 
+  const defaultValues = {
+    image_urls: [],
+    price: '',
+    title: '',
+    condition: '',
+    description: '',
+    category_slug: null,
+    use_user_address: userPreferences.location.use_user_address,
+    show_exact_address: userPreferences.location.show_exact_address,
+  };
+
   const {
     control,
     handleSubmit,
     reset,
+    watch,
     setValue,
-
     formState: { errors, isSubmitting, isDirty },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      image_urls: [],
-      price: '',
-      title: '',
-      condition: '',
-      description: '',
-      category_slug: null,
-      use_user_address: userPreferences.location.use_user_address,
-      show_exact_address: userPreferences.location.show_exact_address,
-    },
+    defaultValues,
   });
 
   const [activeField, setActiveField] = useState<string | null>(null);
 
+  const currentFormData = watch();
+
   useEffect(() => {
     setValue('category_slug', selectedCategorySlug, { shouldDirty: true });
-  }, [selectedCategorySlug, setValue]);
+  }, [selectedCategorySlug]);
+
+  useEffect(() => {
+    if (isDraft) {
+      reset(formData);
+      console.log('Setting from store:');
+    }
+  }, [formData, reset, isDraft]);
+
+  useEffect(() => {
+    if (isDirty) {
+      console.log('Form data changed:', currentFormData);
+      setForm(currentFormData);
+      setIsDraft(true);
+    }
+  }, [currentFormData, isDirty, setForm, setIsDraft]);
 
   const onSubmit = async (data) => {
     //router.push('/create/uploading-item');
     setForm(data);
     router.push('/create/uploading-item');
-    reset();
+    reset(defaultValues);
     scrollViewRef?.current?.scrollTo({ y: 0 });
   };
 
@@ -142,9 +175,11 @@ export default function CreateForm() {
       {
         text: 'Reset form',
         style: 'destructive',
-        onPress: () => (
-          reset(), resetForm(), scrollViewRef?.current?.scrollTo({ y: 0 })
-        ),
+        onPress: () => {
+          resetForm();
+          reset(defaultValues);
+          scrollViewRef?.current?.scrollTo({ y: 0 });
+        },
       },
     ]);
   }
@@ -157,14 +192,14 @@ export default function CreateForm() {
     >
       <Stack.Screen
         options={{
-          headerRight: () =>
-            isDirty ? (
-              <SmallButton
-                title="Start over"
-                variant="ghost"
-                onPress={handleResetForm}
-              />
-            ) : null,
+          headerRight: () => (
+            <SmallButton
+              title="Start over"
+              variant="ghost"
+              disabled={isDirty || !isDraft}
+              onPress={handleResetForm}
+            />
+          ),
         }}
       />
       <PageScrollView
@@ -288,7 +323,7 @@ export default function CreateForm() {
                 </Item.Value>
               </Item>
             )}
-          ></Controller>
+          />
 
           <Controller
             control={control}
@@ -302,7 +337,7 @@ export default function CreateForm() {
                 </Item.Value>
               </Item>
             )}
-          ></Controller>
+          />
         </Card>
 
         {/* Category field */}

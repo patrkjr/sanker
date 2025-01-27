@@ -17,7 +17,7 @@ interface SmallButtonProps {
   onPress?: () => void;
 }
 
-const SmallButton = forwardRef<Pressable, SmallButtonProps>(
+const SmallButton = forwardRef<typeof Pressable, SmallButtonProps>(
   ({ variant = 'default', title, onPress, disabled = false }, ref) => {
     const colors = useThemedColors();
 
@@ -39,9 +39,16 @@ const SmallButton = forwardRef<Pressable, SmallButtonProps>(
       },
     };
 
+    const disabledStyles = {
+      opacity: 0.5,
+    };
+
     function getButtonStyles() {
       const baseStyle = [{ ...styles.baseBorder, ...styles.baseContainer }];
       baseStyle.push(variantStyles[variant]);
+      if (disabled) {
+        baseStyle.push(disabledStyles);
+      }
       return baseStyle;
     }
 

@@ -13,10 +13,10 @@ interface ItemFormState {
     manufacturer: string | null;
     model: string | null;
   };
-  isEditing: boolean;
+  isDraft: boolean;
   setForm: (formData: Partial<ItemFormState['formData']>) => void;
   resetForm: (initialFormData?: Partial<ItemFormState['formData']>) => void;
-  setIsEditing: (isEditing: boolean) => void;
+  setIsDraft: (isDraft: boolean) => void;
 }
 
 const useItemFormStore = create<ItemFormState>((set) => ({
@@ -32,7 +32,7 @@ const useItemFormStore = create<ItemFormState>((set) => ({
     use_user_address: null,
     show_exact_address: null,
   },
-  isEditing: false,
+  isDraft: false,
   setForm: (formData) =>
     set((state) => ({
       ...state,
@@ -53,9 +53,9 @@ const useItemFormStore = create<ItemFormState>((set) => ({
         model: null,
         ...initialFormData,
       },
-      isEditing: false,
+      isDraft: false,
     }),
-  setIsEditing: (isEditing) => set({ isEditing }),
+  setIsDraft: (isDraft) => set({ isDraft }),
 }));
 
 export default useItemFormStore;
