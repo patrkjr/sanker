@@ -6,12 +6,9 @@ Sanker is a marketplace app designed for buying and selling secondhand outdoor g
 
 ## Demo
 
-<div style="display: flex; justify-content: space-between;">
-  <img src="./gifs/item.gif?raw=true" alt="A demo of viewing an item" width="20%" />
-  <img src="./gifs/create.gif?raw=true" alt="A demo of creating a new listing" width="20%" />
-  <img src="./gifs/messages.gif?raw=true" alt="A demo of messaging" width="20%" />
-  <img src="./gifs/darkmode.gif?raw=true" alt="A demo of dark mode" width="20%" />
-</div>
+<br/>
+[video](https://github.com/user-attachments/assets/fd74fc24-bfd7-4f6f-a1c0-57f5d66354de)
+<br/>
 
 ## Technologies Used
 
