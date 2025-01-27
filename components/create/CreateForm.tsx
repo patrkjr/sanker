@@ -1,6 +1,7 @@
+import { CATEGORY_NAME } from '@/constants/CategoryNames';
 import Spacings from '@/constants/Spacings';
+import { useDefaultFormValues } from '@/hooks/useDefaultFormValues';
 import useItemFormStore from '@/stores/itemFormStore';
-import usePreferencesStore from '@/stores/preferenceStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -9,7 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
+  type ScrollView,
   StyleSheet,
 } from 'react-native';
 import 'react-native-get-random-values';
@@ -18,7 +19,6 @@ import {
   useAnimatedKeyboard,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import * as z from 'zod';
 import { View } from '../Themed';
 import { Label, Small } from '../typography';
 import Button from '../ui/Button';
@@ -30,53 +30,7 @@ import SelectableTag from '../ui/SelectableTag';
 import SmallButton from '../ui/SmallButton';
 import Switch from '../ui/Switch';
 import ImageUploadGallery from './ImageUploadGallery';
-
-const formSchema = z.object({
-  price: z
-    .string({
-      required_error: 'Price is required.',
-      invalid_type_error: 'Price must be a whole number.',
-    })
-    .regex(/^\d+$/, 'Must be a number'),
-  title: z
-    .string()
-    .min(2, 'Give your item a title that is at lease 3 characters long.'),
-  condition: z.enum(['new', 'used', 'worn'], {
-    errorMap: (issue, ctx) => ({ message: 'Please describe the condition.' }),
-  }),
-  description: z.string(),
-  use_user_address: z.boolean(),
-  show_exact_address: z.boolean(),
-  image_urls: z
-    .array(
-      z.object({
-        uri: z.string().url(),
-      })
-    )
-    .min(1, 'You need at least 1 image'),
-});
-
-// This basically serves a temporary translation file.
-const CATEGORY_NAME = {
-  gear: 'Gear',
-  clothing: 'Clothing',
-  'food-and-cooking': 'Food & Cooking',
-  'navigation-and-safety': 'Navigation & Safety',
-  'kids-and-family': 'Kids & Family',
-};
-
-interface FormData {
-  image_urls: string[];
-  price: string | null;
-  title: string | null;
-  condition: string | null;
-  description: string | null;
-  use_user_address: boolean | null;
-  show_exact_address: boolean | null;
-  category_slug: string | null;
-  manufacturer: string | null;
-  model: string | null;
-}
+import { createFormSchema } from './createFormSchema';
 
 export default function CreateForm() {
   const router = useRouter();
@@ -86,18 +40,8 @@ export default function CreateForm() {
   const selectedCategorySlug = useItemFormStore(
     (state) => state.formData.category_slug
   );
-  const { userPreferences } = usePreferencesStore();
 
-  const defaultValues = {
-    image_urls: [],
-    price: '',
-    title: '',
-    condition: '',
-    description: '',
-    category_slug: null,
-    use_user_address: userPreferences.location.use_user_address,
-    show_exact_address: userPreferences.location.show_exact_address,
-  };
+  const defaultValues = useDefaultFormValues();
 
   const {
     control,
@@ -106,8 +50,8 @@ export default function CreateForm() {
     watch,
     setValue,
     formState: { errors, isSubmitting, isDirty },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  } = useForm({
+    resolver: zodResolver(createFormSchema),
     defaultValues,
   });
 
@@ -122,13 +66,11 @@ export default function CreateForm() {
   useEffect(() => {
     if (isDraft) {
       reset(formData);
-      console.log('Setting from store:');
     }
   }, [formData, reset, isDraft]);
 
   useEffect(() => {
     if (isDirty) {
-      console.log('Form data changed:', currentFormData);
       setForm(currentFormData);
       setIsDraft(true);
     }
@@ -178,7 +120,8 @@ export default function CreateForm() {
         onPress: () => {
           resetForm();
           reset(defaultValues);
-          scrollViewRef?.current?.scrollTo({ y: 0 });
+          //Disable scroll for now:
+          //scrollViewRef?.current?.scrollTo({ y: 0 });
         },
       },
     ]);

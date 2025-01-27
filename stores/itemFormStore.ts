@@ -1,18 +1,8 @@
+import type { FormData } from '@/components/create/types/formTypes';
 import { create } from 'zustand';
 
 interface ItemFormState {
-  formData: {
-    image_urls: string[];
-    price: string | null;
-    title: string | null;
-    condition: string | null;
-    description: string | null;
-    use_user_address: boolean | null;
-    show_exact_address: boolean | null;
-    category_slug: string | null;
-    manufacturer: string | null;
-    model: string | null;
-  };
+  formData: FormData;
   isDraft: boolean;
   setForm: (formData: Partial<ItemFormState['formData']>) => void;
   resetForm: (initialFormData?: Partial<ItemFormState['formData']>) => void;
