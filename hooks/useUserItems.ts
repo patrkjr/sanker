@@ -13,7 +13,7 @@ export function useUserItems() {
     try {
       const { data, count, error, status } = await supabase
         .from('items')
-        .select('*', { count: 'exact', head: true })
+        .select('*', { count: 'exact' })
         .eq('owner_id', userProfile?.id)
         .order('created_at', { ascending: false });
 

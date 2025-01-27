@@ -1,16 +1,12 @@
 import { View } from '@/components/Themed';
-import { H3, P } from '@/components/typography';
-import { supabase } from '@/config/supabase';
-import Spacings from '@/constants/Spacings';
-import useUserProfileStore from '@/stores/useUserProfileStore';
-import { useCallback } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
-import ProductItem from '../item/ProductItem';
+import { P } from '@/components/typography';
 import { useUserItems } from '@/hooks/useUserItems';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { useFocusEffect } from 'expo-router';
-import DefaultStyles from '@/constants/DefaultStyles';
+import React, { useCallback } from 'react';
+import { ActivityIndicator } from 'react-native';
+import ProductItem from '../item/ProductItem';
 import PageScrollView from '../ui/PageScrollView';
-import React from 'react';
 
 export default function UserListings() {
   const userProfile = useUserProfileStore((state) => state.userProfile);
