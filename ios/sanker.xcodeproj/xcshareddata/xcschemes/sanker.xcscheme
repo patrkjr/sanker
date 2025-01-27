@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "sanker.app"
-               BlueprintName = "sanker"
-               ReferencedContainer = "container:sanker.xcodeproj">
+               BuildableName = "Sanker.app"
+               BlueprintName = "Sanker"
+               ReferencedContainer = "container:Sanker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "sankerTests.xctest"
-               BlueprintName = "sankerTests"
-               ReferencedContainer = "container:sanker.xcodeproj">
+               BuildableName = "SankerTests.xctest"
+               BlueprintName = "SankerTests"
+               ReferencedContainer = "container:Sanker.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "sanker.app"
-            BlueprintName = "sanker"
-            ReferencedContainer = "container:sanker.xcodeproj">
+            BuildableName = "Sanker.app"
+            BlueprintName = "Sanker"
+            ReferencedContainer = "container:Sanker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "sanker.app"
-            BlueprintName = "sanker"
-            ReferencedContainer = "container:sanker.xcodeproj">
+            BuildableName = "Sanker.app"
+            BlueprintName = "Sanker"
+            ReferencedContainer = "container:Sanker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -11,14 +11,6 @@ export default function ProfileLayout() {
         name="index"
         options={{ title: 'Profile', ...HeaderLargeStyle }}
       />
-      <Stack.Screen
-        name="item/[id]"
-        options={{
-          headerTitle: '',
-          title: 'Item for sale',
-          ...HeaderStyle,
-        }}
-      />
 
       <Stack.Screen
         name="edit-name"

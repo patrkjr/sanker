@@ -11,7 +11,10 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F7F7F7",
+      "dark": {
+        "backgroundColor": "#141414"
+      }
     },
     "ios": {
       "supportsTablet": true,
@@ -76,7 +79,8 @@
       },
       "eas": {
         "projectId": "9f5d3246-4260-4020-8498-70315caebd21"
-      }
+      },
+      "buildVersion": "0.5"
     }
   }
 }
