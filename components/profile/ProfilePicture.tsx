@@ -1,20 +1,10 @@
+import Spacings from '@/constants/Spacings';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import { Image } from 'expo-image';
+import { useState } from 'react';
+import { ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { View } from '../Themed';
 import { P } from '../typography';
-import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import Spacings from '@/constants/Spacings';
-import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
-import useUserStore from '@/stores/userStore';
-import { supabase } from '@/config/supabase';
-import { boolean, number } from 'zod';
-import { Image } from 'expo-image';
 
 // This component can be updated to only take needed props
 // Right now it takes a whole profile, but only uses names and image url
