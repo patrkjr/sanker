@@ -1,16 +1,15 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { View } from '../Themed';
-import { Alert, StyleSheet } from 'react-native';
-import { H3, P, Small } from '../typography';
 import { supabase } from '@/config/supabase';
-import useUserProfileStore from '@/stores/useUserProfileStore';
-import { useThemedColors } from '@/hooks/useThemedColors';
 import Spacings from '@/constants/Spacings';
+import { useSupabase } from '@/context/supabase-provider';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import useUserProfileStore from '@/stores/useUserProfileStore';
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import { View } from '../Themed';
+import { H3 } from '../typography';
 import SelectableTag from '../ui/SelectableTag';
 import SkeletonBox from '../ui/SkeletonBox';
 import ProfilePicture from './ProfilePicture';
-import { useSupabase } from '@/context/supabase-provider';
 
 interface ProfileCardTypes {
   profileId: string;
@@ -84,7 +83,7 @@ export default function ProfileCard({ profileId }: ProfileCardTypes) {
           }}
         />
         <View style={styles.contentContainer}>
-          <ProfilePicture avatarUrl={profile?.avatar_url} size={IMAGE_SIZE} />
+          <ProfilePicture size={IMAGE_SIZE} userId={profileId} />
           {/* Should probably improve the layout of this at some point */}
           {profile?.phone_verified && (
             <View

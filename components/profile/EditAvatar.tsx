@@ -1,25 +1,15 @@
-import React from 'react';
-import { useThemedColors } from '@/hooks/useThemedColors';
-import { View } from '../Themed';
-import { P } from '../typography';
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  Pressable,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import Spacings from '@/constants/Spacings';
-import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
-import useUserProfileStore from '@/stores/useUserProfileStore';
 import { supabase } from '@/config/supabase';
-import * as Haptics from 'expo-haptics';
-import Button from '../ui/Button';
+import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
-import ProfilePicture from './ProfilePicture';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { compressImage } from '@/utils/compressImage';
+import * as Haptics from 'expo-haptics';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import Button from '../ui/Button';
+import ProfilePicture from './ProfilePicture';
 
 // This component can be updated to only take needed props
 // Right now it takes a whole profile, but only uses names and image url
@@ -165,12 +155,7 @@ export default function EditAvatar({
 
   return (
     <>
-      <ProfilePicture
-        isLoading={isLoading}
-        profile={userProfile || {}}
-        avatarUrl={userProfile?.avatar_url || ''}
-        size={size}
-      />
+      <ProfilePicture userId={user?.id} size={size} />
       <Button
         size="sm"
         title="Edit profile picture"

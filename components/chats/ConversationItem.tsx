@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { View } from '../Themed';
-import { H4, P } from '../typography';
 import { supabase } from '@/config/supabase';
-import LoadingShimmer from '../ui/LoadingShimmer';
-import ProfilePicture from '../profile/ProfilePicture';
 import Spacings from '@/constants/Spacings';
-import SelectableTag from '../ui/SelectableTag';
 import { Link, useFocusEffect } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { View } from '../Themed';
+import ProfilePicture from '../profile/ProfilePicture';
+import { H4 } from '../typography';
+import LoadingShimmer from '../ui/LoadingShimmer';
+import SelectableTag from '../ui/SelectableTag';
 
 const MINUTES = 1000 * 60;
 
@@ -64,7 +64,7 @@ export default function ConversationItem({
   return (
     <Link href={href} relativeToDirectory push>
       <View style={styles.container}>
-        <ProfilePicture avatarUrl={user.avatar_url} />
+        <ProfilePicture userId={userId} />
         <View style={styles.middle}>
           <H4>
             {user.first_name} {user.last_name}
