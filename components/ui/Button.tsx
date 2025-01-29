@@ -1,16 +1,12 @@
-import React, { forwardRef } from 'react';
-import { Pressable, useColorScheme, ViewStyle } from 'react-native';
-import { Large, P, Small } from '../typography';
-import Colors from '@/constants/Colors';
-import Spacings from '@/constants/Spacings';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { timingConfig } from '@/constants/Animations';
 import FontScale from '@/constants/FontScale';
+import Spacings from '@/constants/Spacings';
+import { useButtonAnimation } from '@/hooks/useButtonAnimation';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import React, { forwardRef } from 'react';
+import type { View, ViewStyle } from 'react-native';
+import { Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Large } from '../typography';
 
 interface ButtonProps {
   title: string;
@@ -20,10 +16,12 @@ interface ButtonProps {
   ghost?: boolean;
   themed?: boolean;
   onPress?: () => void;
-  [key: string]: any; // Allow other props for Pressable
+  style?: ViewStyle;
+  onPressIn?: () => void;
+  onPressOut?: () => void;
 }
 
-const Button = forwardRef<typeof Pressable, ButtonProps>(
+const Button = forwardRef<View, ButtonProps>(
   (
     {
       title,
@@ -41,16 +39,11 @@ const Button = forwardRef<typeof Pressable, ButtonProps>(
     ref
   ) => {
     const colors = useThemedColors();
-
-    const opacity = useSharedValue(1);
-    const scale = useSharedValue(1);
-
-    const animatedButtonStyle = useAnimatedStyle(() => {
-      return {
-        opacity: opacity.value,
-        transform: [{ scale: scale.value }],
-      };
-    });
+    const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation(
+      {
+        disabled,
+      }
+    );
 
     const wrapperStyle = {
       width: '100%',
@@ -91,22 +84,6 @@ const Button = forwardRef<typeof Pressable, ButtonProps>(
       color: colors.textPlaceholder,
     };
 
-    function handlePressIn() {
-      if (disabled) {
-        return;
-      }
-      opacity.value = withTiming(0.8, timingConfig.md);
-      scale.value = withTiming(0.94, timingConfig.md);
-    }
-
-    function handlePressOut() {
-      if (disabled) {
-        return;
-      }
-      opacity.value = withTiming(1, timingConfig.md);
-      scale.value = withTiming(1, timingConfig.md);
-    }
-
     const descructiveStyle = {
       backgroundColor: colors.descructive.background,
       borderColor: colors.descructive.border,
@@ -117,16 +94,16 @@ const Button = forwardRef<typeof Pressable, ButtonProps>(
     };
 
     return (
-      <Animated.View style={animatedButtonStyle}>
+      <Animated.View style={animatedStyle}>
         <Pressable
           ref={ref}
           onPressIn={() => {
             handlePressIn();
-            onPressIn && onPressIn();
+            onPressIn?.();
           }}
           onPressOut={() => {
             handlePressOut();
-            onPressOut && onPressOut();
+            onPressOut?.();
           }}
           style={[
             wrapperStyle,

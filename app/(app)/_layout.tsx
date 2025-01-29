@@ -51,6 +51,15 @@ function RootLayoutNav() {
       >
         <Stack.Screen name="(protected)" options={{ headerShown: false }} />
         <Stack.Screen
+          name="fullscreen"
+          options={{
+            presentation: 'transparentModal',
+            animation: 'fade',
+            headerShown: false,
+            contentStyle: { backgroundColor: 'rgba(0,0,0,0.89)' },
+          }}
+        />
+        <Stack.Screen
           name="welcome"
           options={{ title: 'Welcome', headerShown: false }}
         />
