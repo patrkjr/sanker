@@ -5,10 +5,13 @@ import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { View } from '../Themed';
-import { P } from '../typography';
+import { Large } from '../typography';
 
-// This component can be updated to only take needed props
-// Right now it takes a whole profile, but only uses names and image url
+interface UserData {
+  avatar_url: string | null;
+  first_name: string | null;
+  last_name: string | null;
+}
 
 interface ProfilePictureProps {
   size: number;
@@ -20,32 +23,41 @@ export default function ProfilePicture({
   userId,
 }: ProfilePictureProps) {
   const colors = useThemedColors();
-  const [fetchedAvatarUrl, setFetchedAvatarUrl] = useState<string | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     if (userId) {
-      fetchAvatarUrl();
+      fetchUserData();
     }
   }, [userId]);
 
-  async function fetchAvatarUrl() {
+  async function fetchUserData() {
     try {
       setIsFetching(true);
       const { data, error } = await supabase
         .from('users')
-        .select('avatar_url')
+        .select('avatar_url, first_name, last_name')
         .eq('id', userId)
         .single();
 
       if (error) throw error;
-      setFetchedAvatarUrl(data?.avatar_url || null);
+      setUserData(data);
     } catch (error) {
-      console.error('Error fetching avatar:', error);
-      setFetchedAvatarUrl(null);
+      console.error('Error fetching user data:', error);
+      setUserData(null);
     } finally {
       setIsFetching(false);
     }
+  }
+
+  function getInitials(): string {
+    if (!userData?.first_name && !userData?.last_name) return '';
+
+    const firstInitial = userData.first_name?.[0] || '';
+    const lastInitial = userData.last_name?.[0] || '';
+
+    return (firstInitial + lastInitial).toUpperCase();
   }
 
   return (
@@ -69,16 +81,16 @@ export default function ProfilePicture({
             />
           </View>
         )}
-        {fetchedAvatarUrl ? (
+        {userData?.avatar_url ? (
           <Image
             style={{ width: size, height: size }}
             accessibilityLabel="Avatar"
-            source={fetchedAvatarUrl}
+            source={userData.avatar_url}
           />
         ) : (
-          <P bold style={{ textAlign: 'center' }}>
-            🥾
-          </P>
+          <Large bold style={{ textAlign: 'center' }}>
+            {getInitials() || '🥾'}
+          </Large>
         )}
       </View>
     </>
