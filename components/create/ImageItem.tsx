@@ -1,23 +1,16 @@
+import { timingConfig } from '@/constants/Animations';
+import Spacings from '@/constants/Spacings';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import { Image } from 'expo-image';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Gesture, Pressable } from 'react-native-gesture-handler';
 import Animated, {
-  FadeOutLeft,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import React from 'react';
-import { useThemedColors } from '@/hooks/useThemedColors';
-import { StyleSheet } from 'react-native';
-import {
-  Pressable,
-  Gesture,
-  GestureDetector,
-} from 'react-native-gesture-handler';
-import Spacings from '@/constants/Spacings';
-import { Text, View } from '../Themed';
-import { Image } from 'expo-image';
-import Icon from '../ui/Icon';
-import { timingConfig } from '@/constants/Animations';
 
 export default function ImageItem({
   item,
@@ -89,48 +82,45 @@ export default function ImageItem({
     };
   });
 
-  // Note that shouldAnimate does not work at this time
-  // Animation will still happen on the last item
+  //Disabled gesture by removing the GestureDetector component
   return (
-    <GestureDetector gesture={panGesture}>
-      <Animated.View
-        exiting={shouldAnimate ? FadeOutLeft : undefined}
-        style={[
-          {
-            width: size,
-            height: size,
-            backgroundColor: colors.cardDisabled,
-            borderRadius: Spacings.borderRadius.md,
-            overflow: 'hidden',
-          },
-          animatedStyle,
-        ]}
+    <Animated.View
+      style={[
+        {
+          width: size,
+          height: size,
+          backgroundColor: colors.cardDisabled,
+          borderRadius: Spacings.borderRadius.md,
+          overflow: 'hidden',
+        },
+        animatedStyle,
+      ]}
+    >
+      <Pressable
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          right: Spacings.sm,
+          top: Spacings.sm,
+        }}
+        onPress={() => onRemoveImage(index)}
       >
-        <Pressable
+        {/* Disabled trash icon */}
+        {/* <View
           style={{
-            position: 'absolute',
-            zIndex: 1,
-            right: Spacings.sm,
-            top: Spacings.sm,
+            backgroundColor: 'transparent',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.8,
+            shadowRadius: 3.84,
+            elevation: 5,
           }}
-          onPress={() => onRemoveImage(index)}
         >
-          <View
-            style={{
-              backgroundColor: 'transparent',
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.8,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}
-          >
-            <Icon name="Trash2" color={'#ffffff'} />
-          </View>
-        </Pressable>
-        <Image style={styles.image} source={item.uri} />
-      </Animated.View>
-    </GestureDetector>
+          <Icon name="Trash2" color={'#ffffff'} />
+        </View> */}
+      </Pressable>
+      <Image style={styles.image} source={item.uri} />
+    </Animated.View>
   );
 }
 

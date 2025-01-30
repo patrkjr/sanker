@@ -1,14 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Spacings from '@/constants/Spacings';
-import AddImage from './ImagePicker';
-import * as ImagePicker from 'expo-image-picker';
-import Animated, {
-  LinearTransition,
-  useSharedValue,
-} from 'react-native-reanimated';
-import ImageItem from './ImageItem';
-import AddMoreCard from './AddMoreCard';
 import * as Haptics from 'expo-haptics';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react';
+import Animated from 'react-native-reanimated';
+import AddMoreCard from './AddMoreCard';
+import ImageItem from './ImageItem';
+import AddImage from './ImagePicker';
 
 interface ImageUploadGalleryProps {
   images: [ImageAsset];
@@ -126,7 +123,6 @@ export default function ImageUploadGallery({
       horizontal
       showsHorizontalScrollIndicator={false}
       // LinearTransition is making a ugly animation when dragging to reorder. Fix in the future.
-      itemLayoutAnimation={LinearTransition}
       data={images}
       style={{ overflow: 'visible' }}
       contentContainerStyle={{
