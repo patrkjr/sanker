@@ -54,9 +54,9 @@ function RootLayoutNav() {
           name="fullscreen"
           options={{
             presentation: 'transparentModal',
-            animation: 'fade',
+            animation: 'none',
             headerShown: false,
-            contentStyle: { backgroundColor: 'rgba(0,0,0,0.89)' },
+            contentStyle: { backgroundColor: 'transparent' },
           }}
         />
         <Stack.Screen

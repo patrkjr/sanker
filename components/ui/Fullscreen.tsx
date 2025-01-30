@@ -2,7 +2,7 @@ import IconButton from '@/components/ui/IconButton';
 import Spacings from '@/constants/Spacings';
 import { useFullscreenViewStore } from '@/stores/useFullscreenViewStore';
 import { Image } from 'expo-image';
-import { Stack, router } from 'expo-router';
+import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
@@ -98,14 +98,6 @@ export default function FullscreenView() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <Stack.Screen
-        options={{
-          presentation: 'transparentModal',
-          animation: 'fade',
-          headerShown: false,
-          contentStyle: { backgroundColor: 'transparent' },
-        }}
-      />
       <Animated.View style={[styles.background, backgroundAnimatedStyle]} />
       <View style={styles.container}>
         <Animated.View
