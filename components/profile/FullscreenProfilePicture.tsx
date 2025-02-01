@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const DISMISS_THRESHOLD = 150;
 
-export default function FullscreenView() {
+export default function FullscreenProfilePicture() {
   const { imageUri, hide } = useFullscreenViewStore();
   const insets = useSafeAreaInsets();
   const { height: SCREEN_HEIGHT } = useWindowDimensions();

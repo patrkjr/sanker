@@ -155,7 +155,7 @@ export default function EditAvatar({
 
   return (
     <>
-      <ProfilePicture userId={user?.id} size={size} />
+      <ProfilePicture userId={user?.id} size={size} pressable={false} />
       <Button
         size="sm"
         title="Edit profile picture"

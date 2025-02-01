@@ -82,7 +82,7 @@ export default function ProfilePicture({
 
     if (userData?.avatar_url) {
       show(userData.avatar_url);
-      router.push('/fullscreen');
+      router.push('/fullscreen-profile-picture');
     }
     onPress?.();
   };

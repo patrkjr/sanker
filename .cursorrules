@@ -28,6 +28,8 @@ UI and Styling
 - Use components from the `components` directory for UI elements.
 - Implement responsive design with a mobile-first approach.
 - Ensure styling consistency between web and native applications.
+- Use react-native-gesture-handler for gesture handling.
+- Use react-native-reanimated for animations.
 
 State Management and Data Fetching
 

@@ -42,16 +42,10 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={preferredTheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: true,
-          title: 'Sign up',
-          gestureEnabled: false,
-        }}
-      >
+      <Stack>
         <Stack.Screen name="(protected)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="fullscreen"
+          name="fullscreen-profile-picture"
           options={{
             presentation: 'transparentModal',
             animation: 'none',
@@ -77,6 +71,14 @@ function RootLayoutNav() {
             gestureEnabled: true,
             title: 'Log in',
             ...HeaderLargeStyle,
+          }}
+        />
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            title: 'Onboarding',
+            presentation: 'modal',
+            headerShown: false,
           }}
         />
       </Stack>

@@ -1,10 +1,10 @@
-import { Alert, StyleSheet } from 'react-native';
-import Spacings from '@/constants/Spacings';
-import { useEffect, useState } from 'react';
 import { supabase } from '@/config/supabase';
-import FeaturedList from './home/FeaturedList';
-import * as Haptics from 'expo-haptics';
+import Spacings from '@/constants/Spacings';
 import usePreferencesStore from '@/stores/preferenceStore';
+import * as Haptics from 'expo-haptics';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import FeaturedList from './home/FeaturedList';
 
 export default function Home() {
   const { userPreferences } = usePreferencesStore();
@@ -22,7 +22,11 @@ export default function Home() {
     try {
       setIsLoading(true);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      const { data, error, status } = await supabase.from('items').select('*');
+      const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
 
       if (error) {
         throw error;
