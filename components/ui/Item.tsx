@@ -1,16 +1,13 @@
-import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
+import { useListItemAnimation } from '@/hooks/useListItemAnimation';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import * as Haptics from 'expo-haptics';
 import { Link } from 'expo-router';
-import { LinkComponent } from 'expo-router/build/link/Link';
+import type { LinkComponent } from 'expo-router/build/link/Link';
 import React from 'react';
+import type { ViewStyle } from 'react-native';
 import { Pressable, StyleSheet } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { View } from '../Themed';
 import { P } from '../typography';
 import Icon from './Icon';
@@ -48,19 +45,16 @@ export default function Item({
 }: ItemProps) {
   const colors = useThemedColors();
 
-  const scale = useSharedValue(1);
-  const opacity = useSharedValue(1);
-  const translateX = useSharedValue(0);
-
-  const animatedItemStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { scale: withTiming(scale.value, timingConfig.md) },
-        { translateX: withTiming(translateX.value, timingConfig.md) },
-      ],
-      opacity: disabled ? 0.5 : withTiming(opacity.value, timingConfig.md),
-    };
-  });
+  const { animatedStyle, handlePressIn, handlePressOut } = useListItemAnimation(
+    {
+      disabled,
+      animate,
+    }
+  ) as {
+    animatedStyle: ViewStyle;
+    handlePressIn: () => void;
+    handlePressOut: () => void;
+  };
 
   function handleOnPress() {
     if (useHaptics) {
@@ -71,14 +65,8 @@ export default function Item({
 
   const content = (
     <Pressable
-      onPressIn={() => (
-        (opacity.value = 0.6),
-        animate && ((translateX.value = 12), (scale.value = 1.03))
-      )}
-      onPressOut={() => (
-        (opacity.value = 1),
-        animate && ((translateX.value = 0), (scale.value = 1))
-      )}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       disabled={disabled || skeleton}
       onPress={onPress && handleOnPress}
     >
@@ -91,7 +79,7 @@ export default function Item({
           },
           isLastItem && { borderBottomWidth: 0 },
           styles.container,
-          animatedItemStyle,
+          animatedStyle,
         ]}
       >
         {!skeleton ? (

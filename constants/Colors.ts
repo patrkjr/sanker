@@ -137,7 +137,7 @@ const red: ColorShades = {
   1100: '#5a0707', // Almost black with the faintest red tint
 };
 
-export { grey, green, blue, red, yellow };
+export { blue, green, grey, red, yellow };
 
 const Colors: ThemeObject = {
   light: {
@@ -182,7 +182,7 @@ const Colors: ThemeObject = {
   },
   dark: {
     text: grey[300],
-    textSecondary: grey[600],
+    textSecondary: grey[500],
     textPlaceholder: grey[700],
     textError: red[400],
     textActive: green[700],

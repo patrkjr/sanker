@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
+import NotificationPreferences from '../profile/user-preferences/NotificationPreferences';
 import { H3, P } from '../typography';
 import { Footer } from './Footer';
 import Header from './Header';
@@ -17,11 +18,14 @@ export default function Notifications() {
         }}
       />
       <View style={styles.content}>
-        <H3>Get notified</H3>
-        <P>
-          Turn on notifications to make sure you see, when someone is interested
-          in your listing.
-        </P>
+        <View style={{ paddingHorizontal: Spacings.md, gap: Spacings.sm }}>
+          <H3>Get notified</H3>
+          <P>
+            Turn on notifications to make sure you see, when someone is
+            interested in your listing.
+          </P>
+        </View>
+        <NotificationPreferences />
       </View>
       <Footer href="./location" />
     </View>

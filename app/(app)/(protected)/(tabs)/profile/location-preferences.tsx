@@ -1,3 +1,3 @@
-import LocationPreferences from '@/components/profile/LocationPreferences';
+import LocationScreen from '@/components/profile/LocationScreen';
 
-export default LocationPreferences;
+export default LocationScreen;

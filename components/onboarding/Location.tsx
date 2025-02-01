@@ -23,7 +23,7 @@ export default function Location() {
           listings. You can change them for each listing you create.
         </P>
       </View>
-      <Footer href="./theme" />
+      <Footer href="./done" />
     </View>
   );
 }

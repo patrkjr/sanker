@@ -1,7 +1,7 @@
-import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createJSONStorage, persist } from 'zustand/middleware';
 import Constants from 'expo-constants';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 // Define the type for the user preferences state
 type UserPreferences = {
@@ -11,7 +11,10 @@ type UserPreferences = {
     show_exact_address: boolean;
   };
   hasSeenOnboarding: boolean;
+  hasCompletedOnboarding: boolean;
   notificationsEnabled: boolean;
+  lastSeenFeatureVersion: string | null;
+  updateFeatureVersion: (version: string) => void;
 };
 
 //console.log(Constants.expoConfig?.version);
@@ -28,6 +31,7 @@ const migrate = (persistedState: any) => {
       version: CURRENT_VERSION,
       userPreferences: {
         ...persistedState.userPreferences,
+        lastSeenFeatureVersion: null,
         hasSeenOnboarding: false,
         location: {
           use_user_address: true,
@@ -56,8 +60,17 @@ const usePreferencesStore = create<UserPreferencesState>()(
           show_exact_address: true,
         },
         hasSeenOnboarding: false,
+        hasCompletedOnboarding: false,
         notificationsEnabled: false,
+        lastSeenFeatureVersion: null,
       },
+      updateFeatureVersion: (version: string) =>
+        set((state) => ({
+          userPreferences: {
+            ...state.userPreferences,
+            lastSeenFeatureVersion: version,
+          },
+        })),
       setPreferences: (newPreferences) =>
         set((state) => ({
           userPreferences: {
@@ -78,7 +91,9 @@ const usePreferencesStore = create<UserPreferencesState>()(
               show_exact_address: true,
             },
             hasSeenOnboarding: false,
+            hasCompletedOnboarding: false,
             notificationsEnabled: false,
+            lastSeenFeatureVersion: null,
           },
         }),
     }),

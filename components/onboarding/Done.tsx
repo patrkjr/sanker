@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
 import { H3, P } from '../typography';
 import Button from '../ui/Button';
+import Card from '../ui/Card';
 import Header from './Header';
 
 export default function Done() {
@@ -38,6 +39,11 @@ export default function Done() {
             onPress={handleDismiss}
           />
         </Link>
+        <Card>
+          <P secondary>
+            You can find additional settings under preferences in your profile.
+          </P>
+        </Card>
       </View>
     </View>
   );

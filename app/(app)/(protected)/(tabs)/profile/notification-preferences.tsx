@@ -1,3 +1,3 @@
-import NotificationPreferences from '@/components/profile/NotificationPreferences';
+import NotificationsScreen from '@/components/profile/NotificationsScreen';
 
-export default NotificationPreferences;
+export default NotificationsScreen;
