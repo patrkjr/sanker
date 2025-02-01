@@ -24,7 +24,7 @@ export default function Home() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       const { data, error } = await supabase
         .from('items')
-        .select('*')
+        .select('id, image_urls, title, price, created_at')
         .order('created_at', { ascending: false })
         .limit(10);
 

@@ -21,6 +21,7 @@ export default function FeaturedList({ items, onRefresh, refreshing }) {
   return (
     <FlatList
       contentInsetAdjustmentBehavior="automatic"
+      data={items}
       numColumns={2}
       onRefresh={onRefresh}
       refreshing={refreshing}
@@ -32,7 +33,6 @@ export default function FeaturedList({ items, onRefresh, refreshing }) {
       }}
       style={{ height: '100%' }}
       contentContainerStyle={styles.items}
-      data={items}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         // remove "profile" when you're done
