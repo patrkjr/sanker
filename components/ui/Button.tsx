@@ -1,20 +1,23 @@
+import { timingConfig } from '@/constants/Animations';
 import FontScale from '@/constants/FontScale';
 import Spacings from '@/constants/Spacings';
-import { useButtonAnimation } from '@/hooks/useButtonAnimation';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import React, { forwardRef } from 'react';
 import type { View, ViewStyle } from 'react-native';
-import { Pressable } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { Large } from '../typography';
+import { Pressable, StyleSheet } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { Large, P } from '../typography';
 
 interface ButtonProps {
   title: string;
   disabled?: boolean;
-  size: 'sm' | 'md';
-  variant?: 'default' | 'themed' | 'descructive';
+  size?: 'sm' | 'md';
+  variant?: 'default' | 'themed' | 'destructive';
   ghost?: boolean;
-  themed?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
   onPressIn?: () => void;
@@ -25,112 +28,149 @@ const Button = forwardRef<View, ButtonProps>(
   (
     {
       title,
-      themed = false,
-      ghost = false,
       variant = 'default',
+      ghost = false,
       disabled = false,
       style,
       size = 'md',
       onPress,
       onPressOut,
       onPressIn,
-      ...otherProps
     },
     ref
   ) => {
     const colors = useThemedColors();
-    const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation(
-      {
-        disabled,
+    const opacity = useSharedValue(1);
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        opacity: opacity.value,
+        transform: [{ scale: scale.value }],
+      };
+    });
+
+    function handlePressIn() {
+      if (onPress) {
+        opacity.value = withTiming(0.8, timingConfig.md);
+        scale.value = withTiming(0.94, timingConfig.md);
       }
-    );
+      onPressIn?.();
+    }
 
-    const wrapperStyle = {
-      width: '100%',
-      backgroundColor: themed ? colors.themed.card : colors.card,
-      paddingVertical: Spacings.sm,
-      paddingHorizontal: Spacings.lg,
-      borderRadius: Spacings.borderRadius.round,
-      borderWidth: 1,
-      borderColor: themed ? colors.themed.border : colors.border,
+    function handlePressOut() {
+      if (onPress) {
+        opacity.value = withTiming(1, timingConfig.md);
+        scale.value = withTiming(1, timingConfig.md);
+      }
+      onPressOut?.();
+    }
+
+    const variantStyles = {
+      default: {
+        solid: {
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+          color: colors.text,
+        },
+        ghost: {
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          color: colors.text,
+        },
+      },
+      themed: {
+        solid: {
+          backgroundColor: colors.themed.card,
+          borderColor: colors.themed.border,
+          color: colors.themed.text,
+        },
+        ghost: {
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          color: colors.themed.text,
+        },
+      },
+      destructive: {
+        solid: {
+          backgroundColor: colors.descructive.background,
+          borderColor: colors.descructive.border,
+          color: colors.descructive.text,
+        },
+        ghost: {
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
+          color: colors.descructive.text,
+        },
+      },
     };
 
-    const textStyle = {
-      color: themed ? colors.themed.text : colors.text,
-      fontSize: size === 'sm' ? FontScale.md : FontScale.lg,
-      fontFamily: 'Nunito-ExtraBold',
-      textAlign: 'center',
+    const sizeStyles = {
+      sm: {
+        minWidth: 64,
+        paddingHorizontal: Spacings.md,
+        paddingVertical: Spacings.xs,
+      },
+      md: {
+        width: '100%' as const,
+        paddingHorizontal: Spacings.lg,
+        paddingVertical: ghost ? Spacings.xxs : Spacings.sm,
+      },
     };
 
-    const ghostStyle = {
-      backgroundColor: 'transparent',
+    const disabledStyle = {
+      backgroundColor: ghost ? 'transparent' : colors.cardDisabled,
       borderColor: 'transparent',
-      paddingVertical: Spacings.xxs,
-      paddingHorizontal: Spacings.xxs,
+      opacity: 0.5,
     };
 
-    const ghostText = {
-      color: colors.text,
-    };
-
-    const disabledStyle: ViewStyle = {
-      backgroundColor: colors.cardDisabled,
-      borderColor: 'transparent',
-      paddingVertical: Spacings.sm,
-      paddingHorizontal: Spacings.md,
-    };
-
-    const disabledText = {
-      color: colors.textPlaceholder,
-    };
-
-    const descructiveStyle = {
-      backgroundColor: colors.descructive.background,
-      borderColor: colors.descructive.border,
-    };
-
-    const descructiveTextStyle = {
-      color: colors.descructive.text,
-    };
+    const Text = size === 'sm' ? P : Large;
+    const currentVariantStyle =
+      variantStyles[variant][ghost ? 'ghost' : 'solid'];
 
     return (
       <Animated.View style={animatedStyle}>
         <Pressable
           ref={ref}
-          onPressIn={() => {
-            handlePressIn();
-            onPressIn?.();
-          }}
-          onPressOut={() => {
-            handlePressOut();
-            onPressOut?.();
-          }}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
           style={[
-            wrapperStyle,
-            ghost && ghostStyle,
-            variant === 'descructive' && descructiveStyle,
+            styles.base,
+            sizeStyles[size],
+            currentVariantStyle,
             disabled && disabledStyle,
             style,
           ]}
           disabled={disabled}
           onPress={onPress}
-          {...otherProps}
         >
-          <Large
+          <Text
             bold
             style={[
-              textStyle,
-              ghost && ghostText,
-              variant === 'descructive' && descructiveTextStyle,
-              disabled && disabledText,
+              {
+                color: currentVariantStyle.color,
+                fontSize: size === 'sm' ? FontScale.md : FontScale.lg,
+                fontFamily: 'Nunito-ExtraBold',
+                textAlign: 'center',
+              },
+              disabled && { color: colors.textPlaceholder },
             ]}
           >
             {title}
-          </Large>
+          </Text>
         </Pressable>
       </Animated.View>
     );
   }
 );
+
+const styles = StyleSheet.create({
+  base: {
+    borderWidth: 1,
+    borderRadius: Spacings.borderRadius.round,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default Button;

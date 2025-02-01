@@ -1,26 +1,24 @@
-import React, { useCallback } from 'react';
+import { supabase } from '@/config/supabase';
+import Spacings from '@/constants/Spacings';
+import { useSupabase } from '@/context/supabase-provider';
+import getConversationIdAsync from '@/utils/getConversationIdAsync';
 import {
   Link,
   useFocusEffect,
   useLocalSearchParams,
   useNavigation,
 } from 'expo-router';
-import { View } from '../Themed';
-import { H2, H4, Label, P, Small } from '../typography';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
-import { supabase } from '@/config/supabase';
-import Spacings from '@/constants/Spacings';
+import { View } from '../Themed';
 import ProfileCard from '../profile/ProfileCard';
-import SelectableTag from '../ui/SelectableTag';
+import { H2, H4, Label, P, Small } from '../typography';
 import Button from '../ui/Button';
-import ImageCarousel from '../ui/ImageCarousel';
-import { useSupabase } from '@/context/supabase-provider';
-import ItemScreenLoader from './ItemScreenLoader';
-import ItemNotFound from './ItemNotFound';
-import useItemStore from '@/stores/itemStore';
 import Card from '../ui/Card';
-import getConversationIdAsync from '@/utils/getConversationIdAsync';
+import ImageCarousel from '../ui/ImageCarousel';
+import SelectableTag from '../ui/SelectableTag';
+import ItemNotFound from './ItemNotFound';
+import ItemScreenLoader from './ItemScreenLoader';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -207,7 +205,7 @@ export default function ItemScreen() {
             >
               <Button
                 title="Message seller"
-                themed
+                variant="themed"
                 disabled={!conversationHref}
               />
             </Link>

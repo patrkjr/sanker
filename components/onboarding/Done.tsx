@@ -33,7 +33,7 @@ export default function Done() {
         <Link href="/" asChild>
           <Button
             title="Start using Sanker"
-            themed
+            variant="themed"
             size="md"
             onPress={handleDismiss}
           />

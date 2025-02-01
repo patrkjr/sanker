@@ -11,7 +11,7 @@ export default function MyListings() {
       <ListingsCountCard />
       <View>
         <Link href="./create" relativeToDirectory asChild>
-          <Button themed title="New item" />
+          <Button variant="themed" title="New item" />
         </Link>
       </View>
     </PageScrollView>

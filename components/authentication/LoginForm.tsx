@@ -1,17 +1,15 @@
-import React from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import * as z from 'zod';
-import Input from '../ui/Input';
-import Spacings from '@/constants/Spacings';
-import Button from '../ui/Button';
-import { useSupabase } from '@/context/supabase-provider';
-import { useState } from 'react';
-import { Alert } from 'react-native';
 import { supabase } from '@/config/supabase';
+import Spacings from '@/constants/Spacings';
+import { useSupabase } from '@/context/supabase-provider';
 import useUserProfileStore from '@/stores/useUserProfileStore';
-import ControlledInputField from '../ui/ControlledInputField';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as z from 'zod';
+import Button from '../ui/Button';
+import ControlledInputField from '../ui/ControlledInputField';
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email adress.'),
@@ -105,7 +103,7 @@ export default function LoginForm() {
 
       <Button
         title="Log in"
-        themed
+        variant="themed"
         disabled={isSubmitting}
         onPress={handleSubmit(onSubmit)}
       />

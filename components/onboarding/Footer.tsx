@@ -20,7 +20,7 @@ export function Footer({ href }: FooterProps) {
   return (
     <View style={styles.navigation}>
       <Link href={href} asChild>
-        <Button title="Continue" themed size="md" />
+        <Button title="Continue" variant="themed" size="md" />
       </Link>
       <View>
         <Button

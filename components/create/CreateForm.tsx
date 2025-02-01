@@ -28,7 +28,6 @@ import ControlledInputField from '../ui/ControlledInputField';
 import Item from '../ui/Item';
 import PageScrollView from '../ui/PageScrollView';
 import SelectableTag from '../ui/SelectableTag';
-import SmallButton from '../ui/SmallButton';
 import Switch from '../ui/Switch';
 import ImageUploadGallery from './ImageUploadGallery';
 import { createFormSchema } from './createFormSchema';
@@ -145,7 +144,7 @@ export default function CreateForm() {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <SmallButton
+            <Button
               title="Start over"
               variant="ghost"
               disabled={isDirty || !isDraft}
@@ -321,7 +320,7 @@ export default function CreateForm() {
         <Button
           title="Post item"
           disabled={isLoading || isSubmitting}
-          themed
+          variant="themed"
           onPress={handleSubmit(onSubmit)}
           //onPress={testSubmit}
         />

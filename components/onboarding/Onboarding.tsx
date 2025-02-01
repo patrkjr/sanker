@@ -31,7 +31,7 @@ export default function Onboarding() {
           best experience for you.
         </P>
         <Link href="/onboarding/profile-picture" asChild>
-          <Button title="Learn Sanker" themed size="md" />
+          <Button title="Learn Sanker" variant="themed" size="md" />
         </Link>
         <Link href="../" relativeToDirectory push asChild>
           <Button title="Lets get started" ghost />

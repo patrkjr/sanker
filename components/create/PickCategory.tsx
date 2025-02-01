@@ -12,7 +12,7 @@ import PageScrollView from '../ui/PageScrollView';
 // function headerRight() {
 //   return (
 //     <Link href={'../'} asChild>
-//       <SmallButton variant="themed" title="Done" />
+//       <Button variant="themed" title="Done" />
 //     </Link>
 //   );
 // }
@@ -73,7 +73,7 @@ export default function PickCategory() {
           </Item>
         ))}
       </Card>
-      <Button themed title="Done" onPress={handleDismiss} />
+      <Button variant="themed" title="Done" onPress={handleDismiss} />
       {formData.category_slug && (
         <Button
           title="Remove category"
