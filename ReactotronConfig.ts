@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Reactotron from 'reactotron-react-native';
 import { green } from './constants/Colors';
 import itemFormStore from './stores/itemFormStore';
+import useUserProfileStore from './stores/useUserProfileStore';
 //AsyncStorage.clear();
 
 Reactotron.setAsyncStorageHandler(AsyncStorage)
@@ -40,4 +41,13 @@ Reactotron.onCustomCommand({
     console.log(itemFormStore.getState());
   },
   description: 'Inspect the form store state',
+});
+
+Reactotron.onCustomCommand({
+  title: 'User profile store state',
+  command: 'Log state',
+  handler: () => {
+    console.log(useUserProfileStore.getState());
+  },
+  description: 'Inspect the user profile store state',
 });

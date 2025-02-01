@@ -4,8 +4,8 @@ import { useButtonAnimation } from '@/hooks/useButtonAnimation';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { useFullscreenViewStore } from '@/stores/useFullscreenViewStore';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -27,6 +27,7 @@ interface ProfilePictureProps {
   userId?: string;
   onPress?: () => void;
   pressable?: boolean;
+  isFetching?: boolean;
 }
 
 export default function ProfilePicture({
@@ -34,24 +35,19 @@ export default function ProfilePicture({
   userId,
   onPress,
   pressable = true,
+  isFetching = false,
 }: ProfilePictureProps) {
   const colors = useThemedColors();
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
   const { show } = useFullscreenViewStore();
   const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation({
     disabled: !pressable,
   });
 
-  useEffect(() => {
-    if (userId) {
-      fetchUserData();
-    }
-  }, [userId]);
+  const fetchUserData = useCallback(async () => {
+    if (!userId) return;
 
-  async function fetchUserData() {
     try {
-      setIsFetching(true);
       const { data, error } = await supabase
         .from('users')
         .select('avatar_url, first_name, last_name')
@@ -63,10 +59,14 @@ export default function ProfilePicture({
     } catch (error) {
       console.error('Error fetching user data:', error);
       setUserData(null);
-    } finally {
-      setIsFetching(false);
     }
-  }
+  }, [userId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [fetchUserData])
+  );
 
   function getInitials(): string {
     if (!userData?.first_name && !userData?.last_name) return '';
@@ -78,12 +78,10 @@ export default function ProfilePicture({
   }
 
   const handlePress = () => {
-    if (!pressable) return;
+    if (!pressable || !userData?.avatar_url) return;
 
-    if (userData?.avatar_url) {
-      show(userData.avatar_url);
-      router.push('/fullscreen-profile-picture');
-    }
+    show(userData.avatar_url);
+    router.push('/fullscreen-profile-picture');
     onPress?.();
   };
 
@@ -121,7 +119,7 @@ export default function ProfilePicture({
     </View>
   );
 
-  if (!pressable) {
+  if (!pressable || !userData?.avatar_url) {
     return content;
   }
 
@@ -143,7 +141,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 3,
+    borderWidth: Spacings.xxs,
     borderRadius: Spacings.borderRadius.round,
   },
   avatarLoading: {
