@@ -73,14 +73,6 @@ function RootLayoutNav() {
             ...HeaderLargeStyle,
           }}
         />
-        <Stack.Screen
-          name="onboarding"
-          options={{
-            title: 'Onboarding',
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        />
       </Stack>
       <ProgressWidget />
     </ThemeProvider>
