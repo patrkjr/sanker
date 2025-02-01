@@ -12,7 +12,7 @@ interface ButtonProps {
   title: string;
   disabled?: boolean;
   size: 'sm' | 'md';
-  variant: 'default' | 'themed' | 'descructive';
+  variant?: 'default' | 'themed' | 'descructive';
   ghost?: boolean;
   themed?: boolean;
   onPress?: () => void;

@@ -13,7 +13,7 @@ import { P } from '../typography';
 interface SmallButtonProps {
   variant?: 'themed' | 'default' | 'ghost';
   title: string;
-  disabled: boolean;
+  disabled?: boolean;
   onPress?: () => void;
 }
 

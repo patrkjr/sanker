@@ -26,6 +26,7 @@ interface ItemProps {
   animate?: boolean;
   disabled?: boolean;
   isLastItem?: boolean;
+  push?: boolean;
   skeleton?: boolean;
   onPress?: () => void;
   useHaptics: boolean;
@@ -43,6 +44,7 @@ export default function Item({
   animate = true,
   skeleton = false,
   children,
+  push = false,
 }: ItemProps) {
   const colors = useThemedColors();
 
@@ -108,7 +110,12 @@ export default function Item({
 
   if (href) {
     return (
-      <Link href={href} relativeToDirectory={relativeToDirectory} asChild>
+      <Link
+        href={href}
+        relativeToDirectory={relativeToDirectory}
+        push={push}
+        asChild
+      >
         {content}
       </Link>
     );
