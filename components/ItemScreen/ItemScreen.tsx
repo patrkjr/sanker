@@ -221,7 +221,7 @@ export default function ItemScreen() {
               </P>
             </Card>
             <Button
-              variant="descructive"
+              variant="destructive"
               title="Delete item"
               onPress={askForDeletion}
             />
