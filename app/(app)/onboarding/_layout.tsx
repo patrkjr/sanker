@@ -1,12 +1,23 @@
+import { useSupabase } from '@/context/supabase-provider';
 import { Stack } from 'expo-router';
 import React from 'react';
 
 export default function OnboardingLayout() {
+  const { user } = useSupabase();
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <Stack screenOptions={{ presentation: 'card' }}>
       <Stack.Screen
         name="index"
-        options={{ title: 'Onboarding', headerTitle: '' }}
+        options={{
+          title: 'Onboarding',
+          headerTitle: '',
+          presentation: 'modal',
+        }}
       />
       <Stack.Screen
         name="profile-picture"

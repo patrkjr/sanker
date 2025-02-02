@@ -1,9 +1,16 @@
 import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
+import { useSupabase } from '@/context/supabase-provider';
 import { Stack } from 'expo-router';
 import React from 'react';
 
 export default function ProfileLayout() {
   // const { title } = useLocalSearchParams();
+
+  const { user } = useSupabase();
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <Stack>

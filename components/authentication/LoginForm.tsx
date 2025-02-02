@@ -3,6 +3,7 @@ import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
 import useUserProfileStore from '@/stores/useUserProfileStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert } from 'react-native';
@@ -19,6 +20,7 @@ const formSchema = z.object({
 export default function LoginForm() {
   const { signInWithPassword } = useSupabase();
   const setUserProfile = useUserProfileStore((state) => state.setUserProfile);
+  const router = useRouter();
 
   const {
     control,
@@ -50,6 +52,8 @@ export default function LoginForm() {
       if (error && status !== 406) {
         throw error;
       }
+
+      router.replace('/');
 
       setUserProfile({ ...data });
     } catch (error) {

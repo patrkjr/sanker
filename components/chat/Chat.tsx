@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { supabase } from '@/config/supabase';
+import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
-import StickyInput from './StickyInput';
-import MessagesList from './MessagesList';
-import getConversationIdAsync from '@/utils/getConversationIdAsync';
 import { useConversationStore } from '@/stores/useConversationStore';
-import LoadingMessages from './LoadingMessages';
+import { Tabs, router, useLocalSearchParams, useNavigation } from 'expo-router';
+import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
 import { H3, P } from '../typography';
-import { StyleSheet } from 'react-native';
-import Spacings from '@/constants/Spacings';
+import LoadingMessages from './LoadingMessages';
+import MessagesList from './MessagesList';
+import StickyInput from './StickyInput';
 
 export default function Chat() {
   const { id, seller_id, buyer_id, item_id, back_title } =
@@ -26,6 +25,8 @@ export default function Chat() {
     subscribeToMessages,
   } = useConversationStore();
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     if (id && id !== 'new') {
       fetchConversation(id);
@@ -36,6 +37,21 @@ export default function Chat() {
       };
     }
   }, [id]);
+
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: 'none',
+      },
+    });
+    return () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: 'flex',
+        },
+      });
+    };
+  }, []);
 
   async function handleSendMessage(text) {
     if (text.trim() !== '' && !text.match(/^ +$/)) {
@@ -68,7 +84,11 @@ export default function Chat() {
   }
 
   const Header = () => {
-    return <Stack.Screen options={{ headerBackTitle: back_title }} />;
+    return (
+      <>
+        <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+      </>
+    );
   };
 
   if (isFetching) {

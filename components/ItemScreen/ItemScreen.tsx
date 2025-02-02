@@ -1,24 +1,26 @@
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
+import type { Item } from '@/types/itemTypes';
 import getConversationIdAsync from '@/utils/getConversationIdAsync';
 import {
-  Link,
   useFocusEffect,
   useLocalSearchParams,
   useNavigation,
 } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { View } from '../Themed';
 import ProfileCard from '../profile/ProfileCard';
-import { H2, H4, Label, P, Small } from '../typography';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import { H2, H4, Label, Mono, P } from '../typography';
 import ImageCarousel from '../ui/ImageCarousel';
+import PageScrollView from '../ui/PageScrollView';
 import SelectableTag from '../ui/SelectableTag';
+import BuyerOptions from './BuyerOptions';
+import EditOptions from './EditOptions';
 import ItemNotFound from './ItemNotFound';
 import ItemScreenLoader from './ItemScreenLoader';
+import NotAuthorized from './NotAuthorized';
 
 const conditionStrings = {
   used: 'Nice but used',
@@ -33,7 +35,7 @@ export default function ItemScreen() {
   const navigation = useNavigation();
   // TODO: Get item from itemStore, then set it in state to prevent showing the same item across multiple ItemScreens
   //const { item, setItem } = useItemStore();
-  const [item, setItem] = useState();
+  const [item, setItem] = useState<Item | null>(null);
   const [conversationHref, setConversationHref] = useState<boolean | string>(
     false
   );
@@ -66,6 +68,10 @@ export default function ItemScreen() {
 
       if (data) {
         setItem(data);
+        navigation.setOptions({ title: data.title });
+      }
+
+      if (user !== null) {
         if (data.owner_id !== user?.id) {
           const conversationId = await getConversationIdAsync({
             item_id: id,
@@ -78,12 +84,8 @@ export default function ItemScreen() {
             setConversationHref('new');
           }
         }
-        navigation.setOptions({ title: data.title });
-      } else {
-        setItem(null);
       }
     } catch (error) {
-      // setItem(null);
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -162,89 +164,67 @@ export default function ItemScreen() {
     }
   }
 
+  function availableActions() {
+    if (user === null) {
+      return <NotAuthorized />;
+    }
+
+    if (item.owner_id !== user?.id) {
+      return (
+        <BuyerOptions
+          conversationHref={conversationHref}
+          user={user}
+          item={item}
+          id={id}
+        />
+      );
+    }
+
+    return (
+      <>
+        <EditOptions onPressDelete={askForDeletion} />
+      </>
+    );
+  }
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View style={styles.pageContent}>
-        <ImageCarousel imageUrls={item?.image_urls} />
-
-        <View style={[styles.subHeader, styles.indent]}>
-          <H4 bold secondary>
-            {item.price} kr.
-          </H4>
-          <SelectableTag
-            showSelectable={false}
-            text={conditionStrings[item.condition]}
-          />
-        </View>
-        <View style={[{ gap: Spacings.xs }, styles.indent]}>
-          <H2>{item.title}</H2>
-        </View>
-        {item.description && (
-          <View style={styles.description}>
-            <Label indent={false}>Description</Label>
-            {item.description && <P>{item.description}</P>}
-          </View>
-        )}
-        <ProfileCard profileId={item.owner_id} />
-
-        {item.owner_id !== user.id ? (
-          <>
-            <Link
-              href={{
-                pathname: `/chat/[id]`,
-                params: {
-                  id: conversationHref,
-                  buyer_id: user?.id,
-                  seller_id: item.owner_id,
-                  item_id: id,
-                  back_title: 'Item',
-                },
-              }}
-              push
-              asChild
-            >
-              <Button
-                title="Message seller"
-                variant="themed"
-                disabled={!conversationHref}
-              />
-            </Link>
-            <Button title="Share" ghost disabled />
-          </>
-        ) : (
-          // If the current user is the owner:
-          <>
-            <Card variant="warning">
-              <P>
-                You can't edit an item yet. But you can delete it, and create a
-                new one. Sorry about that.
-              </P>
-            </Card>
-            <Button
-              variant="destructive"
-              title="Delete item"
-              onPress={askForDeletion}
-            />
-          </>
-        )}
-        <View style={styles.indent}>
-          <Small secondary>
-            Created{' '}
-            <Small secondary bold>
-              {getPrettyDate(item?.created_at)}
-            </Small>
-          </Small>
-        </View>
+    <PageScrollView>
+      <ImageCarousel imageUrls={item?.image_urls} />
+      <View style={styles.indent}>
+        <Mono secondary>
+          Created{' '}
+          <Mono secondary bold>
+            {getPrettyDate(item?.created_at)}
+          </Mono>
+        </Mono>
       </View>
-    </ScrollView>
+
+      <View style={[styles.subHeader, styles.indent]}>
+        <H4 bold secondary>
+          {item.price} kr.
+        </H4>
+        <SelectableTag
+          showSelectable={false}
+          text={conditionStrings[item.condition]}
+        />
+      </View>
+      <View style={[{ gap: Spacings.xs }, styles.indent]}>
+        <H2>{item.title}</H2>
+      </View>
+      {item.description && (
+        <View style={styles.description}>
+          <Label indent={false}>Description</Label>
+          {item.description && <P>{item.description}</P>}
+        </View>
+      )}
+      <ProfileCard profileId={item.owner_id} />
+
+      {availableActions()}
+    </PageScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  pageContent: {
-    padding: Spacings.md,
-    gap: Spacings.md,
-  },
   subHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

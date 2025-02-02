@@ -76,20 +76,23 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
       setUser(session ? session.user : null);
       fetchUserProfile();
     });
+    setTimeout(() => {
+      SplashScreen.hideAsync();
+    }, 500);
   }, []);
 
   useEffect(() => {
-    if (!initialized) return;
+    // if (!initialized) return;
 
-    const inProtectedGroup = segments.some(
-      (segment) => segment === '(protected)'
-    );
+    // const inProtectedGroup = segments.some(
+    //   (segment) => segment === '(protected)'
+    // );
 
-    if (session && !inProtectedGroup) {
-      router.replace('/(app)/(protected)/');
-    } else if (!session && inProtectedGroup) {
-      router.replace('/(app)/welcome');
-    }
+    // if (session && !inProtectedGroup) {
+    //   router.replace('/(app)/(protected)/');
+    // } else if (!session && inProtectedGroup) {
+    //   router.replace('/(app)/welcome');
+    // }
 
     setTimeout(() => {
       SplashScreen.hideAsync();

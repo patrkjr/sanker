@@ -1,6 +1,6 @@
 import ProgressWidget from '@/components/progress-widget/ProgressWidget';
 import { useColorScheme } from '@/components/useColorScheme';
-import { HeaderLargeStyle } from '@/constants/HeaderStyle';
+import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
 import { DarkTheme, DefaultTheme } from '@/constants/Themes';
 import usePreferencesStore from '@/stores/preferenceStore';
 import { ThemeProvider } from '@react-navigation/native';
@@ -16,11 +16,6 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(app)',
-};
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -43,7 +38,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={preferredTheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="welcome"
           options={{ title: 'Welcome', headerShown: false }}
@@ -62,6 +57,34 @@ function RootLayoutNav() {
             gestureEnabled: true,
             title: 'Log in',
             ...HeaderLargeStyle,
+          }}
+        />
+        <Stack.Screen
+          name="item/[id]"
+          options={{
+            title: 'Item',
+            headerTitle: '',
+            headerBackTitle: 'Back',
+            ...HeaderStyle,
+          }}
+        />
+
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            title: 'Onboarding',
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="fullscreen-profile-picture"
+          options={{
+            presentation: 'transparentModal',
+            animation: 'none',
+            headerShown: false,
+            contentStyle: { backgroundColor: 'transparent' },
           }}
         />
       </Stack>

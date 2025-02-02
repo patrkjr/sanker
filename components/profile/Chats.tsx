@@ -1,15 +1,14 @@
-import { StyleSheet } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { View } from '../Themed';
-import { H3, P } from '../typography';
-import { useSupabase } from '@/context/supabase-provider';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import DefaultStyles from '@/constants/DefaultStyles';
 import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
-import Card from '../ui/Card';
-import ConversationItem from '../chats/ConversationItem';
+import { useSupabase } from '@/context/supabase-provider';
 import { useFocusEffect } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { View } from '../Themed';
+import ConversationItem from '../chats/ConversationItem';
+import { H3, P } from '../typography';
+import Card from '../ui/Card';
 import PageScrollView from '../ui/PageScrollView';
 
 export default function Chats() {
@@ -66,7 +65,7 @@ export default function Chats() {
         renderItem={({ item }) => (
           <ConversationItem
             href={{
-              pathname: '/chat/[id]',
+              pathname: '/chats/[id]',
               params: {
                 id: item.id,
                 seller_id: item.seller_id,

@@ -1,6 +1,6 @@
 import DefaultStyles from '@/constants/DefaultStyles';
 import Spacings from '@/constants/Spacings';
-import { Link, Stack, useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
@@ -29,14 +29,12 @@ export default function Done() {
         <P style={{ textAlign: 'center' }}>
           That's all there is to it. You're all set to start using Sanker.
         </P>
-        <Link href="/" asChild>
-          <Button
-            title="Start using Sanker"
-            variant="themed"
-            size="md"
-            onPress={handleDismiss}
-          />
-        </Link>
+        <Button
+          title="Start using Sanker"
+          variant="themed"
+          size="md"
+          onPress={handleDismiss}
+        />
         <View
           style={{
             flex: 1,

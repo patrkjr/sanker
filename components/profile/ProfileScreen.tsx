@@ -2,7 +2,7 @@ import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
 import usePreferencesStore from '@/stores/preferenceStore';
 import useUserProfileStore from '@/stores/useUserProfileStore';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { View } from '../Themed';
@@ -27,6 +27,7 @@ export default function ProfileScreen() {
     (state) => state.clearUserProfile
   );
   const { userPreferences, resetPreferences } = usePreferencesStore();
+  const router = useRouter();
 
   // Check for user
   if (!user) {
@@ -62,6 +63,7 @@ export default function ProfileScreen() {
     signOut();
     clearUserProfile();
     resetPreferences();
+    router.replace('/');
   }
 
   return (

@@ -146,7 +146,8 @@ export default function CreateForm() {
           headerRight: () => (
             <Button
               title="Start over"
-              variant="ghost"
+              size="sm"
+              ghost
               disabled={isDirty || !isDraft}
               onPress={handleResetForm}
             />
