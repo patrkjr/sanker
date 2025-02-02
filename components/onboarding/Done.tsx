@@ -27,9 +27,7 @@ export default function Done() {
       <View style={styles.content}>
         <H3>All done!</H3>
         <P style={{ textAlign: 'center' }}>
-          Welcome to Sanker. We're excited to help you on your journey. Lets get
-          started by setting up your profile and preferences to create the best
-          experience for you.
+          That's all there is to it. You're all set to start using Sanker.
         </P>
         <Link href="/" asChild>
           <Button
@@ -39,11 +37,23 @@ export default function Done() {
             onPress={handleDismiss}
           />
         </Link>
-        <Card>
-          <P secondary>
-            You can find additional settings under preferences in your profile.
-          </P>
-        </Card>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-end',
+            paddingBottom: Spacings.lg,
+          }}
+        >
+          <Card>
+            <P style={{ textAlign: 'center' }} secondary>
+              You can find additional settings under{' '}
+              <P bold secondary>
+                preferences
+              </P>{' '}
+              in your profile.
+            </P>
+          </Card>
+        </View>
       </View>
     </View>
   );
@@ -56,8 +66,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: Spacings.xxl * -1,
-    justifyContent: 'center',
+    marginTop: Spacings.xl,
     alignItems: 'center',
     gap: Spacings.lg,
   },

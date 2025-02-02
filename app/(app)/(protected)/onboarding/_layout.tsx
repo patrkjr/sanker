@@ -6,7 +6,7 @@ export default function OnboardingLayout() {
     <Stack screenOptions={{ presentation: 'card' }}>
       <Stack.Screen
         name="index"
-        options={{ title: 'Onboarding', headerShown: false }}
+        options={{ title: 'Onboarding', headerTitle: '' }}
       />
       <Stack.Screen
         name="profile-picture"

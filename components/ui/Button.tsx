@@ -121,7 +121,7 @@ const Button = forwardRef<View, ButtonProps>(
     const disabledStyle = {
       backgroundColor: ghost ? 'transparent' : colors.cardDisabled,
       borderColor: 'transparent',
-      opacity: 0.5,
+      opacity: 0.7,
     };
 
     const Text = size === 'sm' ? P : Large;
@@ -143,6 +143,7 @@ const Button = forwardRef<View, ButtonProps>(
           ]}
           disabled={disabled}
           onPress={onPress}
+          hitSlop={ghost ? Spacings.sm : undefined}
         >
           <Text
             bold
