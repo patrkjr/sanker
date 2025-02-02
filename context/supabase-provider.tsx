@@ -79,11 +79,13 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const inProtectedGroup = segments[0] === '(protected)';
+    const isProtectedRoute = segments.some(
+      (segment) => segment === '(protected)'
+    );
 
-    if (session && !inProtectedGroup) {
+    if (session && !isProtectedRoute) {
       router.dismissTo('/(app)/(protected)/');
-    } else if (!session) {
+    } else if (!session && isProtectedRoute) {
       router.replace('/(app)/welcome');
     }
 
