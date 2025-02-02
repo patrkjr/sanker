@@ -79,22 +79,20 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const isProtectedRoute = segments.some(
-      (segment) => segment === '(protected)'
-    );
+    if (!initialized) return;
 
-    if (session && isProtectedRoute) {
-      // Allow access to protected routes
-    } else if (!session && isProtectedRoute) {
+    const inProtectedGroup = segments[1] === '(protected)';
+
+    if (session && !inProtectedGroup) {
+      router.replace('/(app)/(protected)/');
+    } else if (!session) {
       router.replace('/(app)/welcome');
-    } else if (session && !isProtectedRoute) {
-      // Allow access to non-protected routes
     }
 
     setTimeout(() => {
       SplashScreen.hideAsync();
     }, 500);
-  }, [session, segments, router]);
+  }, [initialized, session, segments, router]);
 
   return (
     <SupabaseContext.Provider

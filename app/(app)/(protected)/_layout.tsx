@@ -33,6 +33,15 @@ export default function ProtectedLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="fullscreen-profile-picture"
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+          headerShown: false,
+          contentStyle: { backgroundColor: 'transparent' },
+        }}
+      />
     </Stack>
   );
 }
