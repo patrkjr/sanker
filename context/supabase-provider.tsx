@@ -83,10 +83,12 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
       (segment) => segment === '(protected)'
     );
 
-    if (session && !isProtectedRoute) {
-      router.dismissTo('/(app)/(protected)/');
+    if (session && isProtectedRoute) {
+      // Allow access to protected routes
     } else if (!session && isProtectedRoute) {
       router.replace('/(app)/welcome');
+    } else if (session && !isProtectedRoute) {
+      // Allow access to non-protected routes
     }
 
     setTimeout(() => {
