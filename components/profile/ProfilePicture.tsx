@@ -3,9 +3,10 @@ import Spacings from '@/constants/Spacings';
 import { useButtonAnimation } from '@/hooks/useButtonAnimation';
 import { useThemedColors } from '@/hooks/useThemedColors';
 import { useFullscreenViewStore } from '@/stores/useFullscreenViewStore';
+import useUserProfileStore from '@/stores/useUserProfileStore';
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -27,7 +28,7 @@ interface ProfilePictureProps {
   userId?: string;
   onPress?: () => void;
   pressable?: boolean;
-  isFetching?: boolean;
+  isLoading?: boolean;
 }
 
 export default function ProfilePicture({
@@ -35,7 +36,7 @@ export default function ProfilePicture({
   userId,
   onPress,
   pressable = true,
-  isFetching = false,
+  isLoading = false,
 }: ProfilePictureProps) {
   const colors = useThemedColors();
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -43,9 +44,20 @@ export default function ProfilePicture({
   const { animatedStyle, handlePressIn, handlePressOut } = useButtonAnimation({
     disabled: !pressable,
   });
+  const { userProfile } = useUserProfileStore();
+  const currentUserId = userProfile?.id;
 
   const fetchUserData = useCallback(async () => {
     if (!userId) return;
+
+    if (userId === currentUserId && userProfile?.avatar_url) {
+      setUserData({
+        avatar_url: userProfile.avatar_url,
+        first_name: userProfile.first_name ?? null,
+        last_name: userProfile.last_name ?? null,
+      });
+      return;
+    }
 
     try {
       const { data, error } = await supabase
@@ -60,13 +72,29 @@ export default function ProfilePicture({
       console.error('Error fetching user data:', error);
       setUserData(null);
     }
-  }, [userId]);
+  }, [userId, currentUserId, userProfile]);
 
   useFocusEffect(
     useCallback(() => {
       fetchUserData();
     }, [fetchUserData])
   );
+
+  useEffect(() => {
+    if (userId === currentUserId) {
+      setUserData({
+        avatar_url: userProfile?.avatar_url ?? null,
+        first_name: userProfile?.first_name ?? null,
+        last_name: userProfile?.last_name ?? null,
+      });
+    }
+  }, [
+    userProfile?.avatar_url,
+    userProfile?.first_name,
+    userProfile?.last_name,
+    userId,
+    currentUserId,
+  ]);
 
   function getInitials(): string {
     if (!userData?.first_name && !userData?.last_name) return '';
@@ -97,7 +125,7 @@ export default function ProfilePicture({
         styles.profilePicture,
       ]}
     >
-      {isFetching && (
+      {isLoading && (
         <View style={styles.avatarLoading}>
           <ActivityIndicator
             size={'small'}
