@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sanker",
     "slug": "sanker",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sanker",
@@ -74,13 +74,15 @@
       "typedRoutes": true
     },
     "extra": {
+      "preferenceStore": {
+        "version": 2
+      },
       "router": {
         "origin": false
       },
       "eas": {
         "projectId": "9f5d3246-4260-4020-8498-70315caebd21"
-      },
-      "buildVersion": "0.5"
+      }
     }
   }
 }

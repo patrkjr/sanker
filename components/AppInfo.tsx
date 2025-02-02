@@ -17,7 +17,7 @@ export default function AppInfo() {
       <View style={{ gap: Spacings.xxs, alignItems: 'center' }}>
         <H4 secondary>Sanker</H4>
         <Mono secondary>{version}</Mono>
-        <Mono secondary>Build version 0.8</Mono>
+        <Mono secondary>Build version 0.9</Mono>
       </View>
       <P bold secondary>
         Hechu studio

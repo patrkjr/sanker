@@ -18,17 +18,18 @@ type UserPreferences = {
 };
 
 //console.log(Constants.expoConfig?.version);
-const CURRENT_VERSION = Constants.expoConfig?.version || 0;
+const CURRENT_VERSION =
+  Constants.expoConfig?.extra?.preferenceStore?.version || undefined;
 
 const migrate = (persistedState: any) => {
   if (
     persistedState.version < CURRENT_VERSION ||
-    persistedState.version === undefined
+    CURRENT_VERSION === undefined
   ) {
     // Example migration for adding version and location
     return {
       ...persistedState,
-      version: CURRENT_VERSION,
+      version: CURRENT_VERSION || 0,
       userPreferences: {
         ...persistedState.userPreferences,
         lastSeenFeatureVersion: null,
@@ -100,12 +101,12 @@ const usePreferencesStore = create<UserPreferencesState>()(
     {
       name: 'preferences-store',
       storage: createJSONStorage(() => AsyncStorage),
-      version: CURRENT_VERSION,
       migrate,
     }
   )
 );
 
 //AsyncStorage.getItem('preferences-store').then((data) => console.log(data));
+//AsyncStorage.clear();
 
 export default usePreferencesStore;
