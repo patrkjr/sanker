@@ -8,7 +8,6 @@ import Spacings from '@/constants/Spacings';
 import usePreferencesStore from '@/stores/preferenceStore';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function LocationPreferences() {
   const { userPreferences, setPreferences } = usePreferencesStore();
@@ -32,44 +31,37 @@ export default function LocationPreferences() {
   }
 
   return (
-    <ScrollView contentContainerStyle={pageContainer}>
-      <View style={styles.defaultsContainer}>
-        <Label>Defaults</Label>
-        <Card>
-          <Item
-            useHaptics={false}
-            animate={false}
-            onPress={updateUseUserAddress}
-          >
-            <Item.Label>Use my address as location</Item.Label>
-            <Item.Value hasTrailingIcon={false}>
-              <Switch
-                selected={use_user_address}
-                onPress={updateUseUserAddress}
-              />
-            </Item.Value>
-          </Item>
-          <Item
-            useHaptics={false}
-            animate={false}
-            onPress={updateShowExactAddress}
-            isLastItem
-          >
-            <Item.Label>Show exact address</Item.Label>
-            <Item.Value hasTrailingIcon={false}>
-              <Switch
-                selected={show_exact_address}
-                onPress={updateShowExactAddress}
-              />
-            </Item.Value>
-          </Item>
-        </Card>
-        <Small style={{ paddingHorizontal: Spacings.md }} secondary>
-          These settings will be applied as default when you create new
-          listings.
-        </Small>
-      </View>
-    </ScrollView>
+    <View style={styles.defaultsContainer}>
+      <Label>Defaults</Label>
+      <Card>
+        <Item useHaptics={false} animate={false} onPress={updateUseUserAddress}>
+          <Item.Label>Use my address as location</Item.Label>
+          <Item.Value hasTrailingIcon={false}>
+            <Switch
+              selected={use_user_address}
+              onPress={updateUseUserAddress}
+            />
+          </Item.Value>
+        </Item>
+        <Item
+          useHaptics={false}
+          animate={false}
+          onPress={updateShowExactAddress}
+          isLastItem
+        >
+          <Item.Label>Show exact address</Item.Label>
+          <Item.Value hasTrailingIcon={false}>
+            <Switch
+              selected={show_exact_address}
+              onPress={updateShowExactAddress}
+            />
+          </Item.Value>
+        </Item>
+      </Card>
+      <Small style={{ paddingHorizontal: Spacings.md }} secondary>
+        These settings will be applied as default when you create new listings.
+      </Small>
+    </View>
   );
 }
 

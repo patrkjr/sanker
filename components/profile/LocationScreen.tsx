@@ -1,13 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import PageScrollView from '../ui/PageScrollView';
 import LocationPreferences from './user-preferences/LocationPreferences';
 
 export default function LocationScreen() {
   return (
-    <View>
+    <PageScrollView>
       <LocationPreferences />
-    </View>
+    </PageScrollView>
   );
 }
-
-const styles = StyleSheet.create({});
