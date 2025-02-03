@@ -2,7 +2,12 @@ import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
 import { useConversationStore } from '@/stores/useConversationStore';
-import { Tabs, router, useLocalSearchParams, useNavigation } from 'expo-router';
+import {
+  Stack,
+  router,
+  useLocalSearchParams,
+  useNavigation,
+} from 'expo-router';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
@@ -12,8 +17,7 @@ import MessagesList from './MessagesList';
 import StickyInput from './StickyInput';
 
 export default function Chat() {
-  const { id, seller_id, buyer_id, item_id, back_title } =
-    useLocalSearchParams();
+  const { id, seller_id, buyer_id, item_id } = useLocalSearchParams();
   const { user } = useSupabase();
   const {
     fetchConversation,
@@ -37,21 +41,6 @@ export default function Chat() {
       };
     }
   }, [id]);
-
-  useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: 'none',
-      },
-    });
-    return () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: {
-          display: 'flex',
-        },
-      });
-    };
-  }, []);
 
   async function handleSendMessage(text) {
     if (text.trim() !== '' && !text.match(/^ +$/)) {
@@ -86,7 +75,7 @@ export default function Chat() {
   const Header = () => {
     return (
       <>
-        <Tabs.Screen options={{ tabBarStyle: { display: 'none' } }} />
+        <Stack.Screen options={{ headerBackTitle: 'Messages' }} />
       </>
     );
   };

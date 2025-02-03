@@ -1,4 +1,4 @@
-import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
+import { HeaderLargeStyle } from '@/constants/HeaderStyle';
 import { Stack } from 'expo-router';
 import React from 'react';
 
@@ -7,9 +7,11 @@ export default function ChatLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: 'Messages', ...HeaderLargeStyle }}
+        options={{
+          title: 'Messages',
+          ...HeaderLargeStyle,
+        }}
       />
-      <Stack.Screen name="[id]" options={{ title: 'Chat', ...HeaderStyle }} />
     </Stack>
   );
 }

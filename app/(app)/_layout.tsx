@@ -1,10 +1,10 @@
 import ProgressWidget from '@/components/progress-widget/ProgressWidget';
 import { useColorScheme } from '@/components/useColorScheme';
-import { HeaderLargeStyle, HeaderStyle } from '@/constants/HeaderStyle';
+import { HeaderStyle } from '@/constants/HeaderStyle';
 import { DarkTheme, DefaultTheme } from '@/constants/Themes';
 import usePreferencesStore from '@/stores/preferenceStore';
 import { ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import 'react-native-reanimated';
 import {
@@ -16,6 +16,10 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
+
+export const unstable_settings = {
+  initialRouteName: '(app)/(tabs)/(home)',
+};
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -29,6 +33,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const { userPreferences } = usePreferencesStore();
+  const router = useRouter();
   // const [preferredTheme, setPrefferedTheme] = useState<string>('light');
   let preferredTheme: 'light' | 'dark' | 'system' = userPreferences.theme;
   if (userPreferences.theme === 'system') {
@@ -40,24 +45,8 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="welcome"
-          options={{ title: 'Welcome', headerShown: false }}
-        />
-        <Stack.Screen
-          name="signup"
-          options={{
-            gestureEnabled: true,
-            title: 'Sign up',
-            ...HeaderLargeStyle,
-          }}
-        />
-        <Stack.Screen
-          name="login"
-          options={{
-            gestureEnabled: true,
-            title: 'Log in',
-            ...HeaderLargeStyle,
-          }}
+          name="auth"
+          options={{ headerShown: false, presentation: 'modal' }}
         />
         <Stack.Screen
           name="item/[id]"
@@ -65,6 +54,15 @@ function RootLayoutNav() {
             title: 'Item',
             headerTitle: '',
             headerBackTitle: 'Back',
+            ...HeaderStyle,
+          }}
+        />
+
+        <Stack.Screen
+          name="chats/[id]"
+          options={{
+            title: 'Chat',
+            headerBackTitle: 'Messages',
             ...HeaderStyle,
           }}
         />

@@ -5,9 +5,18 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+export const unstable_settings = {
+  initialRouteName: '/',
+};
+
 export default function TabLayout() {
   const colors = useThemedColors();
   const { user } = useSupabase();
+
+  const tabBarStyle = {
+    backgroundColor: colors.card,
+    borderColor: colors.border,
+  };
 
   const TabBarIcon = ({ focused, iconName }) => {
     return (
@@ -20,7 +29,12 @@ export default function TabLayout() {
 
   if (!user) {
     return (
-      <Tabs screenOptions={{ headerShown: false }}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: tabBarStyle,
+        }}
+      >
         <Tabs.Screen
           name="(home)"
           options={{
@@ -80,7 +94,7 @@ export default function TabLayout() {
   }
 
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs screenOptions={{ headerShown: false, tabBarStyle: tabBarStyle }}>
       <Tabs.Screen
         name="(home)"
         options={{

@@ -10,7 +10,7 @@ export default function Settings() {
       <P style={{ textAlign: 'center' }} secondary>
         Sanker is much better with an account.
       </P>
-      <Link href="/signup" asChild>
+      <Link href="/auth" asChild>
         <Button title="Join Sanker" variant="themed" onPress={() => {}} />
       </Link>
     </PageScrollView>

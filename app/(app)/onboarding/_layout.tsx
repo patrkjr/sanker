@@ -2,6 +2,10 @@ import { useSupabase } from '@/context/supabase-provider';
 import { Stack } from 'expo-router';
 import React from 'react';
 
+export const unstable_settings = {
+  initialRouteName: 'onboarding',
+};
+
 export default function OnboardingLayout() {
   const { user } = useSupabase();
 

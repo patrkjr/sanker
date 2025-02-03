@@ -1,8 +1,19 @@
 import { HeaderLargeStyle } from '@/constants/HeaderStyle';
-import { Stack } from 'expo-router';
+import { useSupabase } from '@/context/supabase-provider';
+import { Redirect, Stack } from 'expo-router';
 import React from 'react';
 
+export const unstable_settings = {
+  initialRouteName: 'my-listings',
+};
+
 export default function ListingsLayout() {
+  const { user } = useSupabase();
+
+  if (!user) {
+    return <Redirect href="/auth" push />;
+  }
+
   return (
     <Stack>
       <Stack.Screen

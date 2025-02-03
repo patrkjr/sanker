@@ -1,10 +1,10 @@
+import Spacings from '@/constants/Spacings';
 import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from '../Themed';
 import { H2 } from '../typography';
 import Button from '../ui/Button';
-import Spacings from '@/constants/Spacings';
 import Card from '../ui/Card';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Welcome() {
   return (
@@ -19,8 +19,11 @@ export default function Welcome() {
       >
         <Card style={{ alignItems: 'center', gap: Spacings.md }}>
           <H2>Welcome to Sanker</H2>
-          <Link href={'/signup'} asChild>
+          <Link href={'/auth/signup'} asChild>
             <Button title="Sign up to Sanker" />
+          </Link>
+          <Link href={'/'} replace asChild>
+            <Button title="Use wihtout account" />
           </Link>
         </Card>
       </View>

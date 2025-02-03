@@ -3,8 +3,14 @@ import { useSupabase } from '@/context/supabase-provider';
 import { Stack } from 'expo-router';
 import React from 'react';
 
+export const unstable_settings = {
+  initialRouteName: 'profile',
+};
+
 export default function ProfileLayout() {
   // const { title } = useLocalSearchParams();
+
+  const BACK_BUTTON_TITLE = 'Profile';
 
   const { user } = useSupabase();
 
@@ -32,6 +38,7 @@ export default function ProfileLayout() {
         name="edit-profile"
         options={{
           title: 'Edit profile',
+          headerBackTitle: BACK_BUTTON_TITLE,
           ...HeaderLargeStyle,
         }}
       />
@@ -40,6 +47,7 @@ export default function ProfileLayout() {
         name="notification-preferences"
         options={{
           title: 'Notifications',
+          headerBackTitle: BACK_BUTTON_TITLE,
           ...HeaderStyle,
         }}
       />
@@ -47,6 +55,7 @@ export default function ProfileLayout() {
       <Stack.Screen
         name="location-preferences"
         options={{
+          headerBackTitle: BACK_BUTTON_TITLE,
           title: 'Location',
           ...HeaderStyle,
         }}
@@ -56,6 +65,7 @@ export default function ProfileLayout() {
         name="theme-preferences"
         options={{
           title: 'Theme',
+          headerBackTitle: BACK_BUTTON_TITLE,
           ...HeaderStyle,
         }}
       />
@@ -64,6 +74,7 @@ export default function ProfileLayout() {
         name="about"
         options={{
           title: 'About Sanker',
+          headerBackTitle: BACK_BUTTON_TITLE,
           ...HeaderStyle,
         }}
       />

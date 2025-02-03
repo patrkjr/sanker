@@ -1,5 +1,5 @@
-import Colors from './Colors';
 import { DefaultTheme as RNdefaultTheme } from '@react-navigation/native';
+import Colors from './Colors';
 
 const { dark, light } = Colors;
 const { fonts } = RNdefaultTheme;

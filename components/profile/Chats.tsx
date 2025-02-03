@@ -71,7 +71,6 @@ export default function Chats() {
                 seller_id: item.seller_id,
                 buyer_id: item.buyer_id,
                 item_id: item.item_id,
-                back_title: 'Messages',
               },
             }}
             userId={getParticipantId(item?.seller_id, item?.buyer_id)}

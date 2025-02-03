@@ -26,16 +26,6 @@ export default function CreateFormLayout() {
       />
 
       <Stack.Screen
-        name="item/[id]"
-        options={{
-          headerTitle: '',
-          presentation: 'modal',
-          title: 'Item for sale',
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
         name="pick-category"
         options={{
           title: 'Pick category',

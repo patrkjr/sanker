@@ -204,7 +204,7 @@ export default function SignupForm() {
 
         <View style={{ alignItems: 'center', gap: Spacings.sm }}>
           <P secondary>Already got an account?</P>
-          <Link href="/login" asChild>
+          <Link href="/auth/login" asChild>
             <Button ghost title="Log in" />
           </Link>
         </View>

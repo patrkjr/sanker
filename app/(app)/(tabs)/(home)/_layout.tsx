@@ -8,14 +8,6 @@ export default function HomeLayout() {
         name="index"
         options={{ title: 'Featured', ...HeaderLargeStyle }}
       />
-      {/* <Stack.Screen
-        name="item/[id]"
-        options={{
-          headerTitle: '',
-          title: 'Item for sale',
-          ...HeaderStyle,
-        }}
-      /> */}
     </Stack>
   );
 }
