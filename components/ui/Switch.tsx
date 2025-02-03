@@ -1,28 +1,52 @@
-import { Pressable, StyleSheet } from 'react-native';
-import { View } from '../Themed';
+import { timingConfig } from '@/constants/Animations';
 import Spacings from '@/constants/Spacings';
 import { useThemedColors } from '@/hooks/useThemedColors';
+import * as Haptics from 'expo-haptics';
+import { useEffect, useRef } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { timingConfig } from '@/constants/Animations';
-import { useEffect, useRef } from 'react';
-import * as Haptics from 'expo-haptics';
 
 const WIDTH = 40;
 const HEIGHT = 24;
 const THUMB_SIZE = 20;
 
+const SIZES = {
+  sm: {
+    WIDTH: 40,
+    HEIGHT: 24,
+    THUMB_SIZE: 20,
+  },
+  md: {
+    WIDTH: 52,
+    HEIGHT: 32,
+    THUMB_SIZE: 28,
+  },
+};
+
+interface SwitchProps {
+  selected?: boolean;
+  disabled?: boolean;
+  size?: 'sm' | 'md';
+  useHaptics?: boolean;
+  onPress?: () => void;
+}
+
 export default function Switch({
   selected = false,
   disabled = false,
+  size = 'md',
   useHaptics = true,
   onPress,
   ...otherProps
-}) {
+}: SwitchProps) {
   //Use this to check for initial render
+
+  const { WIDTH, HEIGHT, THUMB_SIZE } = SIZES[size];
+
   const initialRender = useRef(true);
 
   const colors = useThemedColors();
@@ -60,12 +84,16 @@ export default function Switch({
   const animatedThumbStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: thumbPosition.value }],
+      width: THUMB_SIZE,
+      height: THUMB_SIZE,
     };
   });
 
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: backgroundColor.value,
+      width: WIDTH,
+      height: HEIGHT,
     };
   });
 
@@ -95,7 +123,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     borderRadius: Spacings.borderRadius.round,
     width: WIDTH,
-    height: HEIGHT,
   },
   thumb: {
     borderRadius: Spacings.borderRadius.round,
