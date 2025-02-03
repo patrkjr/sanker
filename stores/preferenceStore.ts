@@ -12,6 +12,7 @@ type UserPreferences = {
   };
   hasSeenOnboarding: boolean;
   hasCompletedOnboarding: boolean;
+  hasSeenSetupGuide: boolean;
   notificationsEnabled: boolean;
   lastSeenFeatureVersion: string | null;
   updateFeatureVersion: (version: string) => void;
@@ -22,18 +23,21 @@ const CURRENT_VERSION =
   Constants.expoConfig?.extra?.preferenceStore?.version || undefined;
 
 const migrate = (persistedState: any) => {
+  console.log(persistedState);
   if (
     persistedState.version < CURRENT_VERSION ||
-    CURRENT_VERSION === undefined
+    typeof persistedState.version === 'string'
   ) {
     // Example migration for adding version and location
     return {
       ...persistedState,
-      version: CURRENT_VERSION || 0,
+      version: CURRENT_VERSION,
       userPreferences: {
         ...persistedState.userPreferences,
         lastSeenFeatureVersion: null,
         hasSeenOnboarding: false,
+        hasCompletedOnboarding: false,
+        hasSeenSetupGuide: false,
         location: {
           use_user_address: true,
           show_exact_address: true,
@@ -62,6 +66,7 @@ const usePreferencesStore = create<UserPreferencesState>()(
         },
         hasSeenOnboarding: false,
         hasCompletedOnboarding: false,
+        hasSeenSetupGuide: false,
         notificationsEnabled: false,
         lastSeenFeatureVersion: null,
       },
@@ -93,6 +98,7 @@ const usePreferencesStore = create<UserPreferencesState>()(
             },
             hasSeenOnboarding: false,
             hasCompletedOnboarding: false,
+            hasSeenSetupGuide: false,
             notificationsEnabled: false,
             lastSeenFeatureVersion: null,
           },

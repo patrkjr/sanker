@@ -2,7 +2,7 @@ import { toast } from '@backpackapp-io/react-native-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Reactotron from 'reactotron-react-native';
 import { green } from './constants/Colors';
-import itemFormStore from './stores/itemFormStore';
+import usePreferencesStore from './stores/preferenceStore';
 import useUserProfileStore from './stores/useUserProfileStore';
 //AsyncStorage.clear();
 
@@ -35,19 +35,19 @@ Reactotron.onCustomCommand({
 });
 
 Reactotron.onCustomCommand({
-  title: 'Form store state',
-  command: 'Log state',
-  handler: () => {
-    console.log(itemFormStore.getState());
-  },
-  description: 'Inspect the form store state',
-});
-
-Reactotron.onCustomCommand({
   title: 'User profile store state',
   command: 'Log state',
   handler: () => {
     console.log(useUserProfileStore.getState());
   },
   description: 'Inspect the user profile store state',
+});
+
+Reactotron.onCustomCommand({
+  title: 'Preference store state',
+  command: 'Log state',
+  handler: () => {
+    console.log(usePreferencesStore.getState());
+  },
+  description: 'Inspect the preference store state',
 });
