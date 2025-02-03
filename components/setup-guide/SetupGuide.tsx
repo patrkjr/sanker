@@ -3,7 +3,7 @@ import Spacings from '@/constants/Spacings';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { View } from '../Themed';
-import { H1, Large, P } from '../typography';
+import { H1, P } from '../typography';
 import Button from '../ui/Button';
 
 const Header = () => {
@@ -23,7 +23,7 @@ const Header = () => {
   );
 };
 
-export default function Onboarding() {
+export default function SetupGuide() {
   const { pageContainer } = DefaultStyles;
   return (
     <View style={[pageContainer, { marginTop: Spacings.lg, gap: Spacings.lg }]}>
@@ -40,17 +40,16 @@ export default function Onboarding() {
           alignItems: 'center',
         }}
       >
-        <H1 style={{ textAlign: 'center' }}>Adventure awaits!</H1>
-        <Large secondary bold>
-          This is Sanker
-        </Large>
+        <H1 style={{ textAlign: 'center' }}>Let's get started!</H1>
+        {/* <Large secondary bold>
+          Let's get started!
+        </Large> */}
       </View>
       <P style={{ textAlign: 'center' }}>
-        We're excited to help you on your journey. Let's take a short tour of
-        the app.
+        Let's go through some steps to get you started.
       </P>
-      <Link href="/onboarding/profile-picture" asChild>
-        <Button title="Learn Sanker" variant="themed" disabled />
+      <Link href="/setup-guide/profile-picture" asChild>
+        <Button title="Setup Sanker" variant="themed" />
       </Link>
     </View>
   );

@@ -13,8 +13,12 @@ export default function AboutSanker() {
       contentContainerStyle={pageContainer}
     >
       <Card>
-        <Item href={'/onboarding'} isLastItem>
+        <Item href={'/onboarding'}>
           <Item.Label>Onboarding</Item.Label>
+          <Item.Value></Item.Value>
+        </Item>
+        <Item href={'/setup-guide'} isLastItem>
+          <Item.Label>Setup Guide</Item.Label>
           <Item.Value></Item.Value>
         </Item>
       </Card>

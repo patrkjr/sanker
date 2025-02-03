@@ -77,6 +77,15 @@ function RootLayoutNav() {
         />
 
         <Stack.Screen
+          name="setup-guide"
+          options={{
+            title: 'Setup Guide',
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
           name="fullscreen-profile-picture"
           options={{
             presentation: 'transparentModal',
