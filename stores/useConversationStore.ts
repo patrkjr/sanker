@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { supabase } from '@/config/supabase';
+import { create } from 'zustand';
 
 // Defines the shape of the conversation state within the store
 interface ConversationState {
@@ -14,9 +14,9 @@ interface ConversationState {
 }
 
 interface ConversationParams {
-  buyer_id: string;
-  seller_id: string;
-  item_id: string;
+  buyer_id: string | string[];
+  seller_id: string | string[];
+  item_id: string | string[];
 }
 // Creates a store to manage conversation state using Zustand
 export const useConversationStore = create<ConversationState>((set) => ({

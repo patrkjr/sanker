@@ -3,19 +3,19 @@ import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
 import { useConversationStore } from '@/stores/useConversationStore';
 import {
-  Stack,
   router,
   useLocalSearchParams,
-  useNavigation,
+  usePathname,
+  useSegments,
 } from 'expo-router';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
 import { H3, P } from '../typography';
+import ItemWidget from './ItemWidget';
 import LoadingMessages from './LoadingMessages';
 import MessagesList from './MessagesList';
 import StickyInput from './StickyInput';
-
 export default function Chat() {
   const { id, seller_id, buyer_id, item_id } = useLocalSearchParams();
   const { user } = useSupabase();
@@ -29,8 +29,8 @@ export default function Chat() {
     subscribeToMessages,
   } = useConversationStore();
 
-  const navigation = useNavigation();
-
+  const segments = useSegments();
+  const pathname = usePathname();
   useEffect(() => {
     if (id && id !== 'new') {
       fetchConversation(id);
@@ -42,7 +42,7 @@ export default function Chat() {
     }
   }, [id]);
 
-  async function handleSendMessage(text) {
+  async function handleSendMessage(text: string) {
     if (text.trim() !== '' && !text.match(/^ +$/)) {
       const cleanedText = text.replace(/\s{2,}/g, ' ');
       try {
@@ -75,7 +75,7 @@ export default function Chat() {
   const Header = () => {
     return (
       <>
-        <Stack.Screen options={{ headerBackTitle: 'Messages' }} />
+        <ItemWidget itemId={item_id} />
       </>
     );
   };

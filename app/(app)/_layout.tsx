@@ -52,8 +52,7 @@ function RootLayoutNav() {
           name="item/[id]"
           options={{
             title: 'Item',
-            headerTitle: '',
-            headerBackTitle: 'Back',
+            headerBackButtonDisplayMode: 'minimal',
             ...HeaderStyle,
           }}
         />
@@ -62,7 +61,7 @@ function RootLayoutNav() {
           name="chats/[id]"
           options={{
             title: 'Chat',
-            headerBackTitle: 'Messages',
+            headerBackButtonDisplayMode: 'minimal',
             ...HeaderStyle,
           }}
         />

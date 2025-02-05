@@ -1,9 +1,10 @@
-import { useThemedColors } from '@/hooks/useThemedColors';
-import { StyleSheet } from 'react-native';
-import { View } from '../Themed';
 import Spacings from '@/constants/Spacings';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import { View } from '../Themed';
 
-export default function SkeletonBox({ borderRadius }) {
+export default function SkeletonBox({
+  borderRadius = Spacings.borderRadius.md,
+}) {
   const colors = useThemedColors();
   return (
     <View

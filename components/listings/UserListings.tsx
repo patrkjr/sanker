@@ -9,7 +9,6 @@ import ProductItem from '../item/ProductItem';
 import PageScrollView from '../ui/PageScrollView';
 
 export default function UserListings() {
-  const userProfile = useUserProfileStore((state) => state.userProfile);
   const { isLoading, fetchUserItems } = useUserItems();
   const items = useUserProfileStore((state) => state.userProfile?.items);
 

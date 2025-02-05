@@ -15,6 +15,17 @@ import Icon from '../ui/Icon';
 
 const IMAGE_SIZE = 64;
 
+type ProductItemProps = {
+  children?: React.ReactNode;
+  id: string;
+  title: string;
+  price: string | number;
+  imageUrl: string;
+  disabled?: boolean;
+  animate?: boolean;
+  onPress?: () => void;
+};
+
 export default function ProductItem({
   children,
   id,
@@ -25,7 +36,7 @@ export default function ProductItem({
   animate = true,
   onPress,
   ...otherProps
-}) {
+}: ProductItemProps) {
   const colors = useThemedColors();
   const [pressedState, setPressedState] = useState(false);
 
@@ -88,7 +99,6 @@ const styles = StyleSheet.create({
   outerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
     justifyContent: 'space-between',
     paddingVertical: Spacings.md,
   },
