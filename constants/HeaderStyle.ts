@@ -1,16 +1,7 @@
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Platform } from 'react-native';
 
-type HeaderStyleType = {
-  headerShadowVisible: boolean;
-  headerTitleStyle: { fontFamily: string };
-  headerBackTitleStyle: { fontFamily: string };
-  headerLargeTitleStyle?: { fontFamily: string };
-  headerLargeTitle?: boolean;
-  // headerTransparent?: boolean;
-  // headerBlurEffect?: string;
-};
-
-const HeaderStyle: HeaderStyleType = {
+const HeaderStyle: NativeStackNavigationOptions = {
   headerShadowVisible: false,
   headerTitleStyle: {
     fontFamily: 'Nunito-ExtraBold',

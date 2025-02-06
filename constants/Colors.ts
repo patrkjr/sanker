@@ -42,7 +42,7 @@ type ThemeColors = {
     border: string;
     background: string;
   };
-  descructive: {
+  destructive: {
     text: string;
     border: string;
     background: string;
@@ -169,7 +169,7 @@ const Colors: ThemeObject = {
       border: yellow[300],
       background: yellow[50],
     },
-    descructive: {
+    destructive: {
       text: red[600],
       border: red[200],
       background: red[100],
@@ -209,7 +209,7 @@ const Colors: ThemeObject = {
       background: yellow[1100],
       border: yellow[800],
     },
-    descructive: {
+    destructive: {
       text: red[500],
       border: red[900],
       background: red[1100],

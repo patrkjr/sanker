@@ -93,14 +93,14 @@ const Button = forwardRef<View, ButtonProps>(
       },
       destructive: {
         solid: {
-          backgroundColor: colors.descructive.background,
-          borderColor: colors.descructive.border,
-          color: colors.descructive.text,
+          backgroundColor: colors.destructive.background,
+          borderColor: colors.destructive.border,
+          color: colors.destructive.text,
         },
         ghost: {
           backgroundColor: 'transparent',
           borderColor: 'transparent',
-          color: colors.descructive.text,
+          color: colors.destructive.text,
         },
       },
     };

@@ -8,7 +8,7 @@ import { View } from '../Themed';
 import ProductItem from '../item/ProductItem';
 import LoadingShimmer from '../ui/LoadingShimmer';
 
-export default function Header({ itemId }: { itemId: string }) {
+export default function Header({ itemId }: { itemId: string | string[] }) {
   const [item, setItem] = useState<Item | null>(null);
   const colors = useThemedColors();
 
@@ -55,7 +55,7 @@ export default function Header({ itemId }: { itemId: string }) {
 const styles = StyleSheet.create({
   container: {
     zIndex: 1,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     paddingVertical: Spacings.md,
     paddingHorizontal: Spacings.md,
   },

@@ -2,23 +2,25 @@ import { supabase } from '@/config/supabase';
 import Spacings from '@/constants/Spacings';
 import { useSupabase } from '@/context/supabase-provider';
 import { useConversationStore } from '@/stores/useConversationStore';
-import {
-  router,
-  useLocalSearchParams,
-  usePathname,
-  useSegments,
-} from 'expo-router';
-import React, { useEffect } from 'react';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from '../Themed';
+import ProfilePicture from '../profile/ProfilePicture';
 import { H3, P } from '../typography';
+import IconButton from '../ui/IconButton';
 import ItemWidget from './ItemWidget';
 import LoadingMessages from './LoadingMessages';
 import MessagesList from './MessagesList';
 import StickyInput from './StickyInput';
+
 export default function Chat() {
+  //TODO: Get all info from conversationID, instead of router params
+  //Current implementation cannot get info when deep linking
   const { id, seller_id, buyer_id, item_id } = useLocalSearchParams();
   const { user } = useSupabase();
+  const [headerTitle, setHeaderTitle] = useState('');
+  const recipientId = seller_id === user?.id ? buyer_id : seller_id;
   const {
     fetchConversation,
     conversation,
@@ -28,10 +30,10 @@ export default function Chat() {
     resetConversation,
     subscribeToMessages,
   } = useConversationStore();
+  const router = useRouter();
 
-  const segments = useSegments();
-  const pathname = usePathname();
   useEffect(() => {
+    getRecipientProfile();
     if (id && id !== 'new') {
       fetchConversation(id);
       const unsubscribe = subscribeToMessages(id);
@@ -41,6 +43,20 @@ export default function Chat() {
       };
     }
   }, [id]);
+
+  async function getRecipientProfile() {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('first_name, last_name, avatar_url')
+        .eq('id', recipientId)
+        .single();
+      if (error) throw error;
+      setHeaderTitle(`${data.first_name} ${data.last_name}`);
+    } catch (error) {
+      console.warn('Error getting recipient name:', error);
+    }
+  }
 
   async function handleSendMessage(text: string) {
     if (text.trim() !== '' && !text.match(/^ +$/)) {
@@ -72,9 +88,38 @@ export default function Chat() {
     }
   }
 
+  const HeaderLeft = () => {
+    return (
+      <IconButton
+        name="ChevronLeft"
+        size={32}
+        ghost
+        variant="themed"
+        onPress={() => router.back()}
+      />
+    );
+  };
+
+  const HeaderTitle = () => {
+    return (
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', gap: Spacings.xs }}
+      >
+        <ProfilePicture pressable={false} size={44} userId={recipientId} />
+        <P bold>{headerTitle}</P>
+      </View>
+    );
+  };
+
   const Header = () => {
     return (
       <>
+        <Stack.Screen
+          options={{
+            headerLeft: () => <HeaderLeft />,
+            headerTitle: () => <HeaderTitle />,
+          }}
+        />
         <ItemWidget itemId={item_id} />
       </>
     );

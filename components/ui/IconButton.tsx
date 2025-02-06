@@ -7,13 +7,16 @@ import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import Icon from './Icon';
 
-const ICON_SIZE = 44;
+const BUTTON_SIZE = 44;
 
 interface IconButtonProps {
   name: string;
   onPress?: () => void;
   theme?: 'light' | 'dark';
   disabled?: boolean;
+  variant?: 'default' | 'themed' | 'destructive';
+  ghost?: boolean;
+  size?: number;
 }
 
 export default function IconButton({
@@ -21,6 +24,9 @@ export default function IconButton({
   onPress,
   theme,
   disabled,
+  variant = 'default',
+  ghost = false,
+  ...otherProps
 }: IconButtonProps) {
   const colors = useThemedColors();
   const backgroundColor = theme ? Colors[theme].card : colors.card;
@@ -30,6 +36,29 @@ export default function IconButton({
     disabled,
   });
 
+  const variantStyles = {
+    default: {
+      backgroundColor: backgroundColor,
+      color: iconColor,
+    },
+    themed: {
+      backgroundColor: colors.themed.card,
+      color: colors.themed.text,
+    },
+    destructive: {
+      backgroundColor: colors.destructive.background,
+      color: colors.destructive.text,
+    },
+  };
+
+  const currentVariantStyle = variantStyles[variant];
+
+  const disabledStyle = {
+    backgroundColor: ghost ? 'transparent' : colors.cardDisabled,
+    borderColor: 'transparent',
+    opacity: 0.7,
+  };
+
   return (
     <Animated.View style={animatedStyle}>
       <Pressable
@@ -37,9 +66,17 @@ export default function IconButton({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         disabled={disabled}
-        style={[{ backgroundColor }, styles.container]}
+        style={[
+          {
+            backgroundColor: ghost
+              ? 'transparent'
+              : currentVariantStyle.backgroundColor,
+          },
+          disabled && disabledStyle,
+          styles.container,
+        ]}
       >
-        <Icon name={name} color={iconColor} />
+        <Icon name={name} color={currentVariantStyle.color} {...otherProps} />
       </Pressable>
     </Animated.View>
   );
@@ -47,8 +84,8 @@ export default function IconButton({
 
 const styles = StyleSheet.create({
   container: {
-    width: ICON_SIZE,
-    height: ICON_SIZE,
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: Spacings.borderRadius.round,

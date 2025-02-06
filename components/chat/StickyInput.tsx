@@ -1,16 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
 import Spacings from '@/constants/Spacings';
+import { useThemedColors } from '@/hooks/useThemedColors';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
-  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { timingConfig } from '@/constants/Animations';
-import Input from '../ui/Input';
 import IconButton from '../ui/IconButton';
-import { useThemedColors } from '@/hooks/useThemedColors';
+import Input from '../ui/Input';
 
 export default function StickyInput({
   autoFocus = false,
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     position: 'absolute',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingVertical: Spacings.sm,
     paddingHorizontal: Spacings.sm,
     gap: Spacings.sm,

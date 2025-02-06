@@ -25,7 +25,7 @@ interface UserData {
 
 interface ProfilePictureProps {
   size: number;
-  userId?: string;
+  userId?: string | string[];
   onPress?: () => void;
   pressable?: boolean;
   isLoading?: boolean;
